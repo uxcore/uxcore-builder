@@ -18,12 +18,14 @@ function getUxcoreModuleAlias() {
 module.exports = {
     cache: false,
     entry: {
-        demo: './demo/index'
+        demo: './src/index'
     },
     output: {
         path: './dist',
-        filename: "[name].js",
-        sourceMapFilename: "[name].js.map"
+        filename: "uxcore.js",
+        sourceMapFilename: "uxcore.js.map",
+        libraryTarget: "umd",
+        library: "Uxcore"
     },
     devtool: '#source-map', // 这个配置要和output.sourceMapFilename一起使用
     module: {

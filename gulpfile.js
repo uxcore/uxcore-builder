@@ -20,6 +20,12 @@ var concat = require('gulp-concat');
 // https://www.npmjs.com/package/gulp-just-replace/
 var replace = require('gulp-just-replace');
 
+// https://github.com/terinjokes/gulp-uglify
+var uglify = require('gulp-uglify');
+
+// https://www.npmjs.com/package/gulp-rename/
+var rename = require('gulp-rename');
+
 gulp.task('pack_demo', function(cb) {
     webpack(require('./webpack.dev.js'), function (err, stats) {
         // 重要 打包过程中的语法错误反映在stats中
@@ -67,6 +73,13 @@ gulp.task('reload_by_demo_css', ['less_demo'], function () {
     reload();
 });
 
+gulp.task('jsmin', ['pack_demo'], function() {
+    gulp.src("./dist/uxcore.js")
+        .pipe(uglify())
+        .pipe(rename('uxcore.min.js'))
+        .pipe(gulp.dest("./dist"))
+})
+
 gulp.task('server', [
     'pack_demo',
     'less_component',
@@ -86,3 +99,8 @@ gulp.task('server', [
     gulp.watch('demo/**/*.less', ['reload_by_demo_css']);
 
 });
+
+gulp.task('default', [
+    'pack_demo',
+    'jsmin'
+]);
