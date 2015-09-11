@@ -28254,12 +28254,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _get(Object.getPrototypeOf(Grid.prototype), "constructor", this).call(this, props);
 	
 	        this.state = {
-	            currentPage: 1,
 	            data: this.props.jsxdata,
 	            columns: this.props.jsxcolumns,
-	            __rowData: null,
-	            params: null,
-	            activeColumn: null
+	            passedData: null,
+	            params: null
 	        };
 	    }
 	
@@ -28272,6 +28270,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: "componentWillUnmount",
 	        value: function componentWillUnmount() {}
+	    }, {
+	        key: "notEmpty",
+	        value: function notEmpty(obj) {
+	            var hasOwnProperty = Object.prototype.hasOwnProperty;
+	            // null and undefined are "empty"
+	            if (obj == null) return true;
+	
+	            // Assume if it has a length property with a non-zero value
+	            // that that property is correct.
+	            if (obj.length > 0) return false;
+	            if (obj.length === 0) return true;
+	            // Otherwise, does it have any properties of its own?
+	            // Note that this doesn't handle
+	            // toString and valueOf enumeration bugs in IE < 9
+	            for (var key in obj) {
+	                if (hasOwnProperty.call(obj, key)) return false;
+	            }
+	            return true;
+	        }
 	
 	        // pagination
 	        // column order
@@ -28280,23 +28297,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: "getQueryStr",
 	        value: function getQueryStr() {
-	            var _this = this;
 	
 	            var ctx = this,
 	                queryStr = [],
 	                _props = this.props;
-	            //__rowData right now use as subComp row data, if has __rowData
+	            //passedData right now use as subComp row data, if has passedData
 	            //that means subComp it is
-	            if (_props.__rowData) {
+	
+	            if (_props.passedData) {
 	                (function () {
 	
-	                    var queryObj = {};
+	                    var queryObj = {},
+	                        queryKeys = _props.queryKeys;
+	                    if (!queryKeys) {
+	                        queryKeys = _props.passedData;
+	                    }
 	
-	                    _this.props.params.forEach(function (key) {
-	                        if (ctx.props.__rowData[key]) {
-	                            queryObj[key] = ctx.props.__rowData[key];
+	                    queryKeys.forEach(function (key) {
+	                        if (ctx.notEmpty(_props.passedData[key])) {
+	                            queryObj[key] = _props.passedData[key];
 	                        }
 	                    });
+	
 	                    queryStr = [$.param(queryObj)];
 	                })();
 	            }
@@ -28307,10 +28329,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            //pagination
-	            queryStr.push($.param({ pageSize: 10, currentPage: this.state.currentPage }));
+	            queryStr.push($.param({ pageSize: _props.pageSize, currentPage: this.props.currentPage }));
 	
 	            //column order
-	            var _activeColumn = this.state.activeColumn;
+	            var _activeColumn = this.props.activeColumn;
 	            if (_activeColumn) {
 	                queryStr.push($.param({
 	                    orderColumn: _activeColumn.dataKey,
@@ -28319,7 +28341,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            //search query
-	            var _queryTxt = this.state.searchTxt;
+	            var _queryTxt = this.props.searchTxt;
 	            if (_queryTxt) {
 	                queryStr.push($.param({
 	                    searchTxt: _queryTxt
@@ -28336,25 +28358,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // filter
 	    }, {
 	        key: "fetchData",
-	        value: function fetchData() {
+	        value: function fetchData(obj) {
 	
 	            var ctx = this;
 	
 	            $.ajax({
 	                url: this.props.fetchUrl + "?" + this.getQueryStr().join("&"),
 	                success: function success(result) {
-	                    var _data = result.content.datas;
+	                    var _data = result.content;
 	                    if (result.success) {
-	                        //ctx.props.jsxdata=_data;
-	                        ctx.props.mask = false;
-	                        ctx.setState({
+	                        ctx.props.jsxdata = _data;
+	                        ctx.props.showMask = false;
+	                        var updateObj = $.extend({}, obj ? obj : {}, {
 	                            data: _data,
-	                            mask: false
+	                            showMask: false
 	                        });
+	                        ctx.setState(updateObj);
 	                    }
 	                }
 	            });
 	        }
+	
+	        //just call once when init
 	    }, {
 	        key: "processData",
 	        value: function processData() {
@@ -28362,9 +28387,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var props = this.props,
 	                columns = props.jsxcolumns,
 	                hasCheckedColumn = undefined;
-	            if (!this.state.data) {
-	                //this.props.jsxdata=[];
-	                //this.props.mask=true;
+	            if (!this.props.jsxdata) {
+	                this.props.jsxdata = [];
+	                this.props.mask = true;
 	                this.fetchData();
 	            }
 	            //this.state.data= this.props.jsxdata;
@@ -28404,7 +28429,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: "selectAll",
 	        value: function selectAll(checked) {
-	            var _data = this.state.data.map(function (item, index) {
+	            var _data = this.state.data.datas.map(function (item, index) {
 	                item.jsxchecked = checked;
 	                item.country = item.country;
 	                return item;
@@ -28423,20 +28448,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: "onPageChange",
 	        value: function onPageChange(index) {
 	
-	            this.setState({
-	                currentPage: index
-	            }, function () {
-	                this.fetchData();
-	            });
+	            this.props.currentPage = index;
+	            this.fetchData();
 	        }
 	    }, {
 	        key: "renderPager",
 	        value: function renderPager() {
-	            if (this.props.pagination && this.state.data) {
+	            if (this.props.showPager && this.state.data) {
 	                return _react2["default"].createElement(
 	                    "div",
 	                    { className: "kuma-grid-pagination" },
-	                    _react2["default"].createElement(_uxcorePagination2["default"], { className: "mini", total: this.state.data.length, onChange: this.onPageChange.bind(this), current: this.state.currentPage })
+	                    _react2["default"].createElement(_uxcorePagination2["default"], { className: "mini", total: this.state.data.totalCount, onChange: this.onPageChange.bind(this), current: this.props.currentPage, pageSize: this.props.pageSize })
 	                );
 	            }
 	        }
@@ -28444,50 +28466,54 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: "handleOrderColumnCB",
 	        value: function handleOrderColumnCB(type, column) {
 	
-	            this.setState({
-	                activeColumn: column
-	            }, function () {
-	                this.fetchData();
-	            });
+	            this.props.activeColumn = column;
+	            this.fetchData();
 	        }
 	    }, {
 	        key: "actionBarCB",
 	        value: function actionBarCB(type, txt) {
 	            if (type == 'SEARCH') {
-	                this.setState({
-	                    searchTxt: txt
-	                }, function () {
-	                    this.fetchData();
-	                });
+	                this.props.searchTxt = txt;
+	                this.fetchData();
 	            } else {
 	                var _actionCofig = this.props.actionBar;
 	                _actionCofig[type] ? _actionCofig[type].apply() : "";
 	            }
 	        }
 	    }, {
+	        key: "componentWillMount",
+	        value: function componentWillMount() {
+	            this.processData();
+	        }
+	    }, {
+	        key: "componentWillUpdate",
+	        value: function componentWillUpdate() {}
+	    }, {
 	        key: "render",
 	        value: function render() {
-	            this.processData();
+	            console.log("++++grid render+++");
+	
 	            var props = this.props,
 	                _style = {
-	                width: props.width
+	                width: props.width,
+	                height: props.height
 	            },
 	                renderBodyProps = {
 	                columns: props.jsxcolumns,
-	                data: this.state.data ? this.state.data : [],
-	                width: props.width,
-	                height: props.height,
+	                data: this.state.data ? this.state.data.datas : [],
+	                width: props.width == "100%" ? props.width : props.width - props.headerHeight,
+	                height: props.height == "100%" ? props.height : props.height - props.headerHeight - props.actionBarHeight - (props.showPager ? 50 : 0),
 	                onModifyRow: props.onModifyRow ? props.onModifyRow : function () {},
 	                rowSelection: props.rowSelection,
 	                subComp: props.subComp,
-	                mask: props.mask,
+	                mask: props.showMask,
 	                key: 'grid-body'
 	            },
 	                renderHeaderProps = {
 	                columns: props.jsxcolumns,
-	                activeColumn: this.state.activeColumn,
+	                activeColumn: this.props.activeColumn,
 	                checkAll: this.selectAll.bind(this),
-	                columnPicker: props.columnPicker,
+	                columnPicker: props.showColumnPicker,
 	                //fixed: props.fixed,
 	                handleCP: this.handleCP.bind(this),
 	                headerHeight: props.headerHeight,
@@ -28499,7 +28525,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            var gridHeader = undefined,
 	                actionBar = undefined;
-	            if (props.headerHeight) {
+	            if (props.showHeader) {
 	                gridHeader = _react2["default"].createElement(_Header2["default"], renderHeaderProps);
 	            }
 	
@@ -28528,7 +28554,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	;
 	
-	Grid.defaultProps = {};
+	Grid.defaultProps = {
+	    showHeader: true,
+	    width: "100%",
+	    height: "100%",
+	    headerHeight: 50,
+	    actionBarHeight: 40,
+	    showPager: true,
+	    showColumnPicker: true,
+	    showMask: true,
+	    pageSize: 10,
+	    fetchParams: '',
+	    currentPage: 1,
+	    //like subComp, we have fetchUrl, but also need query key like id to
+	    //query data
+	    queryKeys: [],
+	    searchTxt: ''
+	};
 	
 	// http://facebook.github.io/react/docs/reusable-components.html
 	Grid.propTypes = {};
@@ -28575,13 +28617,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _classCallCheck(this, Header);
 	
 	        _get(Object.getPrototypeOf(Header.prototype), 'constructor', this).call(this, props);
-	        this.state = {};
+	        this.state = {
+	            display: 'none'
+	        };
 	    }
 	
 	    _createClass(Header, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            window.addEventListener('click', this.handleGlobalClick.bind(this));
+	            $(document).on('click.uxcore-grid-header', this.handleGlobalClick.bind(this));
 	        }
 	    }, {
 	        key: 'componentDidUpdate',
@@ -28589,16 +28633,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'componentWillUnmount',
 	        value: function componentWillUnmount() {
-	            window.removeEventListener('click', this.handleGlobalClick.bind(this));
+	            $(document).off('click.uxcore-grid-header');
+	            //window.removeEventListener('click', this.handleGlobalClick.bind(this));
 	        }
 	    }, {
 	        key: 'prepareStyle',
 	        value: function prepareStyle() {}
 	    }, {
 	        key: 'handleGlobalClick',
-	        value: function handleGlobalClick() {
+	        value: function handleGlobalClick(e) {
 	            if (this.props.columnPicker) {
-	                this.hideColumnPick();
+	                this.hideColumnPick(e);
 	            }
 	        }
 	    }, {
@@ -28610,19 +28655,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'handleColumnPicker',
 	        value: function handleColumnPicker(e) {
+	
 	            e.stopPropagation();
-	            var node = this.refs.columnpicker.getDOMNode();
-	            if (node.style.display == 'block') {
-	                node.style.display = 'none';
+	            if (this.state.display == 'block') {
+	                this.setState({
+	                    display: 'none'
+	                });
 	            } else {
-	                node.style.display = 'block';
+	                this.setState({
+	                    display: 'block'
+	                });
 	            }
 	        }
 	    }, {
 	        key: 'hideColumnPick',
-	        value: function hideColumnPick() {
-	            var node = this.refs.columnpicker.getDOMNode();
-	            node.style.display = 'none';
+	        value: function hideColumnPick(e) {
+	            if (!$(e.target).hasClass('kuma-column-picker')) {
+	                this.setState({
+	                    display: 'none'
+	                });
+	            }
 	        }
 	    }, {
 	        key: 'handleColumns',
@@ -28631,17 +28683,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        //prepare the column picker html fragement
+	
 	    }, {
-	        key: 'preparePicker',
-	        value: function preparePicker() {
-	            var me = this;
+	        key: 'renderPicker',
+	        value: function renderPicker() {
+	            var me = this,
+	                _style = {
+	                display: this.state.display
+	            };
+	
 	            return _react2['default'].createElement(
 	                'div',
 	                { className: 'kuma-column-picker-container' },
 	                _react2['default'].createElement('i', { className: 'kuma-icon kuma-icon-target-list kuma-column-picker', onClick: this.handleColumnPicker.bind(this) }),
 	                _react2['default'].createElement(
 	                    'ul',
-	                    { className: 'kuma-grid-colmnpicker', ref: 'columnpicker' },
+	                    { className: 'kuma-grid-colmnpicker', style: _style, ref: 'columnpicker' },
 	                    this.props.columns.map(function (item, index) {
 	                        if (item.dataKey == 'jsxchecked') return;
 	                        if (item.hidden) {
@@ -28700,7 +28757,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                _picker = undefined;
 	
 	            if (this.props.columnPicker) {
-	                _picker = this.preparePicker();
+	                _picker = this.renderPicker();
 	            }
 	
 	            var _style = {
@@ -28943,7 +29000,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        onModifyRow: _props.onModifyRow,
 	                        rowSelection: _props.rowSelection,
 	                        subComp: _props.subComp,
-	                        key: 'row' + index
+	                        key: 'row' + index,
+	                        ts: new Date().getTime()
 	                    };
 	                    return _react2["default"].createElement(_Row2["default"], renderProps);
 	                }),
@@ -29004,9 +29062,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _classCallCheck(this, Row);
 	
 	        _get(Object.getPrototypeOf(Row.prototype), 'constructor', this).call(this, props);
-	        this.state = {
-	            st_showSubComp: false //默认隐藏
-	        };
+	        console.log("++row++");
 	    }
 	
 	    _createClass(Row, [{
@@ -29024,18 +29080,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'showSubComp',
 	        value: function showSubComp() {
-	            this.setState({
-	                st_showSubComp: !this.state.st_showSubComp
-	            });
+	            this.props.showSubComp = !this.props.showSubComp;
+	            this.setState();
 	        }
 	    }, {
 	        key: 'renderSubComp',
 	        value: function renderSubComp() {
+	
 	            var props = this.props;
-	            if (props.subComp && this.state.st_showSubComp) {
-	                //return false;
+	            if (props.subComp && this.props.showSubComp) {
 	                var subComp = _react2['default'].cloneElement(props.subComp, {
-	                    __rowData: this.props.data[this.props.rowIndex]
+	                    passedData: this.props.data[this.props.rowIndex]
 	                });
 	                return _react2['default'].createElement(
 	                    'div',
@@ -29070,7 +29125,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        hasSubComp: props.subComp ? true : false,
 	                        data: _data,
 	                        showSubCompCallback: ctx.showSubComp,
-	                        st_showSubComp: ctx.state.st_showSubComp,
+	                        st_showSubComp: ctx.props.showSubComp,
 	                        ctx: ctx,
 	                        onModifyRow: props.onModifyRow,
 	                        rowSelection: props.rowSelection,
@@ -29089,7 +29144,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	;
 	
-	Row.propTypes = {};
+	Row.propTypes = {
+	    showSubComp: false
+	};
 	
 	Row.defaultProps = {
 	    jsxprefixCls: "kuma-grid-row"
@@ -29231,6 +29288,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	    }, {
+	        key: 'doAction',
+	        value: function doAction(rowData, items, e) {
+	
+	            var el = $(e.target);
+	            if (el.hasClass('action')) {
+	                if (el.data('type') == 'inlineEdit') {
+	                    this.showSubComp();
+	                    return;
+	                }
+	                items.map(function (item) {
+	                    if (item.type == el.data('type')) {
+	                        item.cb.apply(null, [rowData]);
+	                    }
+	                });
+	            }
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	
@@ -29244,7 +29318,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	                _v = props.rowData,
 	                renderProps = undefined;
 	
-	            if (_column.type == 'checkbox') {
+	            if (_column.render) {
+	                _v = _column.render.apply(null, [_v]);
+	            } else if (_column.type == 'action') {
+	                _v = _react2['default'].createElement(
+	                    'div',
+	                    { className: 'action-container', onClick: this.doAction.bind(this, _v, _column.items) },
+	                    _column.items.map(function (child) {
+	                        return _react2['default'].createElement(
+	                            'span',
+	                            { className: 'action', 'data-type': child.type },
+	                            child.title
+	                        );
+	                    })
+	                );
+	            } else if (_column.type == 'checkbox') {
 	                var checked = undefined;
 	                if (_v.jsxchecked) {
 	                    checked = 'checked';
@@ -29701,8 +29789,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	
 	var mixin = __webpack_require__(241);
 	var assign = __webpack_require__(159);
 	
@@ -29740,11 +29826,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  if (getInitialState) {
 	    if (!componentWillMount) {
-	      reactMixin.componentWillMount = function () {
+	      reactMixin.componentWillMount = function() {
 	        applyInitialState(this);
 	      };
 	    } else {
-	      reactMixin.componentWillMount = function () {
+	      reactMixin.componentWillMount = function() {
 	        applyInitialState(this);
 	        componentWillMount.call(this);
 	      };
@@ -29761,33 +29847,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var prototypeMethods = {};
 	  var staticProps = {};
 	
-	  Object.keys(reactMixin).forEach(function (key) {
+	  Object.keys(reactMixin).forEach(function(key) {
 	    if (key === 'mixins') {
 	      return; // Handled below to ensure proper order regardless of property iteration order
 	    }
 	    if (key === 'statics') {
 	      return; // gets special handling
 	    } else if (typeof reactMixin[key] === 'function') {
-	        prototypeMethods[key] = reactMixin[key];
-	      } else {
-	        staticProps[key] = reactMixin[key];
-	      }
+	      prototypeMethods[key] = reactMixin[key];
+	    } else {
+	      staticProps[key] = reactMixin[key];
+	    }
 	  });
 	
 	  mixinProto(reactClass.prototype, prototypeMethods);
 	
-	  var mergePropTypes = function mergePropTypes(left, right, key) {
+	  var mergePropTypes = function(left, right, key) {
 	    if (!left) return right;
 	    if (!right) return left;
 	
 	    var result = {};
-	    Object.keys(left).forEach(function (leftKey) {
+	    Object.keys(left).forEach(function(leftKey) {
 	      if (!right[leftKey]) {
 	        result[leftKey] = left[leftKey];
 	      }
 	    });
 	
-	    Object.keys(right).forEach(function (rightKey) {
+	    Object.keys(right).forEach(function(rightKey) {
 	      if (left[rightKey]) {
 	        result[rightKey] = function checkBothContextTypes() {
 	          return right[rightKey].apply(this, arguments) && left[rightKey].apply(this, arguments);
@@ -29809,7 +29895,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  // statics is a special case because it merges directly onto the class
 	  if (reactMixin.statics) {
-	    Object.getOwnPropertyNames(reactMixin.statics).forEach(function (key) {
+	    Object.getOwnPropertyNames(reactMixin.statics).forEach(function(key) {
 	      var left = reactClass[key];
 	      var right = reactMixin.statics[key];
 	
@@ -29839,15 +29925,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return reactClass;
 	}
 	
-	module.exports = (function () {
+	module.exports = (function() {
 	  var reactMixin = mixinProto;
 	
-	  reactMixin.onClass = function (reactClass, mixin) {
+	  reactMixin.onClass = function(reactClass, mixin) {
 	    return mixinClass(reactClass, mixin);
 	  };
 	
-	  reactMixin.decorate = function (mixin) {
-	    return function (reactClass) {
+	  reactMixin.decorate = function(mixin) {
+	    return function(reactClass) {
 	      return reactMixin.onClass(reactClass, mixin);
 	    };
 	  };
@@ -29855,46 +29941,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return reactMixin;
 	})();
 
+
 /***/ },
 /* 241 */
 /***/ function(module, exports) {
 
-	'use strict';
+	var objToStr = function(x){ return Object.prototype.toString.call(x); };
 	
-	var objToStr = function objToStr(x) {
-	    return Object.prototype.toString.call(x);
-	};
-	
-	var thrower = function thrower(error) {
+	var thrower = function(error){
 	    throw error;
 	};
 	
-	var mixins = module.exports = function makeMixinFunction(rules, _opts) {
+	var mixins = module.exports = function makeMixinFunction(rules, _opts){
 	    var opts = _opts || {};
 	    if (!opts.unknownFunction) {
 	        opts.unknownFunction = mixins.ONCE;
 	    }
 	
 	    if (!opts.nonFunctionProperty) {
-	        opts.nonFunctionProperty = function (left, right, key) {
+	        opts.nonFunctionProperty = function(left, right, key){
 	            if (left !== undefined && right !== undefined) {
-	                var getTypeName = function getTypeName(obj) {
+	                var getTypeName = function(obj){
 	                    if (obj && obj.constructor && obj.constructor.name) {
 	                        return obj.constructor.name;
-	                    } else {
+	                    }
+	                    else {
 	                        return objToStr(obj).slice(8, -1);
 	                    }
 	                };
-	                throw new TypeError('Cannot mixin key ' + key + ' because it is provided by multiple sources, ' + 'and the types are ' + getTypeName(left) + ' and ' + getTypeName(right));
+	                throw new TypeError('Cannot mixin key ' + key + ' because it is provided by multiple sources, '
+	                        + 'and the types are ' + getTypeName(left) + ' and ' + getTypeName(right));
 	            }
 	            return left === undefined ? right : left;
 	        };
 	    }
 	
-	    function setNonEnumerable(target, key, value) {
-	        if (key in target) {
+	    function setNonEnumerable(target, key, value){
+	        if (key in target){
 	            target[key] = value;
-	        } else {
+	        }
+	        else {
 	            Object.defineProperty(target, key, {
 	                value: value,
 	                writable: true,
@@ -29903,18 +29989,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }
 	
-	    return function applyMixin(source, mixin) {
-	        Object.keys(mixin).forEach(function (key) {
-	            var left = source[key],
-	                right = mixin[key],
-	                rule = rules[key];
+	    return function applyMixin(source, mixin){
+	        Object.keys(mixin).forEach(function(key){
+	            var left = source[key], right = mixin[key], rule = rules[key];
 	
 	            // this is just a weird case where the key was defined, but there's no value
 	            // behave like the key wasn't defined
 	            if (left === undefined && right === undefined) return;
 	
-	            var wrapIfFunction = function wrapIfFunction(thing) {
-	                return typeof thing !== "function" ? thing : function () {
+	            var wrapIfFunction = function(thing){
+	                return typeof thing !== "function" ? thing
+	                : function(){
 	                    return thing.call(this, arguments);
 	                };
 	            };
@@ -29932,7 +30017,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            // check to see if they're some combination of functions or undefined
 	            // we already know there's no rule, so use the unknown function behavior
-	            if (leftIsFn && right === undefined || rightIsFn && left === undefined || leftIsFn && rightIsFn) {
+	            if (leftIsFn && right === undefined
+	             || rightIsFn && left === undefined
+	             || leftIsFn && rightIsFn) {
 	                // may throw, the default is ONCE so if both are functions
 	                // the default is to throw
 	                setNonEnumerable(source, key, wrapIfFunction(opts.unknownFunction(left, right, key)));
@@ -29947,8 +30034,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	};
 	
-	mixins._mergeObjects = function (obj1, obj2) {
-	    var assertObject = function assertObject(obj, obj2) {
+	mixins._mergeObjects = function(obj1, obj2) {
+	    var assertObject = function(obj, obj2){
 	        var type = objToStr(obj);
 	        if (type !== '[object Object]') {
 	            var displayType = obj.constructor ? obj.constructor.name : 'Unknown';
@@ -29965,82 +30052,78 @@ return /******/ (function(modules) { // webpackBootstrap
 	    assertObject(obj2, obj1);
 	
 	    var result = {};
-	    Object.keys(obj1).forEach(function (k) {
+	    Object.keys(obj1).forEach(function(k){
 	        if (Object.prototype.hasOwnProperty.call(obj2, k)) {
 	            thrower('cannot merge returns because both have the ' + JSON.stringify(k) + ' key');
 	        }
 	        result[k] = obj1[k];
 	    });
 	
-	    Object.keys(obj2).forEach(function (k) {
+	    Object.keys(obj2).forEach(function(k){
 	        // we can skip the conflict check because all conflicts would already be found
 	        result[k] = obj2[k];
 	    });
 	    return result;
-	};
+	
+	}
 	
 	// define our built-in mixin types
-	mixins.ONCE = function (left, right, key) {
+	mixins.ONCE = function(left, right, key){
 	    if (left && right) {
 	        throw new TypeError('Cannot mixin ' + key + ' because it has a unique constraint.');
 	    }
 	
 	    var fn = left || right;
 	
-	    return function (args) {
+	    return function(args){
 	        return fn.apply(this, args);
 	    };
 	};
 	
-	mixins.MANY = function (left, right, key) {
-	    return function (args) {
+	mixins.MANY = function(left, right, key){
+	    return function(args){
 	        if (right) right.apply(this, args);
 	        return left ? left.apply(this, args) : undefined;
 	    };
 	};
 	
-	mixins.MANY_MERGED_LOOSE = function (left, right, key) {
-	    if (left && right) {
+	mixins.MANY_MERGED_LOOSE = function(left, right, key) {
+	    if(left && right) {
 	        return mixins._mergeObjects(left, right);
 	    }
 	
 	    return left || right;
-	};
+	}
 	
-	mixins.MANY_MERGED = function (left, right, key) {
-	    return function (args) {
+	mixins.MANY_MERGED = function(left, right, key){
+	    return function(args){
 	        var res1 = right && right.apply(this, args);
 	        var res2 = left && left.apply(this, args);
 	        if (res1 && res2) {
-	            return mixins._mergeObjects(res1, res2);
+	            return mixins._mergeObjects(res1, res2)
 	        }
 	        return res2 || res1;
 	    };
 	};
 	
-	mixins.REDUCE_LEFT = function (_left, _right, key) {
-	    var left = _left || function (x) {
-	        return x;
-	    };
-	    var right = _right || function (x) {
-	        return x;
-	    };
-	    return function (args) {
+	
+	mixins.REDUCE_LEFT = function(_left, _right, key){
+	    var left = _left || function(x){ return x };
+	    var right = _right || function(x){ return x };
+	    return function(args){
 	        return right.call(this, left.apply(this, args));
 	    };
 	};
 	
-	mixins.REDUCE_RIGHT = function (_left, _right, key) {
-	    var left = _left || function (x) {
-	        return x;
-	    };
-	    var right = _right || function (x) {
-	        return x;
-	    };
-	    return function (args) {
+	mixins.REDUCE_RIGHT = function(_left, _right, key){
+	    var left = _left || function(x){ return x };
+	    var right = _right || function(x){ return x };
+	    return function(args){
 	        return left.call(this, right.apply(this, args));
 	    };
 	};
+	
+
 
 /***/ },
 /* 242 */
