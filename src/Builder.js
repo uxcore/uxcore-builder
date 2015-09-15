@@ -23,5 +23,6 @@ module.exports = {
     Tree: require("uxcore-tree"),
     Transfer: require("uxcore-transfer"),
     CheckboxGroup: require("uxcore-checkbox-group"),
-    RadioGroup: require("uxcore-radiogroup")
+    RadioGroup: require("uxcore-radiogroup"),
+    Popover: require("uxcore-popover")
 }

@@ -50,6 +50,7 @@
     "uxcore-grid": "~1.0.3",
     "uxcore-kuma": "~1.0.3",
     "uxcore-pagination": "~0.1.0",
+    "uxcore-popover": "~0.1.0",
     "uxcore-radiogroup": "~1.0.1",
     "uxcore-rc-upload": "~1.0.0",
     "uxcore-select2": "~0.1.4",
