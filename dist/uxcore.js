@@ -85,19 +85,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Calendar: __webpack_require__(5),
 	    CheckboxGroup: __webpack_require__(60),
 	    Dialog: __webpack_require__(63),
-	    Dropdown: __webpack_require__(94),
-	    Form: __webpack_require__(161),
-	    Grid: __webpack_require__(237),
-	    Pagination: __webpack_require__(250),
-	    RcUpload: __webpack_require__(222),
-	    Select2: __webpack_require__(174),
-	    Tabs: __webpack_require__(257),
-	    Tooltip: __webpack_require__(274),
-	    Tree: __webpack_require__(304),
-	    Transfer: __webpack_require__(330),
+	    Dropdown: __webpack_require__(96),
+	    Form: __webpack_require__(162),
+	    Grid: __webpack_require__(263),
+	    Pagination: __webpack_require__(255),
+	    Select2: __webpack_require__(175),
+	    Tabs: __webpack_require__(276),
+	    Tooltip: __webpack_require__(293),
+	    Tree: __webpack_require__(323),
+	    Transfer: __webpack_require__(349),
 	    CheckboxGroup: __webpack_require__(60),
-	    RadioGroup: __webpack_require__(171),
-	    Popover: __webpack_require__(332)
+	    RadioGroup: __webpack_require__(351),
+	    Popover: __webpack_require__(353),
+	    FisGrid: __webpack_require__(383),
+	    Hovercard: __webpack_require__(385)
 	};
 
 /***/ },
@@ -128,23 +129,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var sizeMap = {
-		small: 's',
-		medium: 'm',
-		large: 'l'
-	},
-	    colorMap = {
-		blue: 'blue',
-		orange: 'orange',
-		white: 'white',
-		disabled: 'disable'
-	};
+	var _classnames = __webpack_require__(4);
 	
-	var ButtonGroup = __webpack_require__(4);
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var sizeMap = {
+		small: 'sm',
+		medium: '',
+		large: 'lg'
+	},
+	    typeMap = {
+		primary: 'primary',
+		secondary: 'secondary',
+		disabled: 'disabled'
+	},
+	    clsPrefix = 'kuma-button';
 	
 	var Button = (function (_React$Component) {
 		_inherits(Button, _React$Component);
@@ -159,8 +164,15 @@ return /******/ (function(modules) { // webpackBootstrap
 			key: 'render',
 			value: function render() {
 				var props = this.props;
-				var colorType = props.disabled ? 'disabled' : props.color;
-				var className = 'kuma-button kuma-button-' + sizeMap[props.size] + colorMap[colorType] + ' ' + props.additionClass;
+				var type = props.disabled ? 'disabled' : props.type;
+				var clsObj = {};
+				if (props.additionClass) {
+					clsObj[props.additionClass] = true;
+				}
+				if (sizeMap[props.size]) {
+					clsObj[clsPrefix + '-' + sizeMap[props.size]] = true;
+				}
+				var className = (0, _classnames2['default'])(clsPrefix, clsPrefix + '-' + typeMap[type], clsObj);
 				var propEvents = {};
 				Object.keys(props).forEach(function (key) {
 					if (key.indexOf('on') == 0) {
@@ -178,78 +190,75 @@ return /******/ (function(modules) { // webpackBootstrap
 		return Button;
 	})(React.Component);
 	
-	Button.displayName = 'Button';
+	Button.displayName = 'uxcore-button';
 	Button.propTypes = {
-		size: React.PropTypes.oneOf(['large', 'medium', 'small']),
-		color: React.PropTypes.oneOf(['blue', 'orange', 'white']),
+		size: React.PropTypes.oneOf(Object.keys(sizeMap)),
+		type: React.PropTypes.oneOf(Object.keys(typeMap)),
 		disabled: React.PropTypes.oneOf(['disabled', true, false]),
 		additionClass: React.PropTypes.string
 	};
 	Button.defaultProps = {
 		size: 'medium',
-		color: 'blue',
+		type: 'primary',
 		disabled: false,
 		additionClass: ''
 	};
 	
-	module.exports = { Button: Button, ButtonGroup: ButtonGroup };
+	module.exports = Button;
 
 /***/ },
 /* 4 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2015 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
 	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	(function () {
+		'use strict';
 	
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+		var hasOwn = {}.hasOwnProperty;
 	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+		function classNames () {
+			var classes = '';
 	
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
 	
-	var ButtonGroup = (function (_React$Component) {
-		_inherits(ButtonGroup, _React$Component);
+				var argType = typeof arg;
 	
-		function ButtonGroup(props) {
-			_classCallCheck(this, ButtonGroup);
+				if (argType === 'string' || argType === 'number') {
+					classes += ' ' + arg;
+				} else if (Array.isArray(arg)) {
+					classes += ' ' + classNames.apply(null, arg);
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes += ' ' + key;
+						}
+					}
+				}
+			}
 	
-			_get(Object.getPrototypeOf(ButtonGroup.prototype), 'constructor', this).call(this, props);
+			return classes.substr(1);
 		}
 	
-		_createClass(ButtonGroup, [{
-			key: 'render',
-			value: function render() {
-				var count = React.Children.count(this.props.children);
-				return React.createElement(
-					'div',
-					{ className: 'kuma-button-group' },
-					this.props.children.map(function (child, idx) {
-						var cls = undefined;
-						if (idx === 0) {
-							cls = 'kuma-group-left';
-						} else if (idx === count - 1) {
-							cls = 'kuma-group-right';
-						} else {
-							cls = 'kuma-group-middle';
-						}
-						return React.cloneElement(child, {
-							additionClass: cls,
-							key: idx
-						});
-					})
-				);
-			}
-		}]);
-	
-		return ButtonGroup;
-	})(React.Component);
-	
-	ButtonGroup.displayName = 'ButtonGroup';
-	ButtonGroup.propTypes = {};
-	ButtonGroup.defaultProps = {};
-	
-	module.exports = ButtonGroup;
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
 
 /***/ },
 /* 5 */
@@ -342,6 +351,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var value = new GregorianCalendar(defaultValueLocale[p.locale]);
 	                value.setTime(new Date(p.value).valueOf());
 	                pickerOptions.value = calendarOptions.value = value;
+	            } else if (p.value === null) {
+	                pickerOptions.value = calendarOptions.value = null;
 	            }
 	            if (p.defaultValue) {
 	                var value = new GregorianCalendar(defaultValueLocale[p.locale]);
@@ -5310,7 +5321,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        if (props.showToday) {
 	          var disabledToday = false;
-	          var disabledTodayClass = undefined;
+	          var disabledTodayClass = '';
 	          if (props.disabledDate) {
 	            disabledToday = props.disabledDate(this.getTodayTime(), value);
 	            if (disabledToday) {
@@ -5867,11 +5878,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	
 	  onSelect: function onSelect(value, keyDownEvent) {
-	    var props = this.props;
 	    this.setValue(value);
 	    if (!keyDownEvent) {
 	      if (this.isAllowedDate(value)) {
-	        props.onSelect(value);
+	        this.props.onSelect(value);
 	      }
 	    }
 	  },
@@ -8675,6 +8685,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/**
+	 * Dialog Component for uxcore
+	 * @author 
+	 *
+	 * Copyright 2014-2015, Uxcore Team, Alinw.
+	 * All rights reserved.
+	 */
+	
 	'use strict';
 	
 	module.exports = __webpack_require__(64);
@@ -8693,6 +8711,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -8709,28 +8731,139 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _rcDialog2 = _interopRequireDefault(_rcDialog);
 	
-	var _objectAssign = __webpack_require__(93);
+	var _rcUtil = __webpack_require__(72);
 	
-	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+	var _confirm = __webpack_require__(93);
 	
-	var Dialog = (function (_RcDialog) {
-	    _inherits(Dialog, _RcDialog);
+	var _confirm2 = _interopRequireDefault(_confirm);
+	
+	var _uxcoreButton = __webpack_require__(94);
+	
+	var _uxcoreButton2 = _interopRequireDefault(_uxcoreButton);
+	
+	function noop() {}
+	
+	var mousePosition = undefined;
+	var mousePositionEventBinded = undefined;
+	
+	var Dialog = (function (_React$Component) {
+	    _inherits(Dialog, _React$Component);
 	
 	    function Dialog(props) {
 	        _classCallCheck(this, Dialog);
 	
 	        _get(Object.getPrototypeOf(Dialog.prototype), 'constructor', this).call(this, props);
+	        this.state = {
+	            confirmLoading: false,
+	            visible: this.props.visible
+	        };
 	    }
 	
-	    return Dialog;
-	})(_rcDialog2['default']);
+	    _createClass(Dialog, [{
+	        key: 'handleCancel',
+	        value: function handleCancel() {
+	            this.props.onCancel();
+	        }
+	    }, {
+	        key: 'handleOk',
+	        value: function handleOk() {
+	            this.setState({
+	                confirmLoading: true
+	            });
+	            this.props.onOk();
+	        }
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            if ('visible' in nextProps) {
+	                var newState = {
+	                    visible: nextProps.visible
+	                };
+	                // 隐藏后去除按钮 loading 效果
+	                if (!nextProps.visible) {
+	                    newState.confirmLoading = false;
+	                }
+	                this.setState(newState);
+	            }
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            if (mousePositionEventBinded) {
+	                return;
+	            }
+	            // 只有点击事件支持从鼠标位置动画展开
+	            _rcUtil.Dom.addEventListener(document.body, 'click', function onDocumentMousemove(e) {
+	                mousePosition = {
+	                    x: e.pageX,
+	                    y: e.pageY
+	                };
+	                // 20ms 内发生过点击事件，则从点击位置动画展示
+	                // 否则直接 zoom 展示
+	                // 这样可以兼容非点击方式展开
+	                setTimeout(function () {
+	                    return mousePosition = null;
+	                }, 20);
+	            });
+	            mousePositionEventBinded = true;
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var loadingClass = this.state.confirmLoading ? ' kuma-btn-loading' : '';
+	            var props = this.props;
+	            var defaultFooter = [_react2['default'].createElement(
+	                _uxcoreButton2['default'],
+	                { key: 'confirm', onClick: this.handleOk.bind(this) },
+	                '确 定'
+	            ), _react2['default'].createElement(
+	                _uxcoreButton2['default'],
+	                { key: 'cancel', type: 'secondary', onClick: this.handleCancel.bind(this) },
+	                '取 消'
+	            )];
+	            var footer = props.footer || defaultFooter;
+	            var visible = this.state.visible;
+	            return _react2['default'].createElement(_rcDialog2['default'], _extends({ onClose: this.handleCancel.bind(this), footer: footer }, props, {
+	                visible: visible, mousePosition: mousePosition }));
+	        }
+	    }]);
 	
-	Dialog.displayName = 'uxcore-dialog';
-	Dialog.defaultProps = (0, _objectAssign2['default'])(_rcDialog2['default'].defaultProps, {
-	    prefixCls: 'kuma-dialog'
-	});
+	    return Dialog;
+	})(_react2['default'].Component);
 	
 	exports['default'] = Dialog;
+	
+	Dialog.defaultProps = {
+	    prefixCls: 'kuma-dialog',
+	    onOk: noop,
+	    onCancel: noop,
+	    width: 520,
+	    transitionName: false,
+	    maskAnimation: false
+	};
+	
+	Dialog.info = function (props) {
+	    props.iconClassName = 'kuma-icon-information';
+	    props.okCancel = false;
+	    return (0, _confirm2['default'])(props);
+	};
+	
+	Dialog.success = function (props) {
+	    props.iconClassName = 'kuma-icon-success';
+	    props.okCancel = false;
+	    return (0, _confirm2['default'])(props);
+	};
+	
+	Dialog.error = function (props) {
+	    props.iconClassName = 'kuma-icon-error';
+	    props.okCancel = false;
+	    return (0, _confirm2['default'])(props);
+	};
+	
+	Dialog.confirm = function (props) {
+	    props.okCancel = true;
+	    return (0, _confirm2['default'])(props);
+	};
 	module.exports = exports['default'];
 
 /***/ },
@@ -8841,71 +8974,58 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    _get(Object.getPrototypeOf(DialogWrap.prototype), 'constructor', this).call(this, props);
 	    this.state = {
-	      visible: this.props.visible
+	      visible: props.visible
 	    };
-	    ['cleanDialogContainer', 'requestClose', 'close', 'handleClose', 'handleShow'].forEach(function (m) {
+	    ['onClose', 'cleanDialogContainer'].forEach(function (m) {
 	      _this[m] = _this[m].bind(_this);
 	    });
 	  }
 	
 	  _createClass(DialogWrap, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.componentDidUpdate();
+	    }
+	  }, {
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(props) {
-	      if (this.state.visible !== props.visible) {
-	        if (props.visible) {
-	          this.show();
-	        } else {
-	          this.close();
-	        }
+	      if ('visible' in props) {
+	        this.setState({
+	          visible: props.visible
+	        });
 	      }
 	    }
 	  }, {
 	    key: 'shouldComponentUpdate',
 	    value: function shouldComponentUpdate(nextProps, nextState) {
-	      if (!this.state.visible && !nextState.visible) {
-	        return false;
-	      }
-	      return true;
+	      return !!(this.state.visible || nextState.visible);
 	    }
 	  }, {
-	    key: 'show',
-	    value: function show() {
-	      if (!this.state.visible) {
-	        this.setState({
-	          visible: true
-	        });
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      if (this.dialogRendered) {
+	        _react2['default'].render(this.getDialogElement(), this.getDialogContainer());
 	      }
 	    }
 	  }, {
-	    key: 'close',
-	    value: function close() {
-	      if (this.state.visible) {
-	        this.setState({
-	          visible: false
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'requestClose',
-	    value: function requestClose() {
-	      var onBeforeClose = this.props.onBeforeClose;
-	      var close = this.close;
-	      if (onBeforeClose) {
-	        var ret;
-	        if (onBeforeClose.length) {
-	          ret = onBeforeClose(close);
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      if (this.dialogContainer) {
+	        if (this.state.visible) {
+	          _react2['default'].render(this.getDialogElement({
+	            onAfterClose: this.cleanDialogContainer,
+	            onClose: noop,
+	            visible: false
+	          }), this.dialogContainer);
 	        } else {
-	          ret = onBeforeClose();
-	          if (!ret) {
-	            close();
-	          }
+	          this.cleanDialogContainer();
 	        }
-	        if (ret && ret.then) {
-	          ret.then(close);
-	        }
-	      } else {
-	        close();
 	      }
+	    }
+	  }, {
+	    key: 'onClose',
+	    value: function onClose() {
+	      this.props.onClose();
 	    }
 	  }, {
 	    key: 'getDialogContainer',
@@ -8918,49 +9038,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return this.dialogContainer;
 	    }
 	  }, {
-	    key: 'handleClose',
-	    value: function handleClose() {
-	      this.props.onClose();
-	    }
-	  }, {
-	    key: 'handleShow',
-	    value: function handleShow() {
-	      this.props.onShow();
-	    }
-	  }, {
 	    key: 'getDialogElement',
 	    value: function getDialogElement(extra) {
 	      var props = this.props;
-	      var dialogProps = copy(props, ['className', 'closable', 'align', 'title', 'footer', 'mask', 'animation', 'transitionName', 'maskAnimation', 'maskTransitionName', 'prefixCls', 'style', 'width', 'height', 'zIndex']);
+	      var dialogProps = copy(props, ['className', 'closable', 'align', 'title', 'footer', 'mask', 'animation', 'transitionName', 'maskAnimation', 'maskTransitionName', 'mousePosition', 'prefixCls', 'style', 'width', 'height', 'zIndex']);
 	
 	      (0, _objectAssign2['default'])(dialogProps, {
-	        onClose: this.handleClose,
-	        onShow: this.handleShow,
-	        visible: this.state.visible,
-	        onRequestClose: this.requestClose
+	        onClose: this.onClose,
+	        visible: this.state.visible
 	      }, extra);
-	
-	      return _react2['default'].createElement(_Dialog2['default'], _extends({}, dialogProps, { key: "dialog" }), props.children);
+	      return _react2['default'].createElement(_Dialog2['default'], _extends({}, dialogProps, { key: 'dialog' }), props.children);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      if (this.state.visible) {
-	        this.dialogRendered = true;
-	      }
-	      return this.props.renderToBody ? null : this.dialogRendered ? this.getDialogElement() : null;
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.componentDidUpdate();
-	    }
-	  }, {
-	    key: 'componentDidUpdate',
-	    value: function componentDidUpdate() {
-	      if (this.props.renderToBody && this.dialogRendered) {
-	        _react2['default'].render(this.getDialogElement(), this.getDialogContainer());
-	      }
+	      this.dialogRendered = this.dialogRendered || this.state.visible;
+	      return null;
 	    }
 	  }, {
 	    key: 'cleanDialogContainer',
@@ -8968,20 +9061,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _react2['default'].unmountComponentAtNode(this.getDialogContainer());
 	      document.body.removeChild(this.dialogContainer);
 	      this.dialogContainer = null;
-	    }
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      if (this.dialogContainer) {
-	        if (this.state.visible) {
-	          _react2['default'].render(this.getDialogElement({
-	            onClose: this.cleanDialogContainer,
-	            visible: false
-	          }), this.dialogContainer);
-	        } else {
-	          this.cleanDialogContainer();
-	        }
-	      }
 	    }
 	  }]);
 	
@@ -8994,27 +9073,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	    points: ['tc', 'tc'],
 	    offset: [0, 100]
 	  },
-	  renderToBody: true,
 	  mask: true,
 	  closable: true,
 	  prefixCls: 'rc-dialog',
-	  visible: false,
-	  onShow: noop,
 	  onClose: noop
 	};
 	
-	DialogWrap.PropTypes = {
+	DialogWrap.propTypes = {
 	  className: _react2['default'].PropTypes.string,
 	  align: _react2['default'].PropTypes.shape({
 	    align: _react2['default'].PropTypes.array,
 	    offset: _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.number)
 	  }),
-	  renderToBody: _react2['default'].PropTypes.bool,
 	  mask: _react2['default'].PropTypes.bool,
 	  closable: _react2['default'].PropTypes.bool,
 	  prefixCls: _react2['default'].PropTypes.string,
 	  visible: _react2['default'].PropTypes.bool,
-	  onShow: _react2['default'].PropTypes.func,
 	  onClose: _react2['default'].PropTypes.func
 	};
 	
@@ -9071,8 +9145,130 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _rcAnimate2 = _interopRequireDefault(_rcAnimate);
 	
+	function noop() {}
+	
+	function getScroll(w, top) {
+	  var ret = w['page' + (top ? 'Y' : 'X') + 'Offset'];
+	  var method = 'scroll' + (top ? 'Top' : 'Left');
+	  if (typeof ret !== 'number') {
+	    var d = w.document;
+	    ret = d.documentElement[method];
+	    if (typeof ret !== 'number') {
+	      ret = d.body[method];
+	    }
+	  }
+	  return ret;
+	}
+	
+	function setTransformOrigin(node, value) {
+	  var style = node.style;
+	  ['Webkit', 'Moz', 'Ms', 'ms'].forEach(function (prefix) {
+	    style[prefix + 'TransformOrigin'] = value;
+	  });
+	  style['transformOrigin'] = value;
+	}
+	
+	function offset(el) {
+	  var rect = el.getBoundingClientRect();
+	  var pos = {
+	    left: rect.left,
+	    top: rect.top
+	  };
+	  var doc = el.ownerDocument;
+	  var w = doc.defaultView || doc.parentWindow;
+	  pos.left += getScroll(w);
+	  pos.top += getScroll(w, 1);
+	  return pos;
+	}
+	
 	var Dialog = _react2['default'].createClass({
 	  displayName: 'Dialog',
+	
+	  propTypes: {
+	    onAfterClose: _react2['default'].PropTypes.func,
+	    onClose: _react2['default'].PropTypes.func,
+	    closable: _react2['default'].PropTypes.bool,
+	    visible: _react2['default'].PropTypes.bool,
+	    mousePosition: _react2['default'].PropTypes.object
+	  },
+	
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      onAfterClose: noop,
+	      onClose: noop
+	    };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    this.componentDidUpdate({});
+	  },
+	
+	  componentDidUpdate: function componentDidUpdate(prevProps) {
+	    var props = this.props;
+	    if (props.visible) {
+	      // first show
+	      if (!prevProps.visible) {
+	        this.lastOutSideFocusNode = document.activeElement;
+	        (0, _react.findDOMNode)(this.refs.dialog).focus();
+	      }
+	    } else if (prevProps.visible) {
+	      if (props.mask && this.lastOutSideFocusNode) {
+	        try {
+	          this.lastOutSideFocusNode.focus();
+	        } catch (e) {
+	          this.lastOutSideFocusNode = null;
+	        }
+	        this.lastOutSideFocusNode = null;
+	      }
+	    }
+	  },
+	
+	  onAnimateLeave: function onAnimateLeave() {
+	    this.props.onAfterClose();
+	  },
+	
+	  onMaskClick: function onMaskClick() {
+	    if (this.props.closable) {
+	      this.close();
+	    }
+	    (0, _react.findDOMNode)(this.refs.dialog).focus();
+	  },
+	
+	  onKeyDown: function onKeyDown(e) {
+	    var props = this.props;
+	    if (props.closable) {
+	      if (e.keyCode === _rcUtil.KeyCode.ESC) {
+	        this.close();
+	      }
+	    }
+	    // keep focus inside dialog
+	    if (props.visible) {
+	      if (e.keyCode === _rcUtil.KeyCode.TAB) {
+	        var activeElement = document.activeElement;
+	        var dialogRoot = (0, _react.findDOMNode)(this.refs.dialog);
+	        var sentinel = (0, _react.findDOMNode)(this.refs.sentinel);
+	        if (e.shiftKey) {
+	          if (activeElement === dialogRoot) {
+	            sentinel.focus();
+	          }
+	        } else if (activeElement === (0, _react.findDOMNode)(this.refs.sentinel)) {
+	          dialogRoot.focus();
+	        }
+	      }
+	    }
+	  },
+	
+	  onAlign: function onAlign(dialogNode) {
+	    var mousePosition = this.props.mousePosition;
+	    if (this.props.visible) {
+	      if (mousePosition) {
+	        var elOffset = offset(dialogNode);
+	        setTransformOrigin(dialogNode, mousePosition.x - elOffset.left + 'px ' + (mousePosition.y - elOffset.top) + 'px');
+	      } else {
+	        setTransformOrigin(dialogNode, '');
+	      }
+	    }
+	  },
 	
 	  getDialogElement: function getDialogElement() {
 	    var props = this.props;
@@ -9089,14 +9285,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      dest.zIndex = props.zIndex;
 	    }
 	
-	    var footer;
+	    var footer = undefined;
 	    if (props.footer) {
 	      footer = _react2['default'].createElement('div', { className: prefixCls + '-footer' }, props.footer);
 	    }
 	
-	    var header;
+	    var header = undefined;
 	    if (props.title || props.closable) {
-	      header = _react2['default'].createElement('div', { className: prefixCls + '-header' }, closable ? _react2['default'].createElement('a', { tabIndex: "0", onClick: props.onRequestClose, className: prefixCls + '-close' }, _react2['default'].createElement('span', { className: prefixCls + '-close-x' })) : null, _react2['default'].createElement('div', { className: prefixCls + '-title' }, props.title));
+	      header = _react2['default'].createElement('div', { className: prefixCls + '-header' }, closable ? _react2['default'].createElement('a', { tabIndex: '0', onClick: this.close, className: prefixCls + '-close' }, _react2['default'].createElement('span', { className: prefixCls + '-close-x' })) : null, _react2['default'].createElement('div', { className: prefixCls + '-title' }, props.title));
 	    }
 	
 	    var style = (0, _objectAssign2['default'])({}, props.style, dest);
@@ -9106,18 +9302,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	      role: 'dialog',
 	      ref: 'dialog',
 	      style: style,
-	      onKeyDown: this.handleKeyDown
+	      onKeyDown: this.onKeyDown
 	    };
 	    var transitionName = this.getTransitionName();
-	    var dialogElement = _react2['default'].createElement('div', dialogProps, _react2['default'].createElement('div', { className: prefixCls + '-content' }, header, _react2['default'].createElement('div', { className: prefixCls + '-body' }, props.children), footer), _react2['default'].createElement('div', { tabIndex: "0", ref: 'sentinel', style: { width: 0, height: 0, overflow: 'hidden' } }, 'sentinel'));
+	    var dialogElement = _react2['default'].createElement('div', dialogProps, _react2['default'].createElement('div', { className: prefixCls + '-content' }, header, _react2['default'].createElement('div', { className: prefixCls + '-body' }, props.children), footer), _react2['default'].createElement('div', { tabIndex: '0', ref: 'sentinel', style: { width: 0, height: 0, overflow: 'hidden' } }, 'sentinel'));
 	    // add key for align to keep animate children stable
-	    return _react2['default'].createElement(_rcAnimate2['default'], { key: "dialog",
-	      showProp: "dialogVisible",
-	      onEnd: this.handleAnimateEnd,
+	    return _react2['default'].createElement(_rcAnimate2['default'], { key: 'dialog',
+	      showProp: 'dialogVisible',
+	      onLeave: this.onAnimateLeave,
 	      transitionName: transitionName,
-	      component: "",
-	      animateMount: true }, _react2['default'].createElement(_rcAlign2['default'], { align: props.align,
-	      key: "dialog",
+	      component: '',
+	      transitionAppear: true }, _react2['default'].createElement(_rcAlign2['default'], { align: props.align,
+	      key: 'dialog',
+	      onAlign: this.onAlign,
 	      dialogVisible: props.visible,
 	      monitorBufferTime: 80,
 	      monitorWindowResize: true,
@@ -9127,19 +9324,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  getMaskElement: function getMaskElement() {
 	    var props = this.props;
 	    var maskProps = {
-	      onClick: this.handleMaskClick,
+	      onClick: this.onMaskClick,
 	      'data-visible': props.visible
 	    };
 	
 	    if (props.zIndex) {
 	      maskProps.style = { zIndex: props.zIndex };
 	    }
-	    var maskElement;
+	    var maskElement = undefined;
 	    if (props.mask) {
 	      var maskTransition = this.getMaskTransitionName();
-	      maskElement = _react2['default'].createElement('div', _extends({}, maskProps, { className: props.prefixCls + '-mask', key: "mask" }));
+	      maskElement = _react2['default'].createElement('div', _extends({}, maskProps, { className: props.prefixCls + '-mask', key: 'mask' }));
 	      if (maskTransition) {
-	        maskElement = _react2['default'].createElement(_rcAnimate2['default'], { key: "mask", showProp: "data-visible", animateMount: true, component: "",
+	        maskElement = _react2['default'].createElement(_rcAnimate2['default'], { key: 'mask', showProp: 'data-visible', transitionAppear: true, component: '',
 	          transitionName: maskTransition }, maskElement);
 	      }
 	    }
@@ -9156,54 +9353,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return transitionName;
 	  },
 	
-	  componentDidMount: function componentDidMount() {
-	    this.componentDidUpdate({});
-	  },
-	
-	  componentDidUpdate: function componentDidUpdate(prevProps) {
-	    var props = this.props;
-	    if (props.visible) {
-	      // first show
-	      if (!prevProps.visible) {
-	        this.lastOutSideFocusNode = document.activeElement;
-	        _react2['default'].findDOMNode(this.refs.dialog).focus();
-	      }
-	    } else if (prevProps.visible) {
-	      if (props.mask && this.lastOutSideFocusNode) {
-	        try {
-	          this.lastOutSideFocusNode.focus();
-	        } catch (e) {
-	          // empty
-	        }
-	        this.lastOutSideFocusNode = null;
-	      }
-	    }
-	  },
-	
-	  handleKeyDown: function handleKeyDown(e) {
-	    var props = this.props;
-	    if (props.closable) {
-	      if (e.keyCode === _rcUtil.KeyCode.ESC) {
-	        this.props.onRequestClose();
-	      }
-	    }
-	    // keep focus inside dialog
-	    if (props.visible) {
-	      if (e.keyCode === _rcUtil.KeyCode.TAB) {
-	        var activeElement = document.activeElement;
-	        var dialogRoot = _react2['default'].findDOMNode(this.refs.dialog);
-	        var sentinel = _react2['default'].findDOMNode(this.refs.sentinel);
-	        if (e.shiftKey) {
-	          if (activeElement === dialogRoot) {
-	            sentinel.focus();
-	          }
-	        } else if (activeElement === _react2['default'].findDOMNode(this.refs.sentinel)) {
-	          dialogRoot.focus();
-	        }
-	      }
-	    }
-	  },
-	
 	  getTransitionName: function getTransitionName() {
 	    var props = this.props;
 	    var transitionName = props.transitionName;
@@ -9214,29 +9363,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return transitionName;
 	  },
 	
-	  handleShow: function handleShow() {
-	    this.props.onShow();
-	  },
-	
-	  handleClose: function handleClose() {
-	    this.props.onClose();
-	  },
-	
-	  handleAnimateEnd: function handleAnimateEnd(key, visible) {
-	    if (visible) {
-	      this.handleShow();
-	    } else {
-	      this.handleClose();
-	    }
-	  },
-	
-	  handleMaskClick: function handleMaskClick() {
-	    if (this.props.closable) {
-	      this.props.onRequestClose();
-	    }
-	    _react2['default'].findDOMNode(this.refs.dialog).focus();
-	  },
-	
 	  render: function render() {
 	    var _className;
 	
@@ -9245,6 +9371,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var className = (_className = {}, _defineProperty(_className, prefixCls + '-wrap', 1), _defineProperty(_className, prefixCls + '-wrap-hidden', !props.visible), _className);
 	
 	    return _react2['default'].createElement('div', { className: (0, _rcUtil.classSet)(className) }, [this.getMaskElement(), this.getDialogElement()]);
+	  },
+	
+	  close: function close() {
+	    this.props.onClose();
 	  }
 	});
 	
@@ -11194,6 +11324,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		return to;
 	};
 
+
 /***/ },
 /* 85 */
 /***/ function(module, exports, __webpack_require__) {
@@ -12049,54 +12180,167 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 93 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 	
-	function ToObject(val) {
-		if (val == null) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
 	
-		return Object(val);
-	}
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	function ownEnumerableKeys(obj) {
-		var keys = Object.getOwnPropertyNames(obj);
+	var _uxcoreButton = __webpack_require__(94);
 	
-		if (Object.getOwnPropertySymbols) {
-			keys = keys.concat(Object.getOwnPropertySymbols(obj));
-		}
+	var _uxcoreButton2 = _interopRequireDefault(_uxcoreButton);
 	
-		return keys.filter(function (key) {
-			return propIsEnumerable.call(obj, key);
-		});
-	}
+	var _react = __webpack_require__(9);
 	
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var keys;
-		var to = ToObject(target);
+	var _react2 = _interopRequireDefault(_react);
 	
-		for (var s = 1; s < arguments.length; s++) {
-			from = arguments[s];
-			keys = ownEnumerableKeys(Object(from));
+	var _Dialog = __webpack_require__(64);
 	
-			for (var i = 0; i < keys.length; i++) {
-				to[keys[i]] = from[keys[i]];
-			}
-		}
+	var _Dialog2 = _interopRequireDefault(_Dialog);
 	
-		return to;
+	var div = undefined;
+	
+	exports['default'] = function (props) {
+	    var d = undefined;
+	    props = props || {};
+	    props.iconClassName = props.iconClassName || 'kuma-icon-caution';
+	    var width = props.width || 416;
+	
+	    // 默认为 true，保持向下兼容
+	    if (!('okCancel' in props)) {
+	        props.okCancel = true;
+	    }
+	
+	    function close() {
+	        d.setState({
+	            visible: false
+	        });
+	    }
+	
+	    function onCancel() {
+	        var cancelFn = props.onCancel;
+	        if (cancelFn) {
+	            var ret = undefined;
+	            if (cancelFn.length) {
+	                ret = cancelFn(close);
+	            } else {
+	                ret = cancelFn();
+	                if (!ret) {
+	                    close();
+	                }
+	            }
+	            if (ret && ret.then) {
+	                ret.then(close);
+	            }
+	        } else {
+	            close();
+	        }
+	    }
+	
+	    function onOk() {
+	        var okFn = props.onOk;
+	        if (okFn) {
+	            var ret = undefined;
+	            if (okFn.length) {
+	                ret = okFn(close);
+	            } else {
+	                ret = okFn();
+	                if (!ret) {
+	                    close();
+	                }
+	            }
+	            if (ret && ret.then) {
+	                ret.then(close);
+	            }
+	        } else {
+	            close();
+	        }
+	    }
+	
+	    var body = _react2['default'].createElement(
+	        'div',
+	        { className: 'kuma-confirm-body' },
+	        _react2['default'].createElement('i', { className: 'kuma-icon ' + props.iconClassName }),
+	        _react2['default'].createElement(
+	            'span',
+	            { className: 'kuma-confirm-title' },
+	            props.title
+	        ),
+	        _react2['default'].createElement(
+	            'div',
+	            { className: 'kuma-confirm-content' },
+	            props.content
+	        )
+	    );
+	    var footer = undefined;
+	
+	    if (props.okCancel) {
+	        footer = _react2['default'].createElement(
+	            'div',
+	            { className: 'kuma-confirm-action' },
+	            _react2['default'].createElement(
+	                _uxcoreButton2['default'],
+	                { size: 'small', onClick: onOk },
+	                '确 定'
+	            ),
+	            _react2['default'].createElement(
+	                _uxcoreButton2['default'],
+	                { type: 'secondary', size: 'small', onClick: onCancel },
+	                '取 消'
+	            )
+	        );
+	    } else {
+	        footer = _react2['default'].createElement(
+	            'div',
+	            { className: 'kuma-confirm-action' },
+	            _react2['default'].createElement(
+	                _uxcoreButton2['default'],
+	                { size: 'small', onClick: onOk },
+	                '知道了'
+	            )
+	        );
+	    }
+	
+	    if (!div) {
+	        div = document.createElement('div');
+	        document.body.appendChild(div);
+	    }
+	
+	    _react2['default'].render(_react2['default'].createElement(
+	        _Dialog2['default'],
+	        {
+	            prefixCls: 'kuma-dialog',
+	            className: 'kuma-dialog-confirm',
+	            visible: true,
+	            closable: false,
+	            title: '',
+	            transitionName: 'zoom',
+	            footer: '',
+	            maskTransitionName: 'fade', width: width },
+	        _react2['default'].createElement(
+	            'div',
+	            null,
+	            body,
+	            ' ',
+	            footer
+	        )
+	    ), div, function () {
+	        d = this;
+	    });
 	};
+	
+	module.exports = exports['default'];
 
 /***/ },
 /* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Dropdown Component for uxcore
+	 * Button Component for uxcore
 	 * @author 
 	 *
 	 * Copyright 2014-2015, Uxcore Team, Alinw.
@@ -12109,6 +12353,111 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 95 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var _classnames = __webpack_require__(4);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var sizeMap = {
+		small: 'sm',
+		medium: '',
+		large: 'lg'
+	},
+	    typeMap = {
+		primary: 'primary',
+		secondary: 'secondary',
+		disabled: 'disabled'
+	},
+	    clsPrefix = 'kuma-button';
+	
+	var Button = (function (_React$Component) {
+		_inherits(Button, _React$Component);
+	
+		function Button(props) {
+			_classCallCheck(this, Button);
+	
+			_get(Object.getPrototypeOf(Button.prototype), 'constructor', this).call(this, props);
+		}
+	
+		_createClass(Button, [{
+			key: 'render',
+			value: function render() {
+				var props = this.props;
+				var type = props.disabled ? 'disabled' : props.type;
+				var clsObj = {};
+				if (props.additionClass) {
+					clsObj[props.additionClass] = true;
+				}
+				if (sizeMap[props.size]) {
+					clsObj[clsPrefix + '-' + sizeMap[props.size]] = true;
+				}
+				var className = (0, _classnames2['default'])(clsPrefix, clsPrefix + '-' + typeMap[type], clsObj);
+				var propEvents = {};
+				Object.keys(props).forEach(function (key) {
+					if (key.indexOf('on') == 0) {
+						propEvents[key] = props[key];
+					}
+				});
+				return React.createElement(
+					'button',
+					_extends({ className: className, disabled: props.disabled }, propEvents),
+					this.props.children
+				);
+			}
+		}]);
+	
+		return Button;
+	})(React.Component);
+	
+	Button.displayName = 'uxcore-button';
+	Button.propTypes = {
+		size: React.PropTypes.oneOf(Object.keys(sizeMap)),
+		type: React.PropTypes.oneOf(Object.keys(typeMap)),
+		disabled: React.PropTypes.oneOf(['disabled', true, false]),
+		additionClass: React.PropTypes.string
+	};
+	Button.defaultProps = {
+		size: 'medium',
+		type: 'primary',
+		disabled: false,
+		additionClass: ''
+	};
+	
+	module.exports = Button;
+
+/***/ },
+/* 96 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Dropdown Component for uxcore
+	 * @author 
+	 *
+	 * Copyright 2014-2015, Uxcore Team, Alinw.
+	 * All rights reserved.
+	 */
+	
+	'use strict';
+	
+	module.exports = __webpack_require__(97);
+
+/***/ },
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12129,15 +12478,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcDropdown = __webpack_require__(96);
+	var _rcDropdown = __webpack_require__(98);
 	
 	var _rcDropdown2 = _interopRequireDefault(_rcDropdown);
 	
-	var _rcMenu = __webpack_require__(126);
+	var _rcMenu = __webpack_require__(128);
 	
 	var _rcMenu2 = _interopRequireDefault(_rcMenu);
 	
-	var _objectAssign = __webpack_require__(160);
+	var _objectAssign = __webpack_require__(84);
 	
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
@@ -12181,7 +12530,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.Menu = Menu;
 
 /***/ },
-/* 96 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12194,7 +12543,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _Dropdown = __webpack_require__(97);
+	var _Dropdown = __webpack_require__(99);
 	
 	var _Dropdown2 = _interopRequireDefault(_Dropdown);
 	
@@ -12202,7 +12551,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 97 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12229,7 +12578,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcTooltip = __webpack_require__(98);
+	var _rcTooltip = __webpack_require__(100);
 	
 	var _rcTooltip2 = _interopRequireDefault(_rcTooltip);
 	
@@ -12339,15 +12688,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 98 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	module.exports = __webpack_require__(99);
+	module.exports = __webpack_require__(101);
 
 /***/ },
-/* 99 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12374,9 +12723,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcUtil = __webpack_require__(100);
+	var _rcUtil = __webpack_require__(102);
 	
-	var _Popup = __webpack_require__(112);
+	var _Popup = __webpack_require__(114);
 	
 	var _Popup2 = _interopRequireDefault(_Popup);
 	
@@ -12652,31 +13001,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 100 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	module.exports = {
-	  guid: __webpack_require__(101),
-	  classSet: __webpack_require__(102),
-	  joinClasses: __webpack_require__(103),
-	  KeyCode: __webpack_require__(104),
-	  PureRenderMixin: __webpack_require__(105),
-	  shallowEqual: __webpack_require__(106),
-	  createChainedFunction: __webpack_require__(107),
+	  guid: __webpack_require__(103),
+	  classSet: __webpack_require__(104),
+	  joinClasses: __webpack_require__(105),
+	  KeyCode: __webpack_require__(106),
+	  PureRenderMixin: __webpack_require__(107),
+	  shallowEqual: __webpack_require__(108),
+	  createChainedFunction: __webpack_require__(109),
 	  Dom: {
-	    addEventListener: __webpack_require__(108),
-	    contains: __webpack_require__(109)
+	    addEventListener: __webpack_require__(110),
+	    contains: __webpack_require__(111)
 	  },
 	  Children: {
-	    toArray: __webpack_require__(110),
-	    mapSelf: __webpack_require__(111)
+	    toArray: __webpack_require__(112),
+	    mapSelf: __webpack_require__(113)
 	  }
 	};
 
 /***/ },
-/* 101 */
+/* 103 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -12687,7 +13036,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 102 */
+/* 104 */
 /***/ function(module, exports) {
 
 	/**
@@ -12733,7 +13082,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = cx;
 
 /***/ },
-/* 103 */
+/* 105 */
 /***/ function(module, exports) {
 
 	/**
@@ -12779,7 +13128,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = joinClasses;
 
 /***/ },
-/* 104 */
+/* 106 */
 /***/ function(module, exports) {
 
 	/**
@@ -13304,7 +13653,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = KeyCode;
 
 /***/ },
-/* 105 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -13320,7 +13669,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	"use strict";
 	
-	var shallowEqual = __webpack_require__(106);
+	var shallowEqual = __webpack_require__(108);
 	
 	/**
 	 * If your React component's render function is "pure", e.g. it will render the
@@ -13355,7 +13704,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ReactComponentWithPureRenderMixin;
 
 /***/ },
-/* 106 */
+/* 108 */
 /***/ function(module, exports) {
 
 	/**
@@ -13401,7 +13750,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = shallowEqual;
 
 /***/ },
-/* 107 */
+/* 109 */
 /***/ function(module, exports) {
 
 	/**
@@ -13429,7 +13778,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = createChainedFunction;
 
 /***/ },
-/* 108 */
+/* 110 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -13453,7 +13802,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 109 */
+/* 111 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -13470,7 +13819,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 110 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13486,7 +13835,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 111 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13503,7 +13852,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 112 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13520,13 +13869,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _utils = __webpack_require__(113);
+	var _utils = __webpack_require__(115);
 	
-	var _rcAlign = __webpack_require__(114);
+	var _rcAlign = __webpack_require__(116);
 	
 	var _rcAlign2 = _interopRequireDefault(_rcAlign);
 	
-	var _rcAnimate = __webpack_require__(118);
+	var _rcAnimate = __webpack_require__(120);
 	
 	var _rcAnimate2 = _interopRequireDefault(_rcAnimate);
 	
@@ -13623,7 +13972,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 113 */
+/* 115 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -13647,7 +13996,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 114 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13661,7 +14010,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _Align = __webpack_require__(115);
+	var _Align = __webpack_require__(117);
 	
 	var _Align2 = _interopRequireDefault(_Align);
 	
@@ -13669,7 +14018,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 115 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13728,11 +14077,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _domAlign = __webpack_require__(116);
+	var _domAlign = __webpack_require__(118);
 	
 	var _domAlign2 = _interopRequireDefault(_domAlign);
 	
-	var _rcUtil = __webpack_require__(100);
+	var _rcUtil = __webpack_require__(102);
 	
 	var _rcUtil2 = _interopRequireDefault(_rcUtil);
 	
@@ -13870,7 +14219,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 116 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -13888,7 +14237,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _utils = __webpack_require__(117);
+	var _utils = __webpack_require__(119);
 	
 	var _utils2 = _interopRequireDefault(_utils);
 	
@@ -14252,7 +14601,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 117 */
+/* 119 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -14708,16 +15057,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 118 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// export this package's api
 	'use strict';
 	
-	module.exports = __webpack_require__(119);
+	module.exports = __webpack_require__(121);
 
 /***/ },
-/* 119 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14742,15 +15091,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _ChildrenUtils = __webpack_require__(120);
+	var _ChildrenUtils = __webpack_require__(122);
 	
 	var _ChildrenUtils2 = _interopRequireDefault(_ChildrenUtils);
 	
-	var _AnimateChild = __webpack_require__(121);
+	var _AnimateChild = __webpack_require__(123);
 	
 	var _AnimateChild2 = _interopRequireDefault(_AnimateChild);
 	
-	var _util = __webpack_require__(125);
+	var _util = __webpack_require__(127);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -15032,7 +15381,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 120 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15151,7 +15500,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 121 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15168,11 +15517,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _cssAnimation = __webpack_require__(122);
+	var _cssAnimation = __webpack_require__(124);
 	
 	var _cssAnimation2 = _interopRequireDefault(_cssAnimation);
 	
-	var _util = __webpack_require__(125);
+	var _util = __webpack_require__(127);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -15251,13 +15600,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 122 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Event = __webpack_require__(123);
-	var Css = __webpack_require__(124);
+	var Event = __webpack_require__(125);
+	var Css = __webpack_require__(126);
 	var isCssAnimationSupported = Event.endEvents.length !== 0;
 	
 	function getDuration(node, name) {
@@ -15409,7 +15758,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = cssAnimation;
 
 /***/ },
-/* 123 */
+/* 125 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -15497,7 +15846,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = TransitionEvents;
 
 /***/ },
-/* 124 */
+/* 126 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -15528,7 +15877,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 125 */
+/* 127 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -15561,7 +15910,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 126 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15574,23 +15923,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _Menu = __webpack_require__(127);
+	var _Menu = __webpack_require__(129);
 	
 	var _Menu2 = _interopRequireDefault(_Menu);
 	
-	var _SubMenu = __webpack_require__(146);
+	var _SubMenu = __webpack_require__(148);
 	
 	var _SubMenu2 = _interopRequireDefault(_SubMenu);
 	
-	var _MenuItem = __webpack_require__(157);
+	var _MenuItem = __webpack_require__(159);
 	
 	var _MenuItem2 = _interopRequireDefault(_MenuItem);
 	
-	var _MenuItemGroup = __webpack_require__(158);
+	var _MenuItemGroup = __webpack_require__(160);
 	
 	var _MenuItemGroup2 = _interopRequireDefault(_MenuItemGroup);
 	
-	var _Divider = __webpack_require__(159);
+	var _Divider = __webpack_require__(161);
 	
 	var _Divider2 = _interopRequireDefault(_Divider);
 	
@@ -15603,7 +15952,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 127 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15620,15 +15969,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _MenuMixin = __webpack_require__(128);
+	var _MenuMixin = __webpack_require__(130);
 	
 	var _MenuMixin2 = _interopRequireDefault(_MenuMixin);
 	
-	var _objectAssign = __webpack_require__(144);
+	var _objectAssign = __webpack_require__(146);
 	
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
-	var _util = __webpack_require__(145);
+	var _util = __webpack_require__(147);
 	
 	var Menu = _react2['default'].createClass({
 	  displayName: 'Menu',
@@ -15880,7 +16229,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 128 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15915,17 +16264,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcUtil = __webpack_require__(129);
+	var _rcUtil = __webpack_require__(131);
 	
-	var _domScrollIntoView = __webpack_require__(141);
+	var _domScrollIntoView = __webpack_require__(143);
 	
 	var _domScrollIntoView2 = _interopRequireDefault(_domScrollIntoView);
 	
-	var _objectAssign = __webpack_require__(144);
+	var _objectAssign = __webpack_require__(146);
 	
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
-	var _util = __webpack_require__(145);
+	var _util = __webpack_require__(147);
 	
 	function getActiveKey(props) {
 	  var activeKey = props.activeKey;
@@ -16167,31 +16516,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 129 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	module.exports = {
-	  guid: __webpack_require__(130),
-	  classSet: __webpack_require__(131),
-	  joinClasses: __webpack_require__(132),
-	  KeyCode: __webpack_require__(133),
-	  PureRenderMixin: __webpack_require__(134),
-	  shallowEqual: __webpack_require__(135),
-	  createChainedFunction: __webpack_require__(136),
+	  guid: __webpack_require__(132),
+	  classSet: __webpack_require__(133),
+	  joinClasses: __webpack_require__(134),
+	  KeyCode: __webpack_require__(135),
+	  PureRenderMixin: __webpack_require__(136),
+	  shallowEqual: __webpack_require__(137),
+	  createChainedFunction: __webpack_require__(138),
 	  Dom: {
-	    addEventListener: __webpack_require__(137),
-	    contains: __webpack_require__(138)
+	    addEventListener: __webpack_require__(139),
+	    contains: __webpack_require__(140)
 	  },
 	  Children: {
-	    toArray: __webpack_require__(139),
-	    mapSelf: __webpack_require__(140)
+	    toArray: __webpack_require__(141),
+	    mapSelf: __webpack_require__(142)
 	  }
 	};
 
 /***/ },
-/* 130 */
+/* 132 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -16202,7 +16551,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 131 */
+/* 133 */
 /***/ function(module, exports) {
 
 	/**
@@ -16248,7 +16597,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = cx;
 
 /***/ },
-/* 132 */
+/* 134 */
 /***/ function(module, exports) {
 
 	/**
@@ -16294,7 +16643,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = joinClasses;
 
 /***/ },
-/* 133 */
+/* 135 */
 /***/ function(module, exports) {
 
 	/**
@@ -16819,7 +17168,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = KeyCode;
 
 /***/ },
-/* 134 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -16835,7 +17184,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	"use strict";
 	
-	var shallowEqual = __webpack_require__(135);
+	var shallowEqual = __webpack_require__(137);
 	
 	/**
 	 * If your React component's render function is "pure", e.g. it will render the
@@ -16870,7 +17219,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ReactComponentWithPureRenderMixin;
 
 /***/ },
-/* 135 */
+/* 137 */
 /***/ function(module, exports) {
 
 	/**
@@ -16916,7 +17265,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = shallowEqual;
 
 /***/ },
-/* 136 */
+/* 138 */
 /***/ function(module, exports) {
 
 	/**
@@ -16944,7 +17293,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = createChainedFunction;
 
 /***/ },
-/* 137 */
+/* 139 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -16968,7 +17317,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 138 */
+/* 140 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -16985,7 +17334,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 139 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17001,7 +17350,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 140 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17018,20 +17367,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 141 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	module.exports = __webpack_require__(142);
+	module.exports = __webpack_require__(144);
 
 /***/ },
-/* 142 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var util = __webpack_require__(143);
+	var util = __webpack_require__(145);
 	
 	function scrollIntoView(elem, container, config) {
 	  config = config || {};
@@ -17147,7 +17496,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = scrollIntoView;
 
 /***/ },
-/* 143 */
+/* 145 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -17583,7 +17932,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	mix(utils, domUtils);
 
 /***/ },
-/* 144 */
+/* 146 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -17627,7 +17976,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 145 */
+/* 147 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -17647,7 +17996,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 146 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17678,7 +18027,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }return obj;
 	}
 	
-	var _SubPopupMenu = __webpack_require__(147);
+	var _SubPopupMenu = __webpack_require__(149);
 	
 	var _SubPopupMenu2 = _interopRequireDefault(_SubPopupMenu);
 	
@@ -17686,7 +18035,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcUtil = __webpack_require__(129);
+	var _rcUtil = __webpack_require__(131);
 	
 	var SubMenu = _react2['default'].createClass({
 	  displayName: 'SubMenu',
@@ -17707,7 +18056,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    onItemHover: _react2['default'].PropTypes.func
 	  },
 	
-	  mixins: [__webpack_require__(156)],
+	  mixins: [__webpack_require__(158)],
 	
 	  getInitialState: function getInitialState() {
 	    this.isSubMenu = 1;
@@ -17955,7 +18304,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 147 */
+/* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17982,17 +18331,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _MenuMixin = __webpack_require__(128);
+	var _MenuMixin = __webpack_require__(130);
 	
 	var _MenuMixin2 = _interopRequireDefault(_MenuMixin);
 	
-	var _objectAssign = __webpack_require__(144);
+	var _objectAssign = __webpack_require__(146);
 	
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
-	var _util = __webpack_require__(145);
+	var _util = __webpack_require__(147);
 	
-	var _rcAnimate = __webpack_require__(148);
+	var _rcAnimate = __webpack_require__(150);
 	
 	var _rcAnimate2 = _interopRequireDefault(_rcAnimate);
 	
@@ -18088,16 +18437,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 148 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// export this package's api
 	'use strict';
 	
-	module.exports = __webpack_require__(149);
+	module.exports = __webpack_require__(151);
 
 /***/ },
-/* 149 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18122,15 +18471,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _ChildrenUtils = __webpack_require__(150);
+	var _ChildrenUtils = __webpack_require__(152);
 	
 	var _ChildrenUtils2 = _interopRequireDefault(_ChildrenUtils);
 	
-	var _AnimateChild = __webpack_require__(151);
+	var _AnimateChild = __webpack_require__(153);
 	
 	var _AnimateChild2 = _interopRequireDefault(_AnimateChild);
 	
-	var _util = __webpack_require__(155);
+	var _util = __webpack_require__(157);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -18412,7 +18761,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 150 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18531,7 +18880,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 151 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18548,11 +18897,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _cssAnimation = __webpack_require__(152);
+	var _cssAnimation = __webpack_require__(154);
 	
 	var _cssAnimation2 = _interopRequireDefault(_cssAnimation);
 	
-	var _util = __webpack_require__(155);
+	var _util = __webpack_require__(157);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -18631,13 +18980,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 152 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Event = __webpack_require__(153);
-	var Css = __webpack_require__(154);
+	var Event = __webpack_require__(155);
+	var Css = __webpack_require__(156);
 	var isCssAnimationSupported = Event.endEvents.length !== 0;
 	
 	function getDuration(node, name) {
@@ -18789,7 +19138,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = cssAnimation;
 
 /***/ },
-/* 153 */
+/* 155 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -18877,7 +19226,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = TransitionEvents;
 
 /***/ },
-/* 154 */
+/* 156 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -18908,7 +19257,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 155 */
+/* 157 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -18941,7 +19290,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 156 */
+/* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18954,7 +19303,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _rcUtil = __webpack_require__(129);
+	var _rcUtil = __webpack_require__(131);
 	
 	var _rcUtil2 = _interopRequireDefault(_rcUtil);
 	
@@ -19024,7 +19373,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 157 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19093,7 +19442,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcUtil = __webpack_require__(129);
+	var _rcUtil = __webpack_require__(131);
 	
 	var MenuItem = (function (_React$Component) {
 	  _inherits(MenuItem, _React$Component);
@@ -19247,7 +19596,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 158 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19340,7 +19689,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 159 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19440,39 +19789,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 160 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	function ToObject(val) {
-		if (val == null) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-	
-		return Object(val);
-	}
-	
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var keys;
-		var to = ToObject(target);
-	
-		for (var s = 1; s < arguments.length; s++) {
-			from = arguments[s];
-			keys = Object.keys(Object(from));
-	
-			for (var i = 0; i < keys.length; i++) {
-				to[keys[i]] = from[keys[i]];
-			}
-		}
-	
-		return to;
-	};
-
-
-/***/ },
-/* 161 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -19485,10 +19802,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	module.exports = __webpack_require__(162);
+	module.exports = __webpack_require__(163);
 
 /***/ },
-/* 162 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -19511,24 +19828,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FormRow = __webpack_require__(163);
+	var FormRow = __webpack_require__(164);
 	var FormRowTitle = __webpack_require__(165);
 	var FormField = __webpack_require__(167);
 	var TextAreaFormField = __webpack_require__(168);
 	var InputFormField = __webpack_require__(169);
 	var RadioGroupFormField = __webpack_require__(170);
-	var SelectFormField = __webpack_require__(173);
-	var NumberInputFormField = __webpack_require__(217);
-	var DateFormField = __webpack_require__(218);
-	var CheckboxGroupFormField = __webpack_require__(219);
-	var CascadeSelectFormField = __webpack_require__(220);
-	var UploadFormField = __webpack_require__(221);
-	var OtherFormField = __webpack_require__(234);
-	var ButtonGroupFormField = __webpack_require__(235);
+	var SelectFormField = __webpack_require__(174);
+	var NumberInputFormField = __webpack_require__(222);
+	var DateFormField = __webpack_require__(223);
+	var CheckboxGroupFormField = __webpack_require__(224);
+	var CascadeSelectFormField = __webpack_require__(225);
+	var UploadFormField = __webpack_require__(226);
+	var OtherFormField = __webpack_require__(230);
+	var ButtonGroupFormField = __webpack_require__(231);
+	var EditorFormField = __webpack_require__(234);
+	var GridFormField = __webpack_require__(239);
 	var Constants = __webpack_require__(166);
-	var Validators = __webpack_require__(236);
+	var Validators = __webpack_require__(262);
 	
-	var classnames = __webpack_require__(164);
+	var classnames = __webpack_require__(4);
 	var update = React.addons.update;
 	
 	var Form = (function (_React$Component) {
@@ -19561,6 +19880,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (!name) {
 	                console.warn("Each field needs a name to identify itself");
 	            } else {
+	                if (name == 'grid') {
+	                    debugger;
+	                }
 	                this.fields[name] = field;
 	            }
 	        }
@@ -19588,6 +19910,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	                values: me.data,
 	                pass: _flag
 	            };
+	        }
+	    }, {
+	        key: "resetValues",
+	        value: function resetValues() {
+	            var me = this;
+	            var keys = Object.keys(me.fields);
+	            var data = me.props.jsxvalues || me.props.passedData || {};
+	            for (var i = 0; i < keys.length; i++) {
+	                me.fields[keys[i]].handleDataChange(data[keys[i]] == undefined ? null : data[keys[i]], true);
+	            }
 	        }
 	    }, {
 	        key: "doValidate",
@@ -19674,7 +20006,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        attachFormField: me.attachFormField.bind(me),
 	                        detachFormField: me.detachFormField.bind(me),
 	                        handleDataChange: me.handleDataChange.bind(me),
-	                        getValues: me.getValues.bind(me)
+	                        getValues: me.getValues.bind(me),
+	                        resetValues: me.resetValues.bind(me)
 	                    });
 	                })
 	            );
@@ -19698,6 +20031,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	Form.UploadFormField = UploadFormField;
 	Form.OtherFormField = OtherFormField;
 	Form.ButtonGroupFormField = ButtonGroupFormField;
+	Form.EditorFormField = EditorFormField;
+	Form.GridFormField = GridFormField;
 	Form.Constants = Constants;
 	Form.Validators = Validators;
 	
@@ -19720,7 +20055,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Form;
 
 /***/ },
-/* 163 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -19735,7 +20070,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var classnames = __webpack_require__(164);
+	var classnames = __webpack_require__(4);
 	
 	var FormRow = (function (_React$Component) {
 	    _inherits(FormRow, _React$Component);
@@ -19792,7 +20127,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        attachFormField: me.props.attachFormField,
 	                        detachFormField: me.props.detachFormField,
 	                        handleDataChange: me.props.handleDataChange,
-	                        getValues: me.props.getValues
+	                        getValues: me.props.getValues,
+	                        resetValues: me.props.resetValues
 	                    });
 	
 	                    return child;
@@ -19813,61 +20149,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	FormRow.displayName = "FormRow";
 	
 	module.exports = FormRow;
-
-/***/ },
-/* 164 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	  Copyright (c) 2015 Jed Watson.
-	  Licensed under the MIT License (MIT), see
-	  http://jedwatson.github.io/classnames
-	*/
-	
-	(function () {
-		'use strict';
-	
-		function classNames () {
-	
-			var classes = '';
-	
-			for (var i = 0; i < arguments.length; i++) {
-				var arg = arguments[i];
-				if (!arg) continue;
-	
-				var argType = typeof arg;
-	
-				if ('string' === argType || 'number' === argType) {
-					classes += ' ' + arg;
-	
-				} else if (Array.isArray(arg)) {
-					classes += ' ' + classNames.apply(null, arg);
-	
-				} else if ('object' === argType) {
-					for (var key in arg) {
-						if (arg.hasOwnProperty(key) && arg[key]) {
-							classes += ' ' + key;
-						}
-					}
-				}
-			}
-	
-			return classes.substr(1);
-		}
-	
-		if (typeof module !== 'undefined' && module.exports) {
-			module.exports = classNames;
-		} else if (true){
-			// AMD. Register as an anonymous module.
-			!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
-				return classNames;
-			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		} else {
-			window.classNames = classNames;
-		}
-	
-	}());
-
 
 /***/ },
 /* 165 */
@@ -19891,7 +20172,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var Constants = __webpack_require__(166);
-	var classnames = __webpack_require__(164);
+	var classnames = __webpack_require__(4);
 	
 	var FormRowTitle = (function (_React$Component) {
 	    _inherits(FormRowTitle, _React$Component);
@@ -19979,8 +20260,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var Constants = __webpack_require__(166);
-	var classnames = __webpack_require__(164);
-	var assign = __webpack_require__(160);
+	var classnames = __webpack_require__(4);
+	var assign = __webpack_require__(84);
 	
 	var FormField = (function (_React$Component) {
 	    _inherits(FormField, _React$Component);
@@ -20005,6 +20286,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	            me.props.handleDataChange(me, me.props.value, true);
 	        }
 	    }, {
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
+	            var me = this;
+	            if (!me._isEqual(nextProps.value, me.props.value)) {
+	                me.handleDataChange(nextProps.value, true);
+	            }
+	        }
+	    }, {
+	        key: "_isEqual",
+	        value: function _isEqual(a, b) {
+	            return JSON.stringify(a) == JSON.stringify(b);
+	        }
+	    }, {
 	        key: "componentWillUnmount",
 	        value: function componentWillUnmount() {
 	            this.props.detachFormField(this);
@@ -20017,17 +20311,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        /*
 	         * Fired when field value changes，update form's state and then trigger re-render.
+	         * @param fromReset {boolean} if handleDataChange is invoked by form's resetValues,
+	         * doValidate should not be invoked.
 	         */
 	
 	    }, {
 	        key: "handleDataChange",
-	        value: function handleDataChange(value) {
+	        value: function handleDataChange(value, fromReset) {
 	            var me = this;
 	            me.setState({
 	                value: value,
-	                formatValue: me.formatValue(value)
+	                formatValue: me.formatValue(value),
+	                error: !!fromReset ? false : me.state.error,
+	                /*
+	                 * why set state fromReset? some field like editor cannot be reset in the common way
+	                 * so set this state to tell the field that you need to reset by yourself.
+	                 */
+	                fromReset: fromReset
 	            }, function () {
-	                me.doValidate();
+	                if (!fromReset) {
+	                    me.doValidate();
+	                }
 	            });
 	            me.props.handleDataChange(me, value);
 	        }
@@ -20085,7 +20389,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: "renderTips",
 	        value: function renderTips() {
 	            var me = this;
-	            if (me.props.mode != Constants.MODE.EDIT) return;
+	            var mode = me.props.jsxmode || me.props.mode;
+	            if (mode != Constants.MODE.EDIT) return;
 	            if (!!this.props.jsxtips) {
 	                return React.createElement(
 	                    "li",
@@ -20117,26 +20422,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: "renderErrorMsg",
 	        value: function renderErrorMsg() {
 	            var me = this;
-	            if (me.props.mode != Constants.MODE.EDIT) return;
+	            var mode = me.props.jsxmode || me.props.mode;
+	            if (mode != Constants.MODE.EDIT) return;
 	            return React.createElement(
 	                "li",
 	                { className: "kuma-form-errormsg" },
+	                React.createElement("i", { className: "kuma-icon kuma-icon-close-hover" }),
 	                me.state.errMsg
 	            );
 	        }
 	    }, {
 	        key: "renderLabel",
 	        value: function renderLabel() {
-	            return React.createElement(
-	                "label",
-	                { className: "kuma-label" },
-	                this.props.jsxlabel,
-	                React.createElement(
-	                    "i",
-	                    null,
-	                    this.state.required ? "*" : ""
-	                )
-	            );
+	            var me = this;
+	            if (me.props.jsxshowLabel) {
+	                return React.createElement(
+	                    "label",
+	                    { className: "kuma-label" },
+	                    this.props.jsxlabel,
+	                    React.createElement(
+	                        "i",
+	                        null,
+	                        me.props.required ? "*" : ""
+	                    )
+	                );
+	            }
 	        }
 	    }, {
 	        key: "addSpecificClass",
@@ -20150,6 +20460,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            var me = this;
 	            var specificCls = me.addSpecificClass();
+	            var mode = me.props.jsxmode || me.props.mode;
 	
 	            return React.createElement(
 	                "div",
@@ -20159,7 +20470,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                me.renderLabel(),
 	                React.createElement(
 	                    "ul",
-	                    { className: "kuma-form-field-content" },
+	                    { className: classnames({
+	                            "kuma-form-field-content": true,
+	                            "view-mode": mode == Constants.MODE.VIEW,
+	                            "edit-mode": mode == Constants.MODE.EDIT
+	                        }) },
 	                    React.createElement(
 	                        "li",
 	                        null,
@@ -20179,23 +20494,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	FormField.propTypes = {
 	    jsxshow: React.PropTypes.bool,
+	    jsxmode: React.PropTypes.string,
+	    jsxshowLabel: React.PropTypes.bool,
 	    jsxprefixCls: React.PropTypes.string,
 	    jsxflex: React.PropTypes.number,
 	    jsxname: React.PropTypes.string.isRequired,
 	    jsxplaceholder: React.PropTypes.string,
 	    jsxlabel: React.PropTypes.string,
 	    jsxtips: React.PropTypes.string,
-	    jsxrules: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.array])
+	    jsxrules: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.array]),
+	    required: React.PropTypes.bool
 	};
 	
 	FormField.defaultProps = {
 	    jsxshow: true, // 是否显示该块
+	    jsxshowLabel: true, // 是否展示 label
 	    jsxprefixCls: "kuma-form-field", // 默认类名
 	    jsxflex: 1, // 占 Form 的比例，类似于 css3 中的 flex-box
 	    jsxname: "", // 表单字段
 	    jsxplaceholder: "", // 在未选值之前的占位符
 	    jsxlabel: "", // 左侧表单域标题
-	    jsxtips: "" // 提醒
+	    jsxtips: "", // 提醒
+	    required: false
 	};
 	
 	FormField.displayName = "FormField";
@@ -20293,7 +20613,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var FormField = __webpack_require__(167);
 	var Constants = __webpack_require__(166);
-	var classnames = __webpack_require__(164);
+	var classnames = __webpack_require__(4);
 	
 	/**
 	 * extend FormField, rewrite renderField method
@@ -20340,7 +20660,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function renderField() {
 	            var me = this;
 	            var arr = [];
-	            if (me.props.mode == Constants.MODE.EDIT) {
+	            var mode = me.props.jsxmode || me.props.mode;
+	            if (mode == Constants.MODE.EDIT) {
 	                arr.push(React.createElement('input', {
 	                    className: 'kuma-input',
 	                    ref: 'root',
@@ -20351,7 +20672,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    name: me.props.key,
 	                    value: me.state.formatValue,
 	                    onChange: me.handleChange.bind(me) }));
-	            } else if (me.props.mode == Constants.MODE.VIEW) {
+	            } else if (mode == Constants.MODE.VIEW) {
 	                arr.push(React.createElement(
 	                    'span',
 	                    { key: 'text' },
@@ -20390,6 +20711,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var FormField = __webpack_require__(167);
 	var Constants = __webpack_require__(166);
 	var RadioGroup = __webpack_require__(171);
+	var Item = RadioGroup.Item;
 	
 	var RadioGroupFormField = (function (_FormField) {
 	    _inherits(RadioGroupFormField, _FormField);
@@ -20401,15 +20723,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    _createClass(RadioGroupFormField, [{
-	        key: 'getValue',
-	        value: function getValue() {
-	            return this.refs.el.getCheckedValue();
-	        }
-	    }, {
 	        key: 'handleChange',
-	        value: function handleChange() {
+	        value: function handleChange(value) {
 	            var me = this;
-	            var value = me.getValue();
 	            me.handleDataChange(value);
 	        }
 	    }, {
@@ -20431,19 +20747,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	                arr.push(React.createElement(
 	                    RadioGroup,
 	                    {
-	                        jsxname: me.props.jsxname,
 	                        ref: 'el',
 	                        key: 'radiogroup',
-	                        jsxvalue: me.state.value,
+	                        value: me.state.value,
 	                        onChange: me.handleChange.bind(me) },
 	                    me.props.children
 	                ));
 	            } else {
-	                arr.push(React.createElement(
-	                    'span',
-	                    { key: 'radiogroup' },
-	                    me.state.value
-	                ));
+	                var text = me.props.children.filter(function (child, index) {
+	                    return child.props.value == me.state.value;
+	                });
+	
+	                if (text.length) {
+	                    arr.push(React.createElement(
+	                        'span',
+	                        { key: 'radiogroup' },
+	                        text[0].props.text
+	                    ));
+	                }
 	            }
 	            return arr;
 	        }
@@ -20455,12 +20776,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	RadioGroupFormField.displayName = "RadioGroupFormField";
 	RadioGroupFormField.propTypes = FormField.propTypes;
 	RadioGroupFormField.defaultProps = FormField.defaultProps;
+	RadioGroupFormField.Item = Item;
 	module.exports = RadioGroupFormField;
 
 /***/ },
 /* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/**
+	 * Radiogroup Component for uxcore
+	 * @author 
+	 *
+	 * Copyright 2014-2015, Uxcore Team, Alinw.
+	 * All rights reserved.
+	 */
+	
 	'use strict';
 	
 	module.exports = __webpack_require__(172);
@@ -20474,97 +20804,152 @@ return /******/ (function(modules) { // webpackBootstrap
 	* @author: zhouquan.yezq
 	* @time  : 5/25 2015
 	*/
-	'use strict';
 	
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
+	"use strict";
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
-	var _react = __webpack_require__(9);
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
-	var _react2 = _interopRequireDefault(_react);
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
-	var component = _react2['default'].createClass({
-	    displayName: 'component',
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	    mixins: [],
-	    propTypes: {},
-	    getDefaultProps: function getDefaultProps() {
-	        return {};
-	    },
-	    getInitialState: function getInitialState() {
-	        return {
-	            defaultValue: this.props.defaultValue
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Item = __webpack_require__(173);
+	var classnames = __webpack_require__(4);
+	
+	var Radiogroup = (function (_React$Component) {
+	    _inherits(Radiogroup, _React$Component);
+	
+	    function Radiogroup(props) {
+	        _classCallCheck(this, Radiogroup);
+	
+	        _get(Object.getPrototypeOf(Radiogroup.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            defaultValue: props.defaultValue
 	        };
-	    },
-	    componentDidMount: function componentDidMount() {
-	        this.setRadioNames();
-	        this.setCheckedRadio();
-	    },
-	
-	    componentDidUpdate: function componentDidUpdate() {
-	        this.setRadioNames();
-	        this.setCheckedRadio();
-	    },
-	    render: function render() {
-	        return _react2['default'].createElement(
-	            'div',
-	            { className: 'kuma-radio-group', onChange: this.props.onChange },
-	            this.props.children
-	        );
-	    },
-	
-	    setRadioNames: function setRadioNames() {
-	        // stay DRY and don't put the same `name` on all radios manually. Put it on
-	        // the tag and it'll be done here
-	        var $radios = this.getRadios();
-	        for (var i = 0, length = $radios.length; i < length; i++) {
-	            $radios[i].setAttribute('name', this.props.jsxname);
-	        }
-	    },
-	
-	    getRadios: function getRadios() {
-	        return this.getDOMNode().querySelectorAll('input[type="radio"]');
-	    },
-	
-	    setCheckedRadio: function setCheckedRadio() {
-	        var $radios = this.getRadios();
-	        // if `value` is passed from parent, always use that value. This is similar
-	        // to React's controlled component. If `defaultValue` is used instead,
-	        // subsequent updates to defaultValue are ignored. Note: when `defaultValue`
-	        // and `value` are both passed, the latter takes precedence, just like in
-	        // a controlled component
-	        var destinationValue = this.props.jsxvalue != null ? this.props.jsxvalue : this.state.defaultValue;
-	
-	        for (var i = 0, length = $radios.length; i < length; i++) {
-	            var $radio = $radios[i];
-	
-	            // intentionally use implicit conversion for those who accidentally used,
-	            // say, `valueToChange` of 1 (integer) to compare it with `value` of "1"
-	            // (auto conversion to valid html value from React)
-	            if ($radio.value == destinationValue) {
-	                $radio.checked = true;
-	            }
-	        }
-	    },
-	
-	    getCheckedValue: function getCheckedValue() {
-	        var $radios = this.getRadios();
-	        for (var i = 0, length = $radios.length; i < length; i++) {
-	            if ($radios[i].checked) {
-	                return $radios[i].value;
-	            }
-	        }
 	    }
 	
-	});
-	exports['default'] = component;
-	module.exports = exports['default'];
+	    _createClass(Radiogroup, [{
+	        key: "_handleChange",
+	        value: function _handleChange(value) {
+	            var me = this;
+	            me.props.onChange(value);
+	        }
+	    }, {
+	        key: "_processChild",
+	        value: function _processChild() {
+	            var me = this;
+	            var length = React.Children.count(me.props.children);
+	            if (!length) return false;
+	            var elements = React.Children.map(me.props.children, function (child, index) {
+	                if (!!child.type && child.type.displayName == "RadiogroupItem") {
+	                    return React.cloneElement(child, {
+	                        onChange: me._handleChange.bind(me),
+	                        key: index,
+	                        checked: me.props.value == child.props.value
+	                    });
+	                }
+	            });
+	            return elements;
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var me = this;
+	            return React.createElement(
+	                "div",
+	                { className: classnames(_defineProperty({
+	                        "kuma-radio-group": true
+	                    }, me.props.className, !!me.props.className)) },
+	                me._processChild()
+	            );
+	        }
+	    }]);
+	
+	    return Radiogroup;
+	})(React.Component);
+	
+	Radiogroup.displayName = "Radiogroup";
+	Radiogroup.propTypes = {
+	    value: React.PropTypes.string,
+	    onChange: React.PropTypes.func
+	};
+	Radiogroup.defaultProps = {
+	    value: "",
+	    onChange: function onChange() {}
+	};
+	
+	Radiogroup.Item = Item;
+	
+	module.exports = Radiogroup;
 
 /***/ },
 /* 173 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var RadiogroupItem = (function (_React$Component) {
+	    _inherits(RadiogroupItem, _React$Component);
+	
+	    function RadiogroupItem(props) {
+	        _classCallCheck(this, RadiogroupItem);
+	
+	        _get(Object.getPrototypeOf(RadiogroupItem.prototype), "constructor", this).call(this, props);
+	    }
+	
+	    _createClass(RadiogroupItem, [{
+	        key: "_handleChange",
+	        value: function _handleChange(e) {
+	            var me = this;
+	            me.props.onChange(me.props.value);
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var me = this;
+	            return React.createElement(
+	                "label",
+	                null,
+	                React.createElement("input", { type: "radio", ref: "radio", className: me.props.className, checked: me.props.checked, onChange: me._handleChange.bind(me) }),
+	                React.createElement("s", null),
+	                me.props.text
+	            );
+	        }
+	    }]);
+	
+	    return RadiogroupItem;
+	})(React.Component);
+	
+	RadiogroupItem.displayName = "RadiogroupItem";
+	RadiogroupItem.propTypes = {
+	    text: React.PropTypes.string,
+	    value: React.PropTypes.string,
+	    className: React.PropTypes.string,
+	    onChange: React.PropTypes.func
+	};
+	RadiogroupItem.defaultProps = {
+	    text: "",
+	    value: "",
+	    className: "kuma-checkbox",
+	    onChange: function onChange() {}
+	};
+	
+	module.exports = RadiogroupItem;
+
+/***/ },
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -20582,8 +20967,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var FormField = __webpack_require__(167);
 	var Constants = __webpack_require__(166);
-	var Select = __webpack_require__(174);
-	var assign = __webpack_require__(160);
+	var Select = __webpack_require__(175);
+	var assign = __webpack_require__(84);
 	var Option = Select.Option;
 	
 	var SelectFormField = (function (_FormField) {
@@ -20647,8 +21032,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var me = this;
 	            var values = Object.keys(me.state.data);
 	            if (!values.length) {
-	                console.warn("You need to pass data to initialize Select.");
-	                // return [];
+	                // console.warn("You need to pass data to initialize Select.");
 	            } else {
 	                    var arr = values.map(function (value, index) {
 	                        return React.createElement(
@@ -20683,6 +21067,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    style: me.props.jsxstyle,
 	                    multiple: me.props.jsxmultiple,
 	                    allowClear: me.props.jsxallowClear,
+	                    combobox: me.props.jsxcombobox,
 	                    searchPlaceholder: me.props.jsxsearchPlaceholder,
 	                    tags: me.props.jsxtags,
 	                    value: me.state.value,
@@ -20717,6 +21102,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	SelectFormField.propTypes = assign({}, FormField.propTypes, {
 	    jsxstyle: React.PropTypes.object,
 	    jsxplaceholder: React.PropTypes.string,
+	    jsxcombobox: React.PropTypes.bool,
+	    jsxdata: React.PropTypes.object,
 	    beforeFetch: React.PropTypes.func,
 	    afterFetch: React.PropTypes.func,
 	    jsxshowSearch: React.PropTypes.bool,
@@ -20727,6 +21114,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
 	    jsxplaceholder: "请下拉选择",
+	    jsxcombobox: false,
+	    jsxdata: {},
 	    beforeFetch: function beforeFetch(obj) {
 	        return obj;
 	    },
@@ -20743,7 +21132,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = SelectFormField;
 
 /***/ },
-/* 174 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -20756,10 +21145,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	module.exports = __webpack_require__(175);
+	module.exports = __webpack_require__(176);
 
 /***/ },
-/* 175 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20770,7 +21159,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var RcSelect = __webpack_require__(176);
+	var RcSelect = __webpack_require__(177);
 	
 	var Select2 = (function (_RcSelect) {
 		_inherits(Select2, _RcSelect);
@@ -20791,7 +21180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Select2;
 
 /***/ },
-/* 176 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20804,15 +21193,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _Select = __webpack_require__(177);
+	var _Select = __webpack_require__(178);
 	
 	var _Select2 = _interopRequireDefault(_Select);
 	
-	var _Option = __webpack_require__(216);
+	var _Option = __webpack_require__(221);
 	
 	var _Option2 = _interopRequireDefault(_Option);
 	
-	var _OptGroup = __webpack_require__(190);
+	var _OptGroup = __webpack_require__(191);
 	
 	var _OptGroup2 = _interopRequireDefault(_OptGroup);
 	
@@ -20822,7 +21211,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 177 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20841,36 +21230,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }return target;
 	};
 	
-	var _createClass = (function () {
-	  function defineProperties(target, props) {
-	    for (var i = 0; i < props.length; i++) {
-	      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ('value' in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-	    }
-	  }return function (Constructor, protoProps, staticProps) {
-	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-	  };
-	})();
-	
-	var _get = function get(_x, _x2, _x3) {
-	  var _again = true;_function: while (_again) {
-	    var object = _x,
-	        property = _x2,
-	        receiver = _x3;desc = parent = getter = undefined;_again = false;if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
-	      var parent = Object.getPrototypeOf(object);if (parent === null) {
-	        return undefined;
-	      } else {
-	        _x = parent;_x2 = property;_x3 = receiver;_again = true;continue _function;
-	      }
-	    } else if ('value' in desc) {
-	      return desc.value;
-	    } else {
-	      var getter = desc.get;if (getter === undefined) {
-	        return undefined;
-	      }return getter.call(receiver);
-	    }
-	  }
-	};
-	
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
@@ -20883,594 +21242,615 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }return obj;
 	}
 	
-	function _classCallCheck(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError('Cannot call a class as a function');
-	  }
-	}
-	
-	function _inherits(subClass, superClass) {
-	  if (typeof superClass !== 'function' && superClass !== null) {
-	    throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
-	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-	}
-	
 	var _react = __webpack_require__(9);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcUtil = __webpack_require__(178);
+	var _rcUtil = __webpack_require__(179);
 	
-	var _OptGroup = __webpack_require__(190);
+	var _OptGroup = __webpack_require__(191);
 	
 	var _OptGroup2 = _interopRequireDefault(_OptGroup);
 	
-	var _rcAlign = __webpack_require__(191);
-	
-	var _rcAlign2 = _interopRequireDefault(_rcAlign);
-	
-	var _rcAnimate = __webpack_require__(195);
-	
-	var _rcAnimate2 = _interopRequireDefault(_rcAnimate);
-	
-	var _Dropdown = __webpack_require__(203);
+	var _Dropdown = __webpack_require__(192);
 	
 	var _Dropdown2 = _interopRequireDefault(_Dropdown);
 	
-	var _util = __webpack_require__(204);
+	var _util = __webpack_require__(193);
 	
 	function noop() {}
 	
 	function filterFn(input, child) {
-	  return (0, _util.getPropValue)(child, this.props.optionFilterProp).indexOf(input) > -1;
+	  return String((0, _util.getPropValue)(child, this.props.optionFilterProp)).indexOf(input) > -1;
 	}
 	
 	function saveRef(name, component) {
 	  this[name] = component;
 	}
 	
-	var Select = (function (_React$Component) {
-	  _inherits(Select, _React$Component);
+	var Select = _react2['default'].createClass({
+	  displayName: 'Select',
 	
-	  function Select(props) {
-	    var _this = this;
+	  propTypes: {
+	    multiple: _react.PropTypes.bool,
+	    filterOption: _react.PropTypes.any,
+	    showSearch: _react.PropTypes.bool,
+	    disabled: _react.PropTypes.bool,
+	    showArrow: _react.PropTypes.bool,
+	    tags: _react.PropTypes.bool,
+	    transitionName: _react.PropTypes.string,
+	    optionLabelProp: _react.PropTypes.string,
+	    optionFilterProp: _react.PropTypes.string,
+	    animation: _react.PropTypes.string,
+	    onChange: _react.PropTypes.func,
+	    onSelect: _react.PropTypes.func,
+	    onSearch: _react.PropTypes.func,
+	    searchPlaceholder: _react.PropTypes.string,
+	    placeholder: _react.PropTypes.any,
+	    onDeselect: _react.PropTypes.func,
+	    value: _react.PropTypes.oneOfType([_react.PropTypes.array, _react.PropTypes.string]),
+	    defaultValue: _react.PropTypes.oneOfType([_react.PropTypes.array, _react.PropTypes.string]),
+	    label: _react.PropTypes.oneOfType([_react.PropTypes.array, _react.PropTypes.any]),
+	    defaultLabel: _react.PropTypes.oneOfType([_react.PropTypes.array, _react.PropTypes.any]),
+	    dropdownStyle: _react.PropTypes.object,
+	    maxTagTextLength: _react.PropTypes.number
+	  },
 	
-	    _classCallCheck(this, Select);
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      prefixCls: 'rc-select',
+	      filterOption: filterFn,
+	      showSearch: true,
+	      allowClear: false,
+	      placeholder: '',
+	      searchPlaceholder: '',
+	      defaultValue: [],
+	      onChange: noop,
+	      onSelect: noop,
+	      onSearch: noop,
+	      onDeselect: noop,
+	      showArrow: true,
+	      dropdownMatchSelectWidth: true,
+	      dropdownStyle: {},
+	      dropdownMenuStyle: {},
+	      optionFilterProp: 'value',
+	      optionLabelProp: 'value',
+	      notFoundContent: 'Not Found'
+	    };
+	  },
 	
-	    _get(Object.getPrototypeOf(Select.prototype), 'constructor', this).call(this, props);
+	  getInitialState: function getInitialState() {
+	    var props = this.props;
 	    var value = [];
 	    if ('value' in props) {
-	      value = (0, _util.normValue)(props.value);
-	    } else if ('defaultValue' in props) {
-	      value = (0, _util.normValue)(props.defaultValue);
+	      value = (0, _util.toArray)(props.value);
+	    } else {
+	      value = (0, _util.toArray)(props.defaultValue);
 	    }
-	    this.state = {
-	      value: value,
-	      inputValue: ''
-	    };
-	    var events = ['onClick', 'getDOMNode', 'onKeyDown', 'onInputKeyDown', 'onInputChange', 'onFocus', 'onBlur', 'onClearSelection', 'onMenuSelect', 'onMenuDeselect'];
-	    events.forEach(function (m) {
-	      _this[m] = _this[m].bind(_this);
-	    });
+	    var label = this.getLabelFromProps(props, value, 1);
+	    var inputValue = '';
+	    if (props.combobox) {
+	      inputValue = value[0] || '';
+	    }
 	    this.saveInputRef = saveRef.bind(this, 'inputInstance');
 	    this.saveDropdownRef = saveRef.bind(this, 'dropdownInstance');
-	  }
+	    return { value: value, inputValue: inputValue, label: label };
+	  },
 	
-	  _createClass(Select, [{
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(nextProps) {
-	      if ('value' in nextProps) {
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if ('value' in nextProps) {
+	      var value = (0, _util.toArray)(nextProps.value);
+	      var label = this.getLabelFromProps(nextProps, value);
+	      this.setState({
+	        value: value,
+	        label: label
+	      });
+	      if (nextProps.combobox) {
 	        this.setState({
-	          value: (0, _util.normValue)(nextProps.value)
+	          inputValue: value[0] || ''
 	        });
 	      }
 	    }
-	  }, {
-	    key: 'componentDidUpdate',
-	    value: function componentDidUpdate() {
-	      var state = this.state;
-	      var props = this.props;
-	      if (this.haveOpened) {
-	        if (props.renderDropdownToBody) {
-	          _react2['default'].render(this.getDropdownElement(), this.getDropdownContainer());
+	  },
+	
+	  componentDidUpdate: function componentDidUpdate() {
+	    var state = this.state;
+	    var props = this.props;
+	    if (this.haveOpened) {
+	      _react2['default'].render(this.getDropdownElement(), this.getDropdownContainer());
+	    }
+	    if (state.open) {
+	      if (props.dropdownMatchSelectWidth) {
+	        var dropdownDOMNode = this.getDropdownDOMNode();
+	        if (dropdownDOMNode) {
+	          dropdownDOMNode.style.width = this.getDOMNode().offsetWidth + 'px';
 	        }
 	      }
-	      if (state.open) {
-	        if (props.dropdownMatchSelectWidth) {
-	          var dropdownDOMNode = this.getDropdownDOMNode();
-	          if (dropdownDOMNode) {
-	            dropdownDOMNode.style.width = this.getDOMNode().offsetWidth + 'px';
-	          }
-	        }
-	        if ((0, _util.isMultipleOrTags)(props)) {
-	          var inputNode = this.getInputDOMNode();
-	          if (inputNode.value) {
-	            inputNode.style.width = '';
-	            inputNode.style.width = inputNode.scrollWidth + 'px';
-	          } else {
-	            inputNode.style.width = '';
-	          }
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      if (this.dropdownContainer) {
-	        _react2['default'].unmountComponentAtNode(this.dropdownContainer);
-	        document.body.removeChild(this.dropdownContainer);
-	        this.dropdownContainer = null;
-	      }
-	      this.dropdownInstance = null;
-	      if (this._blurTimer) {
-	        clearTimeout(this._blurTimer);
-	        this._blurTimer = null;
-	      }
-	    }
-	  }, {
-	    key: 'onInputChange',
-	    value: function onInputChange(e) {
-	      var val = e.target.value;
-	      var props = this.props;
-	      this.setState({
-	        inputValue: val,
-	        open: true
-	      });
-	      if ((0, _util.isCombobox)(props)) {
-	        props.onChange(val);
-	      }
-	      props.onSearch(val);
-	    }
-	  }, {
-	    key: 'onClick',
-	    value: function onClick() {
-	      if (!this.props.disabled) {
-	        if (this.state.open) {
-	          this.setOpenState(false);
+	      if ((0, _util.isMultipleOrTags)(props)) {
+	        var inputNode = this.getInputDOMNode();
+	        if (inputNode.value) {
+	          inputNode.style.width = '';
+	          inputNode.style.width = inputNode.scrollWidth + 'px';
 	        } else {
-	          this.openIfHasChildren();
+	          inputNode.style.width = '';
 	        }
 	      }
 	    }
+	  },
 	
-	    // combobox ignore
-	  }, {
-	    key: 'onKeyDown',
-	    value: function onKeyDown(e) {
-	      var props = this.props;
-	      if (props.disabled) {
-	        return;
+	  componentWillUnmount: function componentWillUnmount() {
+	    if (this.dropdownContainer) {
+	      _react2['default'].unmountComponentAtNode(this.dropdownContainer);
+	      document.body.removeChild(this.dropdownContainer);
+	      this.dropdownContainer = null;
+	    }
+	    this.dropdownInstance = null;
+	    if (this._blurTimer) {
+	      clearTimeout(this._blurTimer);
+	      this._blurTimer = null;
+	    }
+	  },
+	
+	  onInputChange: function onInputChange(e) {
+	    var val = e.target.value;
+	    var props = this.props;
+	    this.setState({
+	      inputValue: val,
+	      open: true
+	    });
+	    if ((0, _util.isCombobox)(props)) {
+	      this.fireChange([val], [val]);
+	    }
+	    props.onSearch(val);
+	  },
+	
+	  onClick: function onClick() {
+	    var props = this.props;
+	    if (!props.disabled) {
+	      if (this.state.open) {
+	        this.setOpenState(false);
+	      } else {
+	        this.openIfHasChildren();
+	        if ((0, _util.isMultipleOrTagsOrCombobox)(props)) {
+	          if (this.getInputDOMNode()) {
+	            this.getInputDOMNode().focus();
+	          }
+	        }
 	      }
-	      var keyCode = e.keyCode;
-	      if (this.state.open && !this.getInputDOMNode()) {
-	        this.onInputKeyDown(e);
-	      } else if (keyCode === _rcUtil.KeyCode.ENTER || keyCode === _rcUtil.KeyCode.DOWN) {
-	        this.onClick();
+	    }
+	  },
+	
+	  // combobox ignore
+	  onKeyDown: function onKeyDown(e) {
+	    var props = this.props;
+	    if (props.disabled) {
+	      return;
+	    }
+	    var keyCode = e.keyCode;
+	    if (this.state.open && !this.getInputDOMNode()) {
+	      this.onInputKeyDown(e);
+	    } else if (keyCode === _rcUtil.KeyCode.ENTER || keyCode === _rcUtil.KeyCode.DOWN) {
+	      this.onClick();
+	      e.preventDefault();
+	    }
+	  },
+	
+	  onInputKeyDown: function onInputKeyDown(e) {
+	    var props = this.props;
+	    var state = this.state;
+	    var keyCode = e.keyCode;
+	    if ((0, _util.isMultipleOrTags)(props) && !e.target.value && keyCode === _rcUtil.KeyCode.BACKSPACE) {
+	      var value = state.value.concat();
+	      if (value.length) {
+	        var label = state.label.concat();
+	        var popValue = value.pop();
+	        label.pop();
+	        props.onDeselect(popValue);
+	        this.fireChange(value, label);
+	      }
+	      return;
+	    }
+	
+	    if (keyCode === _rcUtil.KeyCode.DOWN) {
+	      if (!state.open) {
+	        this.openIfHasChildren();
 	        e.preventDefault();
-	      }
-	    }
-	  }, {
-	    key: 'onInputKeyDown',
-	    value: function onInputKeyDown(e) {
-	      var props = this.props;
-	      var state = this.state;
-	      var keyCode = e.keyCode;
-	      if ((0, _util.isMultipleOrTags)(props) && !e.target.value && keyCode === _rcUtil.KeyCode.BACKSPACE) {
-	        var value = state.value.concat();
-	        if (value.length) {
-	          value.pop();
-	          this.fireChange(value);
-	        }
+	        e.stopPropagation();
 	        return;
 	      }
-	
-	      if (keyCode === _rcUtil.KeyCode.DOWN) {
-	        if (!state.open) {
-	          this.openIfHasChildren();
-	          e.preventDefault();
-	          e.stopPropagation();
-	          return;
-	        }
-	      } else if (keyCode === _rcUtil.KeyCode.ESC) {
-	        if (state.open) {
-	          this.setOpenState(false);
-	          e.preventDefault();
-	          e.stopPropagation();
-	        }
-	        return;
-	      }
-	
+	    } else if (keyCode === _rcUtil.KeyCode.ESC) {
 	      if (state.open) {
-	        var menu = this.dropdownInstance && this.dropdownInstance.refs.menu;
-	        if (menu && menu.onKeyDown(e)) {
-	          e.preventDefault();
-	          e.stopPropagation();
-	        }
+	        this.setOpenState(false);
+	        e.preventDefault();
+	        e.stopPropagation();
+	      }
+	      return;
+	    }
+	
+	    if (state.open) {
+	      var menu = this.dropdownInstance && this.dropdownInstance.getMenuComponent();
+	      if (menu && menu.onKeyDown(e)) {
+	        e.preventDefault();
+	        e.stopPropagation();
 	      }
 	    }
-	  }, {
-	    key: 'onMenuSelect',
-	    value: function onMenuSelect(key, item) {
-	      var value = this.state.value;
-	      var props = this.props;
-	      var selectedValue = (0, _util.getValuePropValue)(item);
+	  },
+	
+	  onMenuSelect: function onMenuSelect(_ref) {
+	    var item = _ref.item;
+	
+	    var value = this.state.value;
+	    var label = this.state.label;
+	    var props = this.props;
+	    var selectedValue = (0, _util.getValuePropValue)(item);
+	    var selectedLabel = this.getLabelFromOption(item);
+	    props.onSelect(selectedValue, item);
+	    if ((0, _util.isMultipleOrTags)(props)) {
 	      if (value.indexOf(selectedValue) !== -1) {
 	        return;
 	      }
-	      if ((0, _util.isMultipleOrTags)(props)) {
-	        value = value.concat([selectedValue]);
-	      } else {
-	        if (value[0] === selectedValue) {
-	          this.setOpenState(false);
-	          return;
-	        }
-	        value = [selectedValue];
-	      }
-	      props.onSelect(selectedValue, item);
-	      this.fireChange(value);
-	      this.setState({
-	        inputValue: ''
-	      });
-	      this.setOpenState(false);
-	      if ((0, _util.isCombobox)(props)) {
-	        this.setState({
-	          inputValue: (0, _util.getPropValue)(item, props.optionLabelProp)
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'onMenuDeselect',
-	    value: function onMenuDeselect(key, item, e) {
-	      if (e.type === 'click') {
-	        this.removeSelected((0, _util.getValuePropValue)(item));
-	      }
-	      this.setState({
-	        inputValue: ''
-	      });
-	      this.setOpenState(false);
-	    }
-	  }, {
-	    key: 'onBlur',
-	    value: function onBlur() {
-	      var _this2 = this;
-	
-	      if (this._blurTimer) {
-	        clearTimeout(this._blurTimer);
-	      }
-	      this._blurTimer = setTimeout(function () {
-	        _this2.setState({
-	          open: false
-	        });
-	      }, 100);
-	    }
-	  }, {
-	    key: 'onFocus',
-	    value: function onFocus() {
-	      if (this._blurTimer) {
-	        clearTimeout(this._blurTimer);
-	        this._blurTimer = null;
-	      }
-	    }
-	  }, {
-	    key: 'onClearSelection',
-	    value: function onClearSelection(e) {
-	      var props = this.props;
-	      var state = this.state;
-	      if (props.disabled) {
+	      value = value.concat([selectedValue]);
+	      label = label.concat([selectedLabel]);
+	    } else {
+	      if (value[0] === selectedValue) {
+	        this.setOpenState(false);
 	        return;
 	      }
-	      e.stopPropagation();
-	      if (state.inputValue || state.value.length) {
-	        this.fireChange([]);
-	        this.setState({
-	          inputValue: ''
-	        });
-	      }
-	      this.setOpenState(false);
+	      value = [selectedValue];
+	      label = [selectedLabel];
 	    }
-	  }, {
-	    key: 'getLabelByValue',
-	    value: function getLabelByValue(children, value) {
-	      var _this3 = this;
-	
-	      if (value === undefined) {
-	        return null;
-	      }
-	      var label = null;
-	      _react2['default'].Children.forEach(children, function (c) {
-	        if (c.type === _OptGroup2['default']) {
-	          var maybe = _this3.getLabelByValue(c.props.children, value);
-	          if (maybe !== null) {
-	            label = maybe;
-	          }
-	        } else if ((0, _util.getValuePropValue)(c) === value) {
-	          label = (0, _util.getPropValue)(c, _this3.props.optionLabelProp);
-	        }
+	    this.fireChange(value, label);
+	    this.setOpenState(false);
+	    this.setState({
+	      inputValue: ''
+	    });
+	    if ((0, _util.isCombobox)(props)) {
+	      this.setState({
+	        inputValue: (0, _util.getPropValue)(item, props.optionLabelProp)
 	      });
+	    }
+	  },
+	
+	  onMenuDeselect: function onMenuDeselect(_ref2) {
+	    var item = _ref2.item;
+	    var domEvent = _ref2.domEvent;
+	
+	    if (domEvent.type === 'click') {
+	      this.removeSelected((0, _util.getValuePropValue)(item));
+	    }
+	    this.setOpenState(false);
+	    this.setState({
+	      inputValue: ''
+	    });
+	  },
+	
+	  onBlur: function onBlur() {
+	    var _this = this;
+	
+	    if (this._blurTimer) {
+	      clearTimeout(this._blurTimer);
+	    }
+	    this._blurTimer = setTimeout(function () {
+	      _this.setState({
+	        open: false
+	      });
+	    }, 100);
+	  },
+	
+	  onFocus: function onFocus() {
+	    if (this._blurTimer) {
+	      clearTimeout(this._blurTimer);
+	      this._blurTimer = null;
+	    }
+	  },
+	
+	  onPlaceholderClick: function onPlaceholderClick() {
+	    this.getInputDOMNode().focus();
+	  },
+	
+	  onClearSelection: function onClearSelection(e) {
+	    var props = this.props;
+	    var state = this.state;
+	    if (props.disabled) {
+	      return;
+	    }
+	    e.stopPropagation();
+	    if (state.inputValue || state.value.length) {
+	      this.fireChange([], []);
+	      this.setOpenState(false);
+	      this.setState({
+	        inputValue: ''
+	      });
+	    }
+	  },
+	
+	  getLabelBySingleValue: function getLabelBySingleValue(children, value) {
+	    var _this2 = this;
+	
+	    if (value === undefined) {
+	      return null;
+	    }
+	    var label = null;
+	    _react2['default'].Children.forEach(children, function (c) {
+	      if (c.type === _OptGroup2['default']) {
+	        var maybe = _this2.getLabelBySingleValue(c.props.children, value);
+	        if (maybe !== null) {
+	          label = maybe;
+	        }
+	      } else if ((0, _util.getValuePropValue)(c) === value) {
+	        label = _this2.getLabelFromOption(c);
+	      }
+	    });
+	    return label;
+	  },
+	
+	  getLabelFromOption: function getLabelFromOption(c) {
+	    return (0, _util.getPropValue)(c, this.props.optionLabelProp);
+	  },
+	
+	  getLabelFromProps: function getLabelFromProps(props, value, init) {
+	    var label = [];
+	    if ('label' in props) {
+	      label = (0, _util.toArray)(props.label);
+	    } else if (init && 'defaultLabel' in props) {
+	      label = (0, _util.toArray)(props.defaultLabel);
+	    } else {
+	      label = this.getLabelByValue(props.children, value);
+	    }
+	    return label;
+	  },
+	
+	  getVLForOnChange: function getVLForOnChange(vls) {
+	    if (vls !== undefined) {
+	      return (0, _util.isMultipleOrTags)(this.props) ? vls : vls[0];
+	    }
+	    return vls;
+	  },
+	
+	  getLabelByValue: function getLabelByValue(children, value) {
+	    var _this3 = this;
+	
+	    return value.map(function (v) {
+	      var label = _this3.getLabelBySingleValue(children, v);
+	      if (label === null) {
+	        return v;
+	      }
 	      return label;
-	    }
-	  }, {
-	    key: 'getDropdownDOMNode',
-	    value: function getDropdownDOMNode() {
-	      return _react2['default'].findDOMNode(this.dropdownInstance);
-	    }
-	  }, {
-	    key: 'getDropdownContainer',
-	    value: function getDropdownContainer() {
-	      if (!this.dropdownContainer) {
-	        this.dropdownContainer = document.createElement('div');
-	        document.body.appendChild(this.dropdownContainer);
-	      }
-	      return this.dropdownContainer;
-	    }
-	  }, {
-	    key: 'getInputElement',
-	    value: function getInputElement() {
-	      var props = this.props;
-	      return _react2['default'].createElement('input', { ref: this.saveInputRef,
-	        onChange: this.onInputChange,
-	        onKeyDown: this.onInputKeyDown,
-	        value: this.state.inputValue,
-	        disabled: props.disabled,
-	        placeholder: props.searchPlaceholder,
-	        className: props.prefixCls + '-search__field',
-	        role: 'textbox' });
-	    }
-	  }, {
-	    key: 'getDropdownElement',
-	    value: function getDropdownElement() {
-	      var state = this.state;
-	      var props = this.props;
-	      return _react2['default'].createElement(_rcAnimate2['default'], {
-	        component: '',
-	        exclusive: true,
-	        animateMount: true,
-	        showProp: 'selectOpen',
-	        transitionName: this.getDropdownTransitionName() }, _react2['default'].createElement(_rcAlign2['default'], { target: this.getDOMNode,
-	        key: 'dropdown',
-	        selectOpen: state.open,
-	        disabled: !state.open,
-	        align: { points: ['tl', 'bl'], offset: [0, 4] } }, _react2['default'].createElement(_Dropdown2['default'], {
-	        key: 'dropdown',
-	        visible: state.open,
-	        onDropdownFocus: this.onFocus,
-	        onDropdownBlur: this.onBlur,
-	        filterOption: props.filterOption,
-	        optionFilterProp: props.optionFilterProp,
-	        optionLabelProp: props.optionLabelProp,
-	        inputValue: state.inputValue,
-	        inputElement: this.getInputElement(),
-	        ref: this.saveDropdownRef,
-	        tags: props.tags,
-	        notFoundContent: props.notFoundContent,
-	        onMenuDeselect: this.onMenuDeselect,
-	        onMenuSelect: this.onMenuSelect,
-	        value: state.value,
-	        isMultipleOrTags: (0, _util.isMultipleOrTags)(props),
-	        prefixCls: props.prefixCls,
-	        isMultipleOrTagsOrCombobox: (0, _util.isMultipleOrTagsOrCombobox)(props),
-	        showSearch: props.showSearch,
-	        dropdownMenuStyle: props.dropdownMenuStyle,
-	        dropdownStyle: props.dropdownStyle }, props.children)));
-	    }
-	  }, {
-	    key: 'getDropdownTransitionName',
-	    value: function getDropdownTransitionName() {
-	      var props = this.props;
-	      var transitionName = props.transitionName;
-	      if (!transitionName && props.animation) {
-	        transitionName = props.prefixCls + '-dropdown-' + props.animation;
-	      }
-	      return transitionName;
-	    }
-	  }, {
-	    key: 'getInputDOMNode',
-	    value: function getInputDOMNode() {
-	      return _react2['default'].findDOMNode(this.inputInstance);
-	    }
-	  }, {
-	    key: 'getDOMNode',
-	    value: function getDOMNode() {
-	      return _react2['default'].findDOMNode(this);
-	    }
-	  }, {
-	    key: 'renderTopControlNode',
-	    value: function renderTopControlNode() {
-	      var _this4 = this;
+	    });
+	  },
 	
-	      var value = this.state.value;
-	      var props = this.props;
-	      var prefixCls = props.prefixCls;
-	      var allowClear = props.allowClear;
-	      var children = props.children;
-	      var clear = _react2['default'].createElement('span', { className: prefixCls + '-selection__clear',
-	        onClick: this.onClearSelection });
-	      // single and not combobox, input is inside dropdown
-	      if ((0, _util.isSingleMode)(props)) {
-	        return _react2['default'].createElement('span', { className: prefixCls + '-selection__rendered' }, _react2['default'].createElement('span', null, this.getLabelByValue(children, value[0]) || props.placeholder), allowClear ? clear : null);
-	      }
+	  getDropdownDOMNode: function getDropdownDOMNode() {
+	    return _react2['default'].findDOMNode(this.dropdownInstance);
+	  },
 	
-	      var selectedValueNodes = undefined;
-	      if ((0, _util.isMultipleOrTags)(props)) {
-	        selectedValueNodes = value.map(function (v) {
-	          var content = _this4.getLabelByValue(children, v) || v;
-	          var title = content;
-	          var maxTagTextLength = props.maxTagTextLength;
-	          if (maxTagTextLength && typeof content === 'string' && content.length > maxTagTextLength) {
-	            content = content.slice(0, maxTagTextLength) + '...';
-	          }
-	          return _react2['default'].createElement('li', { className: prefixCls + '-selection__choice',
-	            key: v,
-	            title: title }, _react2['default'].createElement('span', { className: prefixCls + '-selection__choice__content' }, content), _react2['default'].createElement('span', { className: prefixCls + '-selection__choice__remove',
-	            onClick: _this4.removeSelected.bind(_this4, v) }));
-	        });
-	      }
-	      return _react2['default'].createElement('ul', { className: prefixCls + '-selection__rendered' }, selectedValueNodes, allowClear && !(0, _util.isMultipleOrTags)(props) ? clear : null, _react2['default'].createElement('li', { className: prefixCls + '-search ' + prefixCls + '-search--inline' }, this.getInputElement()));
+	  getDropdownContainer: function getDropdownContainer() {
+	    if (!this.dropdownContainer) {
+	      this.dropdownContainer = document.createElement('div');
+	      document.body.appendChild(this.dropdownContainer);
 	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _rootCls;
+	    return this.dropdownContainer;
+	  },
 	
-	      var props = this.props;
-	      var multiple = (0, _util.isMultipleOrTags)(props);
-	      var state = this.state;
-	      var prefixCls = props.prefixCls;
-	      var ctrlNode = this.renderTopControlNode();
-	      var extraSelectionProps = {};
-	      if (!(0, _util.isCombobox)(props)) {
-	        extraSelectionProps = {
-	          onKeyDown: this.onKeyDown,
-	          tabIndex: 0
-	        };
-	      }
-	      var rootCls = (_rootCls = {}, _defineProperty(_rootCls, props.className, !!props.className), _defineProperty(_rootCls, prefixCls, 1), _defineProperty(_rootCls, prefixCls + '-open', this.state.open), _defineProperty(_rootCls, prefixCls + '-combobox', (0, _util.isCombobox)(props)), _defineProperty(_rootCls, prefixCls + '-disabled', props.disabled), _rootCls);
-	      var dropdownElement = undefined;
-	      this.haveOpened = this.haveOpened || state.open;
-	      if (this.haveOpened) {
-	        dropdownElement = this.getDropdownElement();
-	      }
+	  getSearchPlaceholderElement: function getSearchPlaceholderElement(hidden) {
+	    var props = this.props;
+	    if (props.searchPlaceholder) {
 	      return _react2['default'].createElement('span', {
-	        style: props.style,
-	        className: (0, _rcUtil.classSet)(rootCls),
-	        onFocus: this.onFocus,
-	        onBlur: this.onBlur }, _react2['default'].createElement('span', _extends({ ref: 'selection',
-	        key: 'selection',
-	        className: prefixCls + '-selection ' + prefixCls + '-selection--' + (multiple ? 'multiple' : 'single'),
-	        role: 'combobox',
-	        'aria-autocomplete': 'list',
-	        onClick: this.onClick,
-	        'aria-haspopup': 'true',
-	        'aria-expanded': state.open
-	      }, extraSelectionProps), ctrlNode, multiple || !props.showArrow ? null : _react2['default'].createElement('span', { key: 'arrow', className: prefixCls + '-arrow', tabIndex: '-1', style: { outline: 'none' } }, _react2['default'].createElement('b', null))), props.renderDropdownToBody ? null : dropdownElement);
+	        style: { display: hidden ? 'none' : 'block' },
+	        onClick: this.onPlaceholderClick,
+	        className: props.prefixCls + '-search__field__placeholder' }, props.searchPlaceholder);
 	    }
-	  }, {
-	    key: 'removeSelected',
-	    value: function removeSelected(selectedValue) {
-	      var props = this.props;
-	      if (props.disabled) {
-	        return;
-	      }
-	      var value = this.state.value.filter(function (v) {
-	        return v !== selectedValue;
-	      });
-	      var canMultiple = (0, _util.isMultipleOrTags)(props);
-	      if (canMultiple) {
-	        props.onDeselect(selectedValue);
-	      }
-	      this.fireChange(value);
-	    }
-	  }, {
-	    key: 'setOpenState',
-	    value: function setOpenState(open) {
-	      var _this5 = this;
+	    return null;
+	  },
 	
-	      var refs = this.refs;
-	      this.setState({
-	        open: open
-	      }, function () {
-	        if (open || (0, _util.isMultipleOrTagsOrCombobox)(_this5.props)) {
-	          if (_this5.getInputDOMNode()) {
-	            _this5.getInputDOMNode().focus();
-	          }
-	        } else if (refs.selection) {
-	          _react2['default'].findDOMNode(refs.selection).focus();
+	  getInputElement: function getInputElement() {
+	    var props = this.props;
+	    return _react2['default'].createElement('span', { className: props.prefixCls + '-search__field__wrap' }, _react2['default'].createElement('input', { ref: this.saveInputRef,
+	      onChange: this.onInputChange,
+	      onKeyDown: this.onInputKeyDown,
+	      value: this.state.inputValue,
+	      disabled: props.disabled,
+	      className: props.prefixCls + '-search__field',
+	      role: 'textbox' }), (0, _util.isMultipleOrTags)(props) ? null : this.getSearchPlaceholderElement(!!this.state.inputValue));
+	  },
+	
+	  getDropdownElement: function getDropdownElement() {
+	    var state = this.state;
+	    var props = this.props;
+	    return _react2['default'].createElement(_Dropdown2['default'], {
+	      key: 'dropdown',
+	      transitionName: this.getDropdownTransitionName(),
+	      visible: state.open,
+	      getAlignTarget: this.getDOMNode,
+	      onDropdownFocus: this.onFocus,
+	      onDropdownBlur: this.onBlur,
+	      filterOption: props.filterOption,
+	      optionFilterProp: props.optionFilterProp,
+	      optionLabelProp: props.optionLabelProp,
+	      inputValue: state.inputValue,
+	      inputElement: this.getInputElement(),
+	      ref: this.saveDropdownRef,
+	      tags: props.tags,
+	      notFoundContent: props.notFoundContent,
+	      onMenuDeselect: this.onMenuDeselect,
+	      onMenuSelect: this.onMenuSelect,
+	      value: state.value,
+	      isMultipleOrTags: (0, _util.isMultipleOrTags)(props),
+	      prefixCls: props.prefixCls,
+	      isMultipleOrTagsOrCombobox: (0, _util.isMultipleOrTagsOrCombobox)(props),
+	      showSearch: props.showSearch,
+	      className: props.dropdownClassName,
+	      dropdownMenuStyle: props.dropdownMenuStyle,
+	      dropdownStyle: props.dropdownStyle }, props.children);
+	  },
+	
+	  getDropdownTransitionName: function getDropdownTransitionName() {
+	    var props = this.props;
+	    var transitionName = props.transitionName;
+	    if (!transitionName && props.animation) {
+	      transitionName = props.prefixCls + '-dropdown-' + props.animation;
+	    }
+	    return transitionName;
+	  },
+	
+	  getInputDOMNode: function getInputDOMNode() {
+	    return _react2['default'].findDOMNode(this.inputInstance);
+	  },
+	
+	  renderTopControlNode: function renderTopControlNode() {
+	    var _this4 = this;
+	
+	    var value = this.state.value;
+	    var label = this.state.label;
+	    var props = this.props;
+	    var prefixCls = props.prefixCls;
+	    var allowClear = props.allowClear;
+	    var clear = _react2['default'].createElement('span', { key: 'clear',
+	      className: prefixCls + '-selection__clear',
+	      onClick: this.onClearSelection });
+	    // single and not combobox, input is inside dropdown
+	    if ((0, _util.isSingleMode)(props)) {
+	      var placeholder = _react2['default'].createElement('span', { key: 'placeholder', className: prefixCls + '-selection__placeholder' }, props.placeholder);
+	      var innerNode = placeholder;
+	      if (this.state.label[0]) {
+	        innerNode = _react2['default'].createElement('span', { key: 'value' }, this.state.label[0]);
+	      }
+	      return _react2['default'].createElement('span', { className: prefixCls + '-selection__rendered' }, [innerNode, allowClear ? clear : null]);
+	    }
+	
+	    var selectedValueNodes = undefined;
+	    if ((0, _util.isMultipleOrTags)(props)) {
+	      selectedValueNodes = value.map(function (v, index) {
+	        var content = label[index];
+	        var title = content;
+	        var maxTagTextLength = props.maxTagTextLength;
+	        if (maxTagTextLength && typeof content === 'string' && content.length > maxTagTextLength) {
+	          content = content.slice(0, maxTagTextLength) + '...';
 	        }
+	        return _react2['default'].createElement('li', { className: prefixCls + '-selection__choice',
+	          key: v,
+	          title: title }, _react2['default'].createElement('span', { className: prefixCls + '-selection__choice__content' }, content), _react2['default'].createElement('span', { className: prefixCls + '-selection__choice__remove',
+	          onClick: _this4.removeSelected.bind(_this4, v) }));
 	      });
 	    }
-	  }, {
-	    key: 'openIfHasChildren',
-	    value: function openIfHasChildren() {
-	      var props = this.props;
-	      if (_react2['default'].Children.count(props.children) || (0, _util.isSingleMode)(props)) {
-	        this.setOpenState(true);
+	    return _react2['default'].createElement('ul', { className: prefixCls + '-selection__rendered' }, selectedValueNodes, allowClear && !(0, _util.isMultipleOrTags)(props) ? clear : null, _react2['default'].createElement('li', { className: prefixCls + '-search ' + prefixCls + '-search--inline' }, this.getInputElement()));
+	  },
+	
+	  render: function render() {
+	    var _rootCls;
+	
+	    var props = this.props;
+	    var multiple = (0, _util.isMultipleOrTags)(props);
+	    var state = this.state;
+	    var prefixCls = props.prefixCls;
+	    var ctrlNode = this.renderTopControlNode();
+	    var extraSelectionProps = {};
+	    if (!(0, _util.isCombobox)(props)) {
+	      extraSelectionProps = {
+	        onKeyDown: this.onKeyDown,
+	        tabIndex: 0
+	      };
+	    }
+	    var rootCls = (_rootCls = {}, _defineProperty(_rootCls, props.className, !!props.className), _defineProperty(_rootCls, prefixCls, 1), _defineProperty(_rootCls, prefixCls + '-open', this.state.open), _defineProperty(_rootCls, prefixCls + '-combobox', (0, _util.isCombobox)(props)), _defineProperty(_rootCls, prefixCls + '-disabled', props.disabled), _rootCls);
+	    this.haveOpened = this.haveOpened || state.open;
+	    return _react2['default'].createElement('span', {
+	      style: props.style,
+	      className: (0, _rcUtil.classSet)(rootCls),
+	      onFocus: this.onFocus,
+	      onBlur: this.onBlur }, _react2['default'].createElement('span', _extends({ ref: 'selection',
+	      key: 'selection',
+	      className: prefixCls + '-selection ' + prefixCls + '-selection--' + (multiple ? 'multiple' : 'single'),
+	      role: 'combobox',
+	      'aria-autocomplete': 'list',
+	      onClick: this.onClick,
+	      'aria-haspopup': 'true',
+	      'aria-expanded': state.open
+	    }, extraSelectionProps), ctrlNode, multiple || !props.showArrow ? null : _react2['default'].createElement('span', { key: 'arrow', className: prefixCls + '-arrow', tabIndex: '-1', style: { outline: 'none' } }, _react2['default'].createElement('b', null)), multiple ? this.getSearchPlaceholderElement(!!this.state.inputValue || this.state.value.length) : null));
+	  },
+	
+	  removeSelected: function removeSelected(selectedValue) {
+	    var props = this.props;
+	    if (props.disabled) {
+	      return;
+	    }
+	    var label = this.state.label.concat();
+	    var index = this.state.value.indexOf(selectedValue);
+	    var value = this.state.value.filter(function (v) {
+	      return v !== selectedValue;
+	    });
+	    if (index !== -1) {
+	      label.splice(index, 1);
+	    }
+	    var canMultiple = (0, _util.isMultipleOrTags)(props);
+	    if (canMultiple) {
+	      props.onDeselect(selectedValue);
+	    }
+	    this.fireChange(value, label);
+	  },
+	
+	  setOpenState: function setOpenState(open) {
+	    var _this5 = this;
+	
+	    var refs = this.refs;
+	    this.setState({
+	      open: open
+	    }, function () {
+	      if (open || (0, _util.isMultipleOrTagsOrCombobox)(_this5.props)) {
+	        if (_this5.getInputDOMNode()) {
+	          _this5.getInputDOMNode().focus();
+	        }
+	      } else if (refs.selection) {
+	        _react2['default'].findDOMNode(refs.selection).focus();
 	      }
+	    });
+	  },
+	
+	  openIfHasChildren: function openIfHasChildren() {
+	    var props = this.props;
+	    if (_react2['default'].Children.count(props.children) || (0, _util.isSingleMode)(props)) {
+	      this.setOpenState(true);
 	    }
-	  }, {
-	    key: 'fireChange',
-	    value: function fireChange(value) {
-	      this.props.onChange((0, _util.isMultipleOrTags)(this.props) ? value : value[0]);
+	  },
+	
+	  fireChange: function fireChange(value, label) {
+	    var props = this.props;
+	    if (!('value' in props)) {
 	      this.setState({
-	        value: value
+	        value: value, label: label
 	      });
 	    }
-	  }]);
-	
-	  return Select;
-	})(_react2['default'].Component);
-	
-	Select.propTypes = {
-	  multiple: _react2['default'].PropTypes.bool,
-	  filterOption: _react2['default'].PropTypes.any,
-	  showSearch: _react2['default'].PropTypes.bool,
-	  disabled: _react2['default'].PropTypes.bool,
-	  showArrow: _react2['default'].PropTypes.bool,
-	  renderDropdownToBody: _react2['default'].PropTypes.bool,
-	  tags: _react2['default'].PropTypes.bool,
-	  transitionName: _react2['default'].PropTypes.string,
-	  optionLabelProp: _react2['default'].PropTypes.string,
-	  optionFilterProp: _react2['default'].PropTypes.string,
-	  animation: _react2['default'].PropTypes.string,
-	  onChange: _react2['default'].PropTypes.func,
-	  onSelect: _react2['default'].PropTypes.func,
-	  onSearch: _react2['default'].PropTypes.func,
-	  searchPlaceholder: _react2['default'].PropTypes.string,
-	  placeholder: _react2['default'].PropTypes.any,
-	  onDeselect: _react2['default'].PropTypes.func,
-	  dropdownStyle: _react2['default'].PropTypes.object,
-	  maxTagTextLength: _react2['default'].PropTypes.number
-	};
-	
-	Select.defaultProps = {
-	  prefixCls: 'rc-select',
-	  filterOption: filterFn,
-	  showSearch: true,
-	  allowClear: false,
-	  placeholder: '',
-	  searchPlaceholder: '',
-	  onChange: noop,
-	  onSelect: noop,
-	  onSearch: noop,
-	  onDeselect: noop,
-	  showArrow: true,
-	  dropdownMatchSelectWidth: true,
-	  dropdownStyle: {},
-	  dropdownMenuStyle: {},
-	  renderDropdownToBody: false,
-	  optionFilterProp: 'value',
-	  optionLabelProp: 'value',
-	  notFoundContent: 'Not Found'
-	};
+	    props.onChange(this.getVLForOnChange(value), this.getVLForOnChange(label));
+	  }
+	});
 	
 	exports['default'] = Select;
 	module.exports = exports['default'];
 
 /***/ },
-/* 178 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	module.exports = {
-	  guid: __webpack_require__(179),
-	  classSet: __webpack_require__(180),
-	  joinClasses: __webpack_require__(181),
-	  KeyCode: __webpack_require__(182),
-	  PureRenderMixin: __webpack_require__(183),
-	  shallowEqual: __webpack_require__(184),
-	  createChainedFunction: __webpack_require__(185),
+	  guid: __webpack_require__(180),
+	  classSet: __webpack_require__(181),
+	  joinClasses: __webpack_require__(182),
+	  KeyCode: __webpack_require__(183),
+	  PureRenderMixin: __webpack_require__(184),
+	  shallowEqual: __webpack_require__(185),
+	  createChainedFunction: __webpack_require__(186),
 	  Dom: {
-	    addEventListener: __webpack_require__(186),
-	    contains: __webpack_require__(187)
+	    addEventListener: __webpack_require__(187),
+	    contains: __webpack_require__(188)
 	  },
 	  Children: {
-	    toArray: __webpack_require__(188),
-	    mapSelf: __webpack_require__(189)
+	    toArray: __webpack_require__(189),
+	    mapSelf: __webpack_require__(190)
 	  }
 	};
 
 /***/ },
-/* 179 */
+/* 180 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -21481,7 +21861,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 180 */
+/* 181 */
 /***/ function(module, exports) {
 
 	/**
@@ -21527,7 +21907,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = cx;
 
 /***/ },
-/* 181 */
+/* 182 */
 /***/ function(module, exports) {
 
 	/**
@@ -21573,7 +21953,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = joinClasses;
 
 /***/ },
-/* 182 */
+/* 183 */
 /***/ function(module, exports) {
 
 	/**
@@ -22098,7 +22478,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = KeyCode;
 
 /***/ },
-/* 183 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -22114,7 +22494,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	"use strict";
 	
-	var shallowEqual = __webpack_require__(184);
+	var shallowEqual = __webpack_require__(185);
 	
 	/**
 	 * If your React component's render function is "pure", e.g. it will render the
@@ -22149,7 +22529,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ReactComponentWithPureRenderMixin;
 
 /***/ },
-/* 184 */
+/* 185 */
 /***/ function(module, exports) {
 
 	/**
@@ -22195,7 +22575,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = shallowEqual;
 
 /***/ },
-/* 185 */
+/* 186 */
 /***/ function(module, exports) {
 
 	/**
@@ -22223,7 +22603,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = createChainedFunction;
 
 /***/ },
-/* 186 */
+/* 187 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22247,7 +22627,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 187 */
+/* 188 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -22264,7 +22644,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 188 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22280,7 +22660,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22297,7 +22677,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22362,1921 +22742,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 191 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	// export this package's api
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { 'default': obj };
-	}
-	
-	var _Align = __webpack_require__(192);
-	
-	var _Align2 = _interopRequireDefault(_Align);
-	
-	exports['default'] = _Align2['default'];
-	module.exports = exports['default'];
-
-/***/ },
 /* 192 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	
-	var _createClass = (function () {
-	  function defineProperties(target, props) {
-	    for (var i = 0; i < props.length; i++) {
-	      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ('value' in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-	    }
-	  }return function (Constructor, protoProps, staticProps) {
-	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-	  };
-	})();
-	
-	var _get = function get(_x, _x2, _x3) {
-	  var _again = true;_function: while (_again) {
-	    var object = _x,
-	        property = _x2,
-	        receiver = _x3;desc = parent = getter = undefined;_again = false;if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
-	      var parent = Object.getPrototypeOf(object);if (parent === null) {
-	        return undefined;
-	      } else {
-	        _x = parent;_x2 = property;_x3 = receiver;_again = true;continue _function;
-	      }
-	    } else if ('value' in desc) {
-	      return desc.value;
-	    } else {
-	      var getter = desc.get;if (getter === undefined) {
-	        return undefined;
-	      }return getter.call(receiver);
-	    }
-	  }
-	};
-	
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { 'default': obj };
-	}
-	
-	function _classCallCheck(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError('Cannot call a class as a function');
-	  }
-	}
-	
-	function _inherits(subClass, superClass) {
-	  if (typeof superClass !== 'function' && superClass !== null) {
-	    throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
-	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-	}
-	
-	var _react = __webpack_require__(9);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _domAlign = __webpack_require__(193);
-	
-	var _domAlign2 = _interopRequireDefault(_domAlign);
-	
-	var _rcUtil = __webpack_require__(178);
-	
-	var _rcUtil2 = _interopRequireDefault(_rcUtil);
-	
-	function isWindow(obj) {
-	  /*eslint-disable eqeqeq */
-	  return obj != null && obj == obj.window;
-	  /*eslint-enable eqeqeq */
-	}
-	
-	function buffer(fn, ms) {
-	  var timer;
-	  return function () {
-	    if (timer) {
-	      clearTimeout(timer);
-	    }
-	    timer = setTimeout(fn, ms);
-	  };
-	}
-	
-	var Align = (function (_React$Component) {
-	  _inherits(Align, _React$Component);
-	
-	  function Align(props) {
-	    _classCallCheck(this, Align);
-	
-	    _get(Object.getPrototypeOf(Align.prototype), 'constructor', this).apply(this, arguments);
-	    this.handleWindowResize = this.handleWindowResize.bind(this);
-	  }
-	
-	  _createClass(Align, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var props = this.props;
-	      // if parent ref not attached .... use document.getElementById
-	      if (!props.disabled) {
-	        var source = _react2['default'].findDOMNode(this);
-	        props.onAlign(source, (0, _domAlign2['default'])(source, props.target(), props.align));
-	        if (props.monitorWindowResize) {
-	          this.startMonitorWindowResize();
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'startMonitorWindowResize',
-	    value: function startMonitorWindowResize() {
-	      if (!this.resizeHandler) {
-	        this.resizeHandler = _rcUtil2['default'].Dom.addEventListener(window, 'resize', buffer(this.handleWindowResize, this.props.monitorBufferTime));
-	      }
-	    }
-	  }, {
-	    key: 'stopMonitorWindowResize',
-	    value: function stopMonitorWindowResize() {
-	      if (this.resizeHandler) {
-	        this.resizeHandler.remove();
-	        this.resizeHandler = null;
-	      }
-	    }
-	  }, {
-	    key: 'handleWindowResize',
-	    value: function handleWindowResize() {
-	      var props = this.props;
-	      if (!props.disabled) {
-	        var source = _react2['default'].findDOMNode(this);
-	        props.onAlign(source, (0, _domAlign2['default'])(source, props.target(), props.align));
-	      }
-	    }
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      this.stopMonitorWindowResize();
-	    }
-	  }, {
-	    key: 'componentDidUpdate',
-	    value: function componentDidUpdate(prevProps) {
-	      var reAlign = false;
-	      var props = this.props;
-	      var currentTarget;
-	
-	      if (!props.disabled) {
-	        if (prevProps.disabled || prevProps.align !== props.align) {
-	          reAlign = true;
-	          currentTarget = props.target();
-	        } else {
-	          var lastTarget = prevProps.target();
-	          currentTarget = props.target();
-	          if (isWindow(lastTarget) && isWindow(currentTarget)) {
-	            reAlign = false;
-	          } else if (lastTarget !== currentTarget) {
-	            reAlign = true;
-	          }
-	        }
-	      }
-	
-	      if (reAlign) {
-	        var source = _react2['default'].findDOMNode(this);
-	        props.onAlign(source, (0, _domAlign2['default'])(source, currentTarget, props.align));
-	      }
-	
-	      if (props.monitorWindowResize && !props.disabled) {
-	        this.startMonitorWindowResize();
-	      } else {
-	        this.stopMonitorWindowResize();
-	      }
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2['default'].Children.only(this.props.children);
-	    }
-	  }]);
-	
-	  return Align;
-	})(_react2['default'].Component);
-	
-	Align.defaultProps = {
-	  target: function target() {
-	    return window;
-	  },
-	  onAlign: function onAlign() {},
-	  monitorBufferTime: 50,
-	  monitorWindowResize: false,
-	  disabled: false
-	};
-	
-	Align.PropTypes = {
-	  align: _react2['default'].PropTypes.object.isRequired,
-	  target: _react2['default'].PropTypes.func,
-	  onAlign: _react2['default'].PropTypes.func,
-	  monitorBufferTime: _react2['default'].PropTypes.number,
-	  monitorWindowResize: _react2['default'].PropTypes.bool,
-	  disabled: _react2['default'].PropTypes.bool
-	};
-	
-	exports['default'] = Align;
-	module.exports = exports['default'];
-
-/***/ },
-/* 193 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * align dom node flexibly
-	 * @author yiminghe@gmail.com
-	 */
-	
-	'use strict';
-	
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { 'default': obj };
-	}
-	
-	var _utils = __webpack_require__(194);
-	
-	var _utils2 = _interopRequireDefault(_utils);
-	
-	// http://yiminghe.iteye.com/blog/1124720
-	
-	/**
-	 * 获取 node 上的 align 对齐点 相对于页面的坐标
-	 */
-	
-	function getAlignOffset(region, align) {
-	  var V = align.charAt(0);
-	  var H = align.charAt(1);
-	  var w = region.width;
-	  var h = region.height;
-	  var x = undefined;
-	  var y = undefined;
-	
-	  x = region.left;
-	  y = region.top;
-	
-	  if (V === 'c') {
-	    y += h / 2;
-	  } else if (V === 'b') {
-	    y += h;
-	  }
-	
-	  if (H === 'c') {
-	    x += w / 2;
-	  } else if (H === 'r') {
-	    x += w;
-	  }
-	
-	  return {
-	    left: x,
-	    top: y
-	  };
-	}
-	
-	/**
-	 * 得到会导致元素显示不全的祖先元素
-	 */
-	
-	function getOffsetParent(element) {
-	  // ie 这个也不是完全可行
-	  /*
-	   <div style="width: 50px;height: 100px;overflow: hidden">
-	   <div style="width: 50px;height: 100px;position: relative;" id="d6">
-	   元素 6 高 100px 宽 50px<br/>
-	   </div>
-	   </div>
-	   */
-	  // element.offsetParent does the right thing in ie7 and below. Return parent with layout!
-	  //  In other browsers it only includes elements with position absolute, relative or
-	  // fixed, not elements with overflow set to auto or scroll.
-	  //        if (UA.ie && ieMode < 8) {
-	  //            return element.offsetParent;
-	  //        }
-	  // 统一的 offsetParent 方法
-	  var doc = element.ownerDocument;
-	  var body = doc.body;
-	  var parent = undefined;
-	  var positionStyle = _utils2['default'].css(element, 'position');
-	  var skipStatic = positionStyle === 'fixed' || positionStyle === 'absolute';
-	
-	  if (!skipStatic) {
-	    return element.nodeName.toLowerCase() === 'html' ? null : element.parentNode;
-	  }
-	
-	  for (parent = element.parentNode; parent && parent !== body; parent = parent.parentNode) {
-	    positionStyle = _utils2['default'].css(parent, 'position');
-	    if (positionStyle !== 'static') {
-	      return parent;
-	    }
-	  }
-	  return null;
-	}
-	
-	/**
-	 * 获得元素的显示部分的区域
-	 */
-	
-	function getVisibleRectForElement(element) {
-	  var visibleRect = {
-	    left: 0,
-	    right: Infinity,
-	    top: 0,
-	    bottom: Infinity
-	  };
-	  var el = element;
-	  var scrollX = undefined;
-	  var scrollY = undefined;
-	  var winSize = undefined;
-	  var doc = element.ownerDocument;
-	  var win = doc.defaultView || doc.parentWindow;
-	  var body = doc.body;
-	  var documentElement = doc.documentElement;
-	
-	  // Determine the size of the visible rect by climbing the dom accounting for
-	  // all scrollable containers.
-	  while (el) {
-	    // clientWidth is zero for inline block elements in ie.
-	    if ((navigator.userAgent.indexOf('MSIE') === -1 || el.clientWidth !== 0) && (
-	    // body may have overflow set on it, yet we still get the entire
-	    // viewport. In some browsers, el.offsetParent may be
-	    // document.documentElement, so check for that too.
-	    el !== body && el !== documentElement && _utils2['default'].css(el, 'overflow') !== 'visible')) {
-	      var pos = _utils2['default'].offset(el);
-	      // add border
-	      pos.left += el.clientLeft;
-	      pos.top += el.clientTop;
-	      visibleRect.top = Math.max(visibleRect.top, pos.top);
-	      visibleRect.right = Math.min(visibleRect.right,
-	      // consider area without scrollBar
-	      pos.left + el.clientWidth);
-	      visibleRect.bottom = Math.min(visibleRect.bottom, pos.top + el.clientHeight);
-	      visibleRect.left = Math.max(visibleRect.left, pos.left);
-	    } else if (el === body || el === documentElement) {
-	      break;
-	    }
-	    el = getOffsetParent(el);
-	  }
-	
-	  // Clip by window's viewport.
-	  scrollX = _utils2['default'].getWindowScrollLeft(win);
-	  scrollY = _utils2['default'].getWindowScrollTop(win);
-	  visibleRect.left = Math.max(visibleRect.left, scrollX);
-	  visibleRect.top = Math.max(visibleRect.top, scrollY);
-	  winSize = {
-	    width: _utils2['default'].viewportWidth(win),
-	    height: _utils2['default'].viewportHeight(win)
-	  };
-	  visibleRect.right = Math.min(visibleRect.right, scrollX + winSize.width);
-	  visibleRect.bottom = Math.min(visibleRect.bottom, scrollY + winSize.height);
-	  return visibleRect.top >= 0 && visibleRect.left >= 0 && visibleRect.bottom > visibleRect.top && visibleRect.right > visibleRect.left ? visibleRect : null;
-	}
-	
-	function getElFuturePos(elRegion, refNodeRegion, points, offset) {
-	  var xy = undefined;
-	  var diff = undefined;
-	  var p1 = undefined;
-	  var p2 = undefined;
-	
-	  xy = {
-	    left: elRegion.left,
-	    top: elRegion.top
-	  };
-	
-	  p1 = getAlignOffset(refNodeRegion, points[1]);
-	  p2 = getAlignOffset(elRegion, points[0]);
-	
-	  diff = [p2.left - p1.left, p2.top - p1.top];
-	
-	  return {
-	    left: xy.left - diff[0] + +offset[0],
-	    top: xy.top - diff[1] + +offset[1]
-	  };
-	}
-	
-	function isFailX(elFuturePos, elRegion, visibleRect) {
-	  return elFuturePos.left < visibleRect.left || elFuturePos.left + elRegion.width > visibleRect.right;
-	}
-	
-	function isFailY(elFuturePos, elRegion, visibleRect) {
-	  return elFuturePos.top < visibleRect.top || elFuturePos.top + elRegion.height > visibleRect.bottom;
-	}
-	
-	function adjustForViewport(elFuturePos, elRegion, visibleRect, overflow) {
-	  var pos = _utils2['default'].clone(elFuturePos);
-	  var size = {
-	    width: elRegion.width,
-	    height: elRegion.height
-	  };
-	
-	  if (overflow.adjustX && pos.left < visibleRect.left) {
-	    pos.left = visibleRect.left;
-	  }
-	
-	  // Left edge inside and right edge outside viewport, try to resize it.
-	  if (overflow.resizeWidth && pos.left >= visibleRect.left && pos.left + size.width > visibleRect.right) {
-	    size.width -= pos.left + size.width - visibleRect.right;
-	  }
-	
-	  // Right edge outside viewport, try to move it.
-	  if (overflow.adjustX && pos.left + size.width > visibleRect.right) {
-	    // 保证左边界和可视区域左边界对齐
-	    pos.left = Math.max(visibleRect.right - size.width, visibleRect.left);
-	  }
-	
-	  // Top edge outside viewport, try to move it.
-	  if (overflow.adjustY && pos.top < visibleRect.top) {
-	    pos.top = visibleRect.top;
-	  }
-	
-	  // Top edge inside and bottom edge outside viewport, try to resize it.
-	  if (overflow.resizeHeight && pos.top >= visibleRect.top && pos.top + size.height > visibleRect.bottom) {
-	    size.height -= pos.top + size.height - visibleRect.bottom;
-	  }
-	
-	  // Bottom edge outside viewport, try to move it.
-	  if (overflow.adjustY && pos.top + size.height > visibleRect.bottom) {
-	    // 保证上边界和可视区域上边界对齐
-	    pos.top = Math.max(visibleRect.bottom - size.height, visibleRect.top);
-	  }
-	
-	  return _utils2['default'].mix(pos, size);
-	}
-	
-	function flip(points, reg, map) {
-	  var ret = [];
-	  _utils2['default'].each(points, function (p) {
-	    ret.push(p.replace(reg, function (m) {
-	      return map[m];
-	    }));
-	  });
-	  return ret;
-	}
-	
-	function flipOffset(offset, index) {
-	  offset[index] = -offset[index];
-	  return offset;
-	}
-	
-	function getRegion(node) {
-	  var offset = undefined;
-	  var w = undefined;
-	  var h = undefined;
-	  if (!_utils2['default'].isWindow(node) && node.nodeType !== 9) {
-	    offset = _utils2['default'].offset(node);
-	    w = _utils2['default'].outerWidth(node);
-	    h = _utils2['default'].outerHeight(node);
-	  } else {
-	    var win = _utils2['default'].getWindow(node);
-	    offset = {
-	      left: _utils2['default'].getWindowScrollLeft(win),
-	      top: _utils2['default'].getWindowScrollTop(win)
-	    };
-	    w = _utils2['default'].viewportWidth(win);
-	    h = _utils2['default'].viewportHeight(win);
-	  }
-	  offset.width = w;
-	  offset.height = h;
-	  return offset;
-	}
-	
-	/*
-	 * align node
-	 * @param {Element} node current dom node
-	 * @param {Object} align align config
-	 *
-	 *    @example
-	 *    {
-	 *      node: null,         // 参考元素, falsy 或 window 为可视区域, 'trigger' 为触发元素, 其他为指定元素
-	 *      points: ['cc','cc'], // ['tr', 'tl'] 表示 overlay 的 tr 与参考节点的 tl 对齐
-	 *      offset: [0, 0]      // 有效值为 [n, m]
-	 *    }
-	 */
-	function domAlign(el, refNode, align) {
-	  var points = align.points;
-	  var offset = align.offset;
-	  var overflow = align.overflow;
-	  offset = offset && [].concat(offset) || [0, 0];
-	  overflow = overflow || {};
-	  var newOverflowCfg = {};
-	
-	  var fail = 0;
-	  // 当前节点可以被放置的显示区域
-	  var visibleRect = getVisibleRectForElement(el);
-	  // 当前节点所占的区域, left/top/width/height
-	  var elRegion = getRegion(el);
-	  // 参照节点所占的区域, left/top/width/height
-	  var refNodeRegion = getRegion(refNode);
-	  // 当前节点将要被放置的位置
-	  var elFuturePos = getElFuturePos(elRegion, refNodeRegion, points, offset);
-	  // 当前节点将要所处的区域
-	  var newElRegion = _utils2['default'].merge(elRegion, elFuturePos);
-	
-	  // 如果可视区域不能完全放置当前节点时允许调整
-	  if (visibleRect && (overflow.adjustX || overflow.adjustY)) {
-	    if (overflow.adjustX) {
-	      // 如果横向不能放下
-	      if (isFailX(elFuturePos, elRegion, visibleRect)) {
-	        fail = 1;
-	        // 对齐位置反下
-	        points = flip(points, /[lr]/ig, {
-	          l: 'r',
-	          r: 'l'
-	        });
-	        // 偏移量也反下
-	        offset = flipOffset(offset, 0);
-	      }
-	    }
-	
-	    if (overflow.adjustY) {
-	      // 如果纵向不能放下
-	      if (isFailY(elFuturePos, elRegion, visibleRect)) {
-	        fail = 1;
-	        // 对齐位置反下
-	        points = flip(points, /[tb]/ig, {
-	          t: 'b',
-	          b: 't'
-	        });
-	        // 偏移量也反下
-	        offset = flipOffset(offset, 1);
-	      }
-	    }
-	
-	    // 如果失败，重新计算当前节点将要被放置的位置
-	    if (fail) {
-	      elFuturePos = getElFuturePos(elRegion, refNodeRegion, points, offset);
-	      _utils2['default'].mix(newElRegion, elFuturePos);
-	    }
-	
-	    // 检查反下后的位置是否可以放下了
-	    // 如果仍然放不下只有指定了可以调整当前方向才调整
-	    newOverflowCfg.adjustX = overflow.adjustX && isFailX(elFuturePos, elRegion, visibleRect);
-	
-	    newOverflowCfg.adjustY = overflow.adjustY && isFailY(elFuturePos, elRegion, visibleRect);
-	
-	    // 确实要调整，甚至可能会调整高度宽度
-	    if (newOverflowCfg.adjustX || newOverflowCfg.adjustY) {
-	      newElRegion = adjustForViewport(elFuturePos, elRegion, visibleRect, newOverflowCfg);
-	    }
-	  }
-	
-	  // https://github.com/kissyteam/kissy/issues/190
-	  // http://localhost:8888/kissy/src/overlay/demo/other/relative_align/align.html
-	  // 相对于屏幕位置没变，而 left/top 变了
-	  // 例如 <div 'relative'><el absolute></div>
-	  _utils2['default'].offset(el, { left: newElRegion.left, top: newElRegion.top });
-	
-	  // need judge to in case set fixed with in css on height auto element
-	  if (newElRegion.width !== elRegion.width) {
-	    _utils2['default'].css(el, 'width', el.width() + newElRegion.width - elRegion.width);
-	  }
-	
-	  if (newElRegion.height !== elRegion.height) {
-	    _utils2['default'].css(el, 'height', el.height() + newElRegion.height - elRegion.height);
-	  }
-	
-	  return {
-	    points: points,
-	    offset: offset,
-	    overflow: newOverflowCfg
-	  };
-	}
-	
-	domAlign.__getOffsetParent = getOffsetParent;
-	
-	domAlign.__getVisibleRectForElement = getVisibleRectForElement;
-	
-	exports['default'] = domAlign;
-	
-	/**
-	 *  2012-04-26 yiminghe@gmail.com
-	 *   - 优化智能对齐算法
-	 *   - 慎用 resizeXX
-	 *
-	 *  2011-07-13 yiminghe@gmail.com note:
-	 *   - 增加智能对齐，以及大小调整选项
-	 **/
-	module.exports = exports['default'];
-
-/***/ },
-/* 194 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	var RE_NUM = /[\-+]?(?:\d*\.|)\d+(?:[eE][\-+]?\d+|)/.source;
-	
-	var getComputedStyleX = undefined;
-	
-	function css(el, name, v) {
-	  var value = v;
-	  if (typeof name === 'object') {
-	    for (var i in name) {
-	      if (name.hasOwnProperty(i)) {
-	        css(el, i, name[i]);
-	      }
-	    }
-	    return undefined;
-	  }
-	  if (typeof value !== 'undefined') {
-	    if (typeof value === 'number') {
-	      value = value + 'px';
-	    }
-	    el.style[name] = value;
-	    return undefined;
-	  }
-	  return getComputedStyleX(el, name);
-	}
-	
-	function getClientPosition(elem) {
-	  var box = undefined;
-	  var x = undefined;
-	  var y = undefined;
-	  var doc = elem.ownerDocument;
-	  var body = doc.body;
-	  var docElem = doc && doc.documentElement;
-	  // 根据 GBS 最新数据，A-Grade Browsers 都已支持 getBoundingClientRect 方法，不用再考虑传统的实现方式
-	  box = elem.getBoundingClientRect();
-	
-	  // 注：jQuery 还考虑减去 docElem.clientLeft/clientTop
-	  // 但测试发现，这样反而会导致当 html 和 body 有边距/边框样式时，获取的值不正确
-	  // 此外，ie6 会忽略 html 的 margin 值，幸运地是没有谁会去设置 html 的 margin
-	
-	  x = box.left;
-	  y = box.top;
-	
-	  // In IE, most of the time, 2 extra pixels are added to the top and left
-	  // due to the implicit 2-pixel inset border.  In IE6/7 quirks mode and
-	  // IE6 standards mode, this border can be overridden by setting the
-	  // document element's border to zero -- thus, we cannot rely on the
-	  // offset always being 2 pixels.
-	
-	  // In quirks mode, the offset can be determined by querying the body's
-	  // clientLeft/clientTop, but in standards mode, it is found by querying
-	  // the document element's clientLeft/clientTop.  Since we already called
-	  // getClientBoundingRect we have already forced a reflow, so it is not
-	  // too expensive just to query them all.
-	
-	  // ie 下应该减去窗口的边框吧，毕竟默认 absolute 都是相对窗口定位的
-	  // 窗口边框标准是设 documentElement ,quirks 时设置 body
-	  // 最好禁止在 body 和 html 上边框 ，但 ie < 9 html 默认有 2px ，减去
-	  // 但是非 ie 不可能设置窗口边框，body html 也不是窗口 ,ie 可以通过 html,body 设置
-	  // 标准 ie 下 docElem.clientTop 就是 border-top
-	  // ie7 html 即窗口边框改变不了。永远为 2
-	  // 但标准 firefox/chrome/ie9 下 docElem.clientTop 是窗口边框，即使设了 border-top 也为 0
-	
-	  x -= docElem.clientLeft || body.clientLeft || 0;
-	  y -= docElem.clientTop || body.clientTop || 0;
-	
-	  return { left: x, top: y };
-	}
-	
-	function getScroll(w, top) {
-	  var ret = w['page' + (top ? 'Y' : 'X') + 'Offset'];
-	  var method = 'scroll' + (top ? 'Top' : 'Left');
-	  if (typeof ret !== 'number') {
-	    var d = w.document;
-	    // ie6,7,8 standard mode
-	    ret = d.documentElement[method];
-	    if (typeof ret !== 'number') {
-	      // quirks mode
-	      ret = d.body[method];
-	    }
-	  }
-	  return ret;
-	}
-	
-	function getScrollLeft(w) {
-	  return getScroll(w);
-	}
-	
-	function getScrollTop(w) {
-	  return getScroll(w, true);
-	}
-	
-	function getOffset(el) {
-	  var pos = getClientPosition(el);
-	  var doc = el.ownerDocument;
-	  var w = doc.defaultView || doc.parentWindow;
-	  pos.left += getScrollLeft(w);
-	  pos.top += getScrollTop(w);
-	  return pos;
-	}
-	function _getComputedStyle(elem, name, cs) {
-	  var computedStyle = cs;
-	  var val = '';
-	  var d = elem.ownerDocument;
-	
-	  // https://github.com/kissyteam/kissy/issues/61
-	  if (computedStyle = computedStyle || d.defaultView.getComputedStyle(elem, null)) {
-	    val = computedStyle.getPropertyValue(name) || computedStyle[name];
-	  }
-	
-	  return val;
-	}
-	
-	var _RE_NUM_NO_PX = new RegExp('^(' + RE_NUM + ')(?!px)[a-z%]+$', 'i');
-	var RE_POS = /^(top|right|bottom|left)$/;
-	var CURRENT_STYLE = 'currentStyle';
-	var RUNTIME_STYLE = 'runtimeStyle';
-	var LEFT = 'left';
-	var PX = 'px';
-	
-	function _getComputedStyleIE(elem, name) {
-	  // currentStyle maybe null
-	  // http://msdn.microsoft.com/en-us/library/ms535231.aspx
-	  var ret = elem[CURRENT_STYLE] && elem[CURRENT_STYLE][name];
-	
-	  // 当 width/height 设置为百分比时，通过 pixelLeft 方式转换的 width/height 值
-	  // 一开始就处理了! CUSTOM_STYLE.height,CUSTOM_STYLE.width ,cssHook 解决@2011-08-19
-	  // 在 ie 下不对，需要直接用 offset 方式
-	  // borderWidth 等值也有问题，但考虑到 borderWidth 设为百分比的概率很小，这里就不考虑了
-	
-	  // From the awesome hack by Dean Edwards
-	  // http://erik.eae.net/archives/2007/07/27/18.54.15/#comment-102291
-	  // If we're not dealing with a regular pixel number
-	  // but a number that has a weird ending, we need to convert it to pixels
-	  // exclude left right for relativity
-	  if (_RE_NUM_NO_PX.test(ret) && !RE_POS.test(name)) {
-	    // Remember the original values
-	    var style = elem.style;
-	    var left = style[LEFT];
-	    var rsLeft = elem[RUNTIME_STYLE][LEFT];
-	
-	    // prevent flashing of content
-	    elem[RUNTIME_STYLE][LEFT] = elem[CURRENT_STYLE][LEFT];
-	
-	    // Put in the new values to get a computed value out
-	    style[LEFT] = name === 'fontSize' ? '1em' : ret || 0;
-	    ret = style.pixelLeft + PX;
-	
-	    // Revert the changed values
-	    style[LEFT] = left;
-	
-	    elem[RUNTIME_STYLE][LEFT] = rsLeft;
-	  }
-	  return ret === '' ? 'auto' : ret;
-	}
-	
-	if (typeof window !== 'undefined') {
-	  getComputedStyleX = window.getComputedStyle ? _getComputedStyle : _getComputedStyleIE;
-	}
-	
-	// 设置 elem 相对 elem.ownerDocument 的坐标
-	function setOffset(elem, offset) {
-	  // set position first, in-case top/left are set even on static elem
-	  if (css(elem, 'position') === 'static') {
-	    elem.style.position = 'relative';
-	  }
-	  var preset = -9999;
-	  if ('left' in offset) {
-	    elem.style.left = preset + 'px';
-	  }
-	  if ('top' in offset) {
-	    elem.style.top = preset + 'px';
-	  }
-	  var old = getOffset(elem);
-	  var ret = {};
-	  var key = undefined;
-	  for (key in offset) {
-	    if (offset.hasOwnProperty(key)) {
-	      ret[key] = preset + offset[key] - old[key];
-	    }
-	  }
-	  css(elem, ret);
-	}
-	
-	function each(arr, fn) {
-	  for (var i = 0; i < arr.length; i++) {
-	    fn(arr[i]);
-	  }
-	}
-	
-	function isBorderBoxFn(elem) {
-	  return getComputedStyleX(elem, 'boxSizing') === 'border-box';
-	}
-	
-	var BOX_MODELS = ['margin', 'border', 'padding'];
-	var CONTENT_INDEX = -1;
-	var PADDING_INDEX = 2;
-	var BORDER_INDEX = 1;
-	var MARGIN_INDEX = 0;
-	
-	function swap(elem, options, callback) {
-	  var old = {};
-	  var style = elem.style;
-	  var name = undefined;
-	
-	  // Remember the old values, and insert the new ones
-	  for (name in options) {
-	    if (options.hasOwnProperty(name)) {
-	      old[name] = style[name];
-	      style[name] = options[name];
-	    }
-	  }
-	
-	  callback.call(elem);
-	
-	  // Revert the old values
-	  for (name in options) {
-	    if (options.hasOwnProperty(name)) {
-	      style[name] = old[name];
-	    }
-	  }
-	}
-	
-	function getPBMWidth(elem, props, which) {
-	  var value = 0;
-	  var prop = undefined;
-	  var j = undefined;
-	  var i = undefined;
-	  for (j = 0; j < props.length; j++) {
-	    prop = props[j];
-	    if (prop) {
-	      for (i = 0; i < which.length; i++) {
-	        var cssProp = undefined;
-	        if (prop === 'border') {
-	          cssProp = prop + which[i] + 'Width';
-	        } else {
-	          cssProp = prop + which[i];
-	        }
-	        value += parseFloat(getComputedStyleX(elem, cssProp)) || 0;
-	      }
-	    }
-	  }
-	  return value;
-	}
-	
-	/**
-	 * A crude way of determining if an object is a window
-	 * @member util
-	 */
-	function isWindow(obj) {
-	  // must use == for ie8
-	  /* eslint eqeqeq:0 */
-	  return obj !== null && obj !== undefined && obj == obj.window;
-	}
-	
-	var domUtils = {};
-	
-	each(['Width', 'Height'], function (name) {
-	  domUtils['doc' + name] = function (refWin) {
-	    var d = refWin.document;
-	    return Math.max(
-	    // firefox chrome documentElement.scrollHeight< body.scrollHeight
-	    // ie standard mode : documentElement.scrollHeight> body.scrollHeight
-	    d.documentElement['scroll' + name],
-	    // quirks : documentElement.scrollHeight 最大等于可视窗口多一点？
-	    d.body['scroll' + name], domUtils['viewport' + name](d));
-	  };
-	
-	  domUtils['viewport' + name] = function (win) {
-	    // pc browser includes scrollbar in window.innerWidth
-	    var prop = 'client' + name;
-	    var doc = win.document;
-	    var body = doc.body;
-	    var documentElement = doc.documentElement;
-	    var documentElementProp = documentElement[prop];
-	    // 标准模式取 documentElement
-	    // backcompat 取 body
-	    return doc.compatMode === 'CSS1Compat' && documentElementProp || body && body[prop] || documentElementProp;
-	  };
-	});
-	
-	/*
-	 得到元素的大小信息
-	 @param elem
-	 @param name
-	 @param {String} [extra]  'padding' : (css width) + padding
-	 'border' : (css width) + padding + border
-	 'margin' : (css width) + padding + border + margin
-	 */
-	function getWH(elem, name, ex) {
-	  var extra = ex;
-	  if (isWindow(elem)) {
-	    return name === 'width' ? domUtils.viewportWidth(elem) : domUtils.viewportHeight(elem);
-	  } else if (elem.nodeType === 9) {
-	    return name === 'width' ? domUtils.docWidth(elem) : domUtils.docHeight(elem);
-	  }
-	  var which = name === 'width' ? ['Left', 'Right'] : ['Top', 'Bottom'];
-	  var borderBoxValue = name === 'width' ? elem.offsetWidth : elem.offsetHeight;
-	  var computedStyle = getComputedStyleX(elem);
-	  var isBorderBox = isBorderBoxFn(elem, computedStyle);
-	  var cssBoxValue = 0;
-	  if (borderBoxValue === null || borderBoxValue === undefined || borderBoxValue <= 0) {
-	    borderBoxValue = undefined;
-	    // Fall back to computed then un computed css if necessary
-	    cssBoxValue = getComputedStyleX(elem, name);
-	    if (cssBoxValue === null || cssBoxValue === undefined || Number(cssBoxValue) < 0) {
-	      cssBoxValue = elem.style[name] || 0;
-	    }
-	    // Normalize '', auto, and prepare for extra
-	    cssBoxValue = parseFloat(cssBoxValue) || 0;
-	  }
-	  if (extra === undefined) {
-	    extra = isBorderBox ? BORDER_INDEX : CONTENT_INDEX;
-	  }
-	  var borderBoxValueOrIsBorderBox = borderBoxValue !== undefined || isBorderBox;
-	  var val = borderBoxValue || cssBoxValue;
-	  if (extra === CONTENT_INDEX) {
-	    if (borderBoxValueOrIsBorderBox) {
-	      return val - getPBMWidth(elem, ['border', 'padding'], which, computedStyle);
-	    }
-	    return cssBoxValue;
-	  } else if (borderBoxValueOrIsBorderBox) {
-	    if (extra === BORDER_INDEX) {
-	      return val;
-	    }
-	    return val + (extra === PADDING_INDEX ? -getPBMWidth(elem, ['border'], which, computedStyle) : getPBMWidth(elem, ['margin'], which, computedStyle));
-	  }
-	  return cssBoxValue + getPBMWidth(elem, BOX_MODELS.slice(extra), which, computedStyle);
-	}
-	
-	var cssShow = { position: 'absolute', visibility: 'hidden', display: 'block' };
-	
-	// fix #119 : https://github.com/kissyteam/kissy/issues/119
-	function getWHIgnoreDisplay() {
-	  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	    args[_key] = arguments[_key];
-	  }
-	
-	  var val = undefined;
-	  var elem = args[0];
-	  // in case elem is window
-	  // elem.offsetWidth === undefined
-	  if (elem.offsetWidth !== 0) {
-	    val = getWH.apply(undefined, args);
-	  } else {
-	    swap(elem, cssShow, function () {
-	      val = getWH.apply(undefined, args);
-	    });
-	  }
-	  return val;
-	}
-	
-	each(['width', 'height'], function (name) {
-	  var first = name.charAt(0).toUpperCase() + name.slice(1);
-	  domUtils['outer' + first] = function (el, includeMargin) {
-	    return el && getWHIgnoreDisplay(el, name, includeMargin ? MARGIN_INDEX : BORDER_INDEX);
-	  };
-	  var which = name === 'width' ? ['Left', 'Right'] : ['Top', 'Bottom'];
-	
-	  domUtils[name] = function (elem, v) {
-	    var val = v;
-	    if (val !== undefined) {
-	      if (elem) {
-	        var computedStyle = getComputedStyleX(elem);
-	        var isBorderBox = isBorderBoxFn(elem);
-	        if (isBorderBox) {
-	          val += getPBMWidth(elem, ['padding', 'border'], which, computedStyle);
-	        }
-	        return css(elem, name, val);
-	      }
-	      return undefined;
-	    }
-	    return elem && getWHIgnoreDisplay(elem, name, CONTENT_INDEX);
-	  };
-	});
-	
-	function mix(to, from) {
-	  for (var i in from) {
-	    if (from.hasOwnProperty(i)) {
-	      to[i] = from[i];
-	    }
-	  }
-	  return to;
-	}
-	
-	var utils = {
-	  getWindow: function getWindow(node) {
-	    if (node && node.document && node.setTimeout) {
-	      return node;
-	    }
-	    var doc = node.ownerDocument || node;
-	    return doc.defaultView || doc.parentWindow;
-	  },
-	  offset: function offset(el, value) {
-	    if (typeof value !== 'undefined') {
-	      setOffset(el, value);
-	    } else {
-	      return getOffset(el);
-	    }
-	  },
-	  isWindow: isWindow,
-	  each: each,
-	  css: css,
-	  clone: function clone(obj) {
-	    var i = undefined;
-	    var ret = {};
-	    for (i in obj) {
-	      if (obj.hasOwnProperty(i)) {
-	        ret[i] = obj[i];
-	      }
-	    }
-	    var overflow = obj.overflow;
-	    if (overflow) {
-	      for (i in obj) {
-	        if (obj.hasOwnProperty(i)) {
-	          ret.overflow[i] = obj.overflow[i];
-	        }
-	      }
-	    }
-	    return ret;
-	  },
-	  mix: mix,
-	  getWindowScrollLeft: function getWindowScrollLeft(w) {
-	    return getScrollLeft(w);
-	  },
-	  getWindowScrollTop: function getWindowScrollTop(w) {
-	    return getScrollTop(w);
-	  },
-	  merge: function merge() {
-	    var ret = {};
-	
-	    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-	      args[_key2] = arguments[_key2];
-	    }
-	
-	    for (var i = 0; i < args.length; i++) {
-	      utils.mix(ret, args[i]);
-	    }
-	    return ret;
-	  },
-	  viewportWidth: 0,
-	  viewportHeight: 0
-	};
-	
-	mix(utils, domUtils);
-	
-	exports['default'] = utils;
-	module.exports = exports['default'];
-
-/***/ },
-/* 195 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// export this package's api
-	'use strict';
-	
-	module.exports = __webpack_require__(196);
-
-/***/ },
-/* 196 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { 'default': obj };
-	}
-	
-	function _defineProperty(obj, key, value) {
-	  if (key in obj) {
-	    Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
-	  } else {
-	    obj[key] = value;
-	  }return obj;
-	}
-	
-	var _react = __webpack_require__(9);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _ChildrenUtils = __webpack_require__(197);
-	
-	var _ChildrenUtils2 = _interopRequireDefault(_ChildrenUtils);
-	
-	var _AnimateChild = __webpack_require__(198);
-	
-	var _AnimateChild2 = _interopRequireDefault(_AnimateChild);
-	
-	var _util = __webpack_require__(202);
-	
-	var _util2 = _interopRequireDefault(_util);
-	
-	var defaultKey = 'rc_animate_' + Date.now();
-	
-	function getChildrenFromProps(props) {
-	  var children = props.children;
-	  if (_react2['default'].isValidElement(children)) {
-	    if (!children.key) {
-	      return _react2['default'].cloneElement(children, {
-	        key: defaultKey
-	      });
-	    }
-	  }
-	  return children;
-	}
-	
-	function noop() {}
-	
-	var Animate = _react2['default'].createClass({
-	  displayName: 'Animate',
-	
-	  propTypes: {
-	    component: _react2['default'].PropTypes.any,
-	    animation: _react2['default'].PropTypes.object,
-	    transitionName: _react2['default'].PropTypes.string,
-	    transitionEnter: _react2['default'].PropTypes.bool,
-	    transitionAppear: _react2['default'].PropTypes.bool,
-	    transitionLeave: _react2['default'].PropTypes.bool,
-	    onEnd: _react2['default'].PropTypes.func,
-	    onEnter: _react2['default'].PropTypes.func,
-	    onLeave: _react2['default'].PropTypes.func,
-	    onAppear: _react2['default'].PropTypes.func,
-	    showProp: _react2['default'].PropTypes.string
-	  },
-	
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      animation: {},
-	      component: 'span',
-	      transitionEnter: true,
-	      transitionLeave: true,
-	      transitionAppear: false,
-	      onEnd: noop,
-	      onEnter: noop,
-	      onLeave: noop,
-	      onAppear: noop
-	    };
-	  },
-	
-	  getInitialState: function getInitialState() {
-	    this.currentlyAnimatingKeys = {};
-	    this.keysToEnter = [];
-	    this.keysToLeave = [];
-	    return {
-	      children: (0, _ChildrenUtils.toArrayChildren)(getChildrenFromProps(this.props))
-	    };
-	  },
-	
-	  componentDidMount: function componentDidMount() {
-	    var _this = this;
-	
-	    var showProp = this.props.showProp;
-	    var children = this.state.children;
-	    if (showProp) {
-	      children = children.filter(function (c) {
-	        return !!c.props[showProp];
-	      });
-	    }
-	    children.forEach(function (c) {
-	      _this.performAppear(c.key);
-	    });
-	  },
-	
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    var _this2 = this;
-	
-	    var nextChildren = (0, _ChildrenUtils.toArrayChildren)(getChildrenFromProps(nextProps));
-	    var props = this.props;
-	    var showProp = props.showProp;
-	    var exclusive = props.exclusive;
-	    var currentlyAnimatingKeys = this.currentlyAnimatingKeys;
-	    // last props children if exclusive
-	    // exclusive needs immediate response
-	    var currentChildren = this.state.children;
-	    // in case destroy in showProp mode
-	    var newChildren = [];
-	    if (showProp) {
-	      currentChildren.forEach(function (currentChild) {
-	        var nextChild = (0, _ChildrenUtils.findChildInChildrenByKey)(nextChildren, currentChild.key);
-	        var newChild = undefined;
-	        if ((!nextChild || !nextChild.props[showProp]) && currentChild.props[showProp]) {
-	          newChild = _react2['default'].cloneElement(nextChild || currentChild, _defineProperty({}, showProp, true));
-	        } else {
-	          newChild = nextChild;
-	        }
-	        if (newChild) {
-	          newChildren.push(newChild);
-	        }
-	      });
-	    } else {
-	      newChildren = _ChildrenUtils2['default'].mergeChildren(currentChildren, nextChildren);
-	    }
-	
-	    // exclusive needs immediate response
-	    if (exclusive) {
-	      Object.keys(currentlyAnimatingKeys).forEach(function (key) {
-	        _this2.stop(key);
-	      });
-	      currentChildren = (0, _ChildrenUtils.toArrayChildren)(getChildrenFromProps(props));
-	    }
-	
-	    // need render to avoid update
-	    this.setState({
-	      children: newChildren
-	    });
-	
-	    nextChildren.forEach(function (c) {
-	      var key = c.key;
-	      if (currentlyAnimatingKeys[key]) {
-	        return;
-	      }
-	      var hasPrev = (0, _ChildrenUtils.findChildInChildrenByKey)(currentChildren, key);
-	      if (showProp) {
-	        var showInNext = c.props[showProp];
-	        if (hasPrev) {
-	          var showInNow = (0, _ChildrenUtils.findShownChildInChildrenByKey)(currentChildren, key, showProp);
-	          if (!showInNow && showInNext) {
-	            _this2.keysToEnter.push(key);
-	          }
-	        } else if (showInNext) {
-	          _this2.keysToEnter.push(key);
-	        }
-	      } else if (!hasPrev) {
-	        _this2.keysToEnter.push(key);
-	      }
-	    });
-	
-	    currentChildren.forEach(function (c) {
-	      var key = c.key;
-	      if (currentlyAnimatingKeys[key]) {
-	        return;
-	      }
-	      var hasNext = (0, _ChildrenUtils.findChildInChildrenByKey)(nextChildren, key);
-	      if (showProp) {
-	        var showInNow = c.props[showProp];
-	        if (hasNext) {
-	          var showInNext = (0, _ChildrenUtils.findShownChildInChildrenByKey)(nextChildren, key, showProp);
-	          if (!showInNext && showInNow) {
-	            _this2.keysToLeave.push(key);
-	          }
-	        } else if (showInNow) {
-	          _this2.keysToLeave.push(key);
-	        }
-	      } else if (!hasNext) {
-	        _this2.keysToLeave.push(key);
-	      }
-	    });
-	  },
-	
-	  componentDidUpdate: function componentDidUpdate() {
-	    var keysToEnter = this.keysToEnter;
-	    this.keysToEnter = [];
-	    keysToEnter.forEach(this.performEnter);
-	    var keysToLeave = this.keysToLeave;
-	    this.keysToLeave = [];
-	    keysToLeave.forEach(this.performLeave);
-	  },
-	
-	  render: function render() {
-	    var props = this.props;
-	    var stateChildren = this.state.children;
-	    var children = null;
-	    if (stateChildren) {
-	      children = stateChildren.map(function (child) {
-	        if (!child.key) {
-	          throw new Error('must set key for <rc-animate> children');
-	        }
-	        return _react2['default'].createElement(_AnimateChild2['default'], {
-	          key: child.key,
-	          ref: child.key,
-	          animation: props.animation,
-	          transitionName: props.transitionName,
-	          transitionEnter: props.transitionEnter,
-	          transitionAppear: props.transitionAppear,
-	          transitionLeave: props.transitionLeave }, child);
-	      });
-	    }
-	    var Component = props.component;
-	    if (Component) {
-	      return _react2['default'].createElement(Component, this.props, children);
-	    }
-	    return children[0] || null;
-	  },
-	
-	  performEnter: function performEnter(key) {
-	    // may already remove by exclusive
-	    if (this.refs[key]) {
-	      this.currentlyAnimatingKeys[key] = true;
-	      this.refs[key].componentWillEnter(this.handleDoneAdding.bind(this, key, 'enter'));
-	    }
-	  },
-	
-	  performAppear: function performAppear(key) {
-	    if (this.refs[key]) {
-	      this.currentlyAnimatingKeys[key] = true;
-	      this.refs[key].componentWillAppear(this.handleDoneAdding.bind(this, key, 'appear'));
-	    }
-	  },
-	
-	  handleDoneAdding: function handleDoneAdding(key, type) {
-	    var props = this.props;
-	    delete this.currentlyAnimatingKeys[key];
-	    var currentChildren = (0, _ChildrenUtils.toArrayChildren)(getChildrenFromProps(props));
-	    if (!this.isValidChildByKey(currentChildren, key)) {
-	      // exclusive will not need this
-	      this.performLeave(key);
-	    } else {
-	      if (type === 'appear') {
-	        if (_util2['default'].allowAppearCallback(props)) {
-	          props.onAppear(key);
-	          props.onEnd(key, true);
-	        }
-	      } else {
-	        if (_util2['default'].allowEnterCallback(props)) {
-	          props.onEnter(key);
-	          props.onEnd(key, true);
-	        }
-	      }
-	    }
-	  },
-	
-	  performLeave: function performLeave(key) {
-	    // may already remove by exclusive
-	    if (this.refs[key]) {
-	      this.currentlyAnimatingKeys[key] = true;
-	      this.refs[key].componentWillLeave(this.handleDoneLeaving.bind(this, key));
-	    }
-	  },
-	
-	  handleDoneLeaving: function handleDoneLeaving(key) {
-	    var props = this.props;
-	    delete this.currentlyAnimatingKeys[key];
-	    var currentChildren = (0, _ChildrenUtils.toArrayChildren)(getChildrenFromProps(props));
-	    // in case state change is too fast
-	    if (this.isValidChildByKey(currentChildren, key)) {
-	      this.performEnter(key);
-	    } else {
-	      if (_util2['default'].allowLeaveCallback(props)) {
-	        props.onLeave(key);
-	        props.onEnd(key, false);
-	      }
-	      if (this.isMounted() && !(0, _ChildrenUtils.isSameChildren)(this.state.children, currentChildren, props.showProp)) {
-	        this.setState({
-	          children: currentChildren
-	        });
-	      }
-	    }
-	  },
-	
-	  isValidChildByKey: function isValidChildByKey(currentChildren, key) {
-	    var showProp = this.props.showProp;
-	    if (showProp) {
-	      return (0, _ChildrenUtils.findShownChildInChildrenByKey)(currentChildren, key, showProp);
-	    }
-	    return (0, _ChildrenUtils.findChildInChildrenByKey)(currentChildren, key);
-	  },
-	
-	  stop: function stop(key) {
-	    delete this.currentlyAnimatingKeys[key];
-	    var component = this.refs[key];
-	    if (component) {
-	      component.stop();
-	    }
-	  }
-	});
-	
-	exports['default'] = Animate;
-	module.exports = exports['default'];
-
-/***/ },
-/* 197 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { 'default': obj };
-	}
-	
-	var _react = __webpack_require__(9);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var utils = {
-	  toArrayChildren: function toArrayChildren(children) {
-	    var ret = [];
-	    _react2['default'].Children.forEach(children, function (c) {
-	      ret.push(c);
-	    });
-	    return ret;
-	  },
-	
-	  findChildInChildrenByKey: function findChildInChildrenByKey(children, key) {
-	    var ret = null;
-	    if (children) {
-	      children.forEach(function (c) {
-	        if (ret) {
-	          return;
-	        }
-	        if (c.key === key) {
-	          ret = c;
-	        }
-	      });
-	    }
-	    return ret;
-	  },
-	
-	  findShownChildInChildrenByKey: function findShownChildInChildrenByKey(children, key, showProp) {
-	    var ret = null;
-	    if (children) {
-	      children.forEach(function (c) {
-	        if (c.key === key && c.props[showProp]) {
-	          if (ret) {
-	            throw new Error('two child with same key for <rc-animate> children');
-	          }
-	          ret = c;
-	        }
-	      });
-	    }
-	    return ret;
-	  },
-	
-	  findHiddenChildInChildrenByKey: function findHiddenChildInChildrenByKey(children, key, showProp) {
-	    var found = 0;
-	    if (children) {
-	      children.forEach(function (c) {
-	        if (found) {
-	          return;
-	        }
-	        found = c.key === key && !c.props[showProp];
-	      });
-	    }
-	    return found;
-	  },
-	
-	  isSameChildren: function isSameChildren(c1, c2, showProp) {
-	    var same = c1.length === c2.length;
-	    if (same) {
-	      c1.forEach(function (child, i) {
-	        var child2 = c2[i];
-	        if (child.key !== child2.key) {
-	          same = false;
-	        } else if (showProp && child.props[showProp] !== child2.props[showProp]) {
-	          same = false;
-	        }
-	      });
-	    }
-	    return same;
-	  },
-	
-	  mergeChildren: function mergeChildren(prev, next) {
-	    var ret = [];
-	
-	    // For each key of `next`, the list of keys to insert before that key in
-	    // the combined list
-	    var nextChildrenPending = {};
-	    var pendingChildren = [];
-	    prev.forEach(function (c) {
-	      if (utils.findChildInChildrenByKey(next, c.key)) {
-	        if (pendingChildren.length) {
-	          nextChildrenPending[c.key] = pendingChildren;
-	          pendingChildren = [];
-	        }
-	      } else {
-	        pendingChildren.push(c);
-	      }
-	    });
-	
-	    next.forEach(function (c) {
-	      if (nextChildrenPending.hasOwnProperty(c.key)) {
-	        ret = ret.concat(nextChildrenPending[c.key]);
-	      }
-	      ret.push(c);
-	    });
-	
-	    ret = ret.concat(pendingChildren);
-	
-	    return ret;
-	  }
-	};
-	
-	exports['default'] = utils;
-	module.exports = exports['default'];
-
-/***/ },
-/* 198 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { 'default': obj };
-	}
-	
-	var _react = __webpack_require__(9);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _cssAnimation = __webpack_require__(199);
-	
-	var _cssAnimation2 = _interopRequireDefault(_cssAnimation);
-	
-	var _util = __webpack_require__(202);
-	
-	var _util2 = _interopRequireDefault(_util);
-	
-	var transitionMap = {
-	  enter: 'transitionEnter',
-	  appear: 'transitionAppear',
-	  leave: 'transitionLeave'
-	};
-	
-	var AnimateChild = _react2['default'].createClass({
-	  displayName: 'AnimateChild',
-	
-	  propTypes: {
-	    children: _react2['default'].PropTypes.any
-	  },
-	
-	  transition: function transition(animationType, finishCallback) {
-	    var _this = this;
-	
-	    var node = _react2['default'].findDOMNode(this);
-	    var props = this.props;
-	    var transitionName = props.transitionName;
-	    this.stop();
-	    var end = function end() {
-	      _this.stopper = null;
-	      finishCallback();
-	    };
-	    if ((_cssAnimation.isCssAnimationSupported || !props.animation[animationType]) && transitionName && props[transitionMap[animationType]]) {
-	      this.stopper = (0, _cssAnimation2['default'])(node, transitionName + '-' + animationType, end);
-	    } else {
-	      this.stopper = props.animation[animationType](node, end);
-	    }
-	  },
-	
-	  stop: function stop() {
-	    if (this.stopper) {
-	      this.stopper.stop();
-	      this.stopper = null;
-	    }
-	  },
-	
-	  componentWillUnmount: function componentWillUnmount() {
-	    this.stop();
-	  },
-	
-	  componentWillEnter: function componentWillEnter(done) {
-	    if (_util2['default'].isEnterSupported(this.props)) {
-	      this.transition('enter', done);
-	    } else {
-	      done();
-	    }
-	  },
-	
-	  componentWillAppear: function componentWillAppear(done) {
-	    if (_util2['default'].isAppearSupported(this.props)) {
-	      this.transition('appear', done);
-	    } else {
-	      done();
-	    }
-	  },
-	
-	  componentWillLeave: function componentWillLeave(done) {
-	    if (_util2['default'].isLeaveSupported(this.props)) {
-	      this.transition('leave', done);
-	    } else {
-	      done();
-	    }
-	  },
-	
-	  render: function render() {
-	    return this.props.children;
-	  }
-	});
-	
-	exports['default'] = AnimateChild;
-	module.exports = exports['default'];
-
-/***/ },
-/* 199 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var Event = __webpack_require__(200);
-	var Css = __webpack_require__(201);
-	var isCssAnimationSupported = Event.endEvents.length !== 0;
-	
-	function getDuration(node, name) {
-	  var style = window.getComputedStyle(node);
-	  var prefixes = ['-webkit-', '-moz-', '-o-', 'ms-', ''];
-	  var ret = '';
-	  for (var i = 0; i < prefixes.length; i++) {
-	    ret = style.getPropertyValue(prefixes[i] + name);
-	    if (ret) {
-	      break;
-	    }
-	  }
-	  return ret;
-	}
-	
-	function fixBrowserByTimeout(node) {
-	  if (isCssAnimationSupported) {
-	    var transitionDuration = parseFloat(getDuration(node, 'transition-duration')) || 0;
-	    var animationDuration = parseFloat(getDuration(node, 'animation-duration')) || 0;
-	    var time = Math.max(transitionDuration, animationDuration);
-	    // sometimes, browser bug
-	    node.rcEndAnimTimeout = setTimeout(function () {
-	      node.rcEndAnimTimeout = null;
-	      if (node.rcEndListener) {
-	        node.rcEndListener();
-	      }
-	    }, time * 1000 + 200);
-	  }
-	}
-	
-	function clearBrowserBugTimeout(node) {
-	  if (node.rcEndAnimTimeout) {
-	    clearTimeout(node.rcEndAnimTimeout);
-	    node.rcEndAnimTimeout = null;
-	  }
-	}
-	
-	var cssAnimation = function cssAnimation(node, transitionName, callback) {
-	  var className = transitionName;
-	  var activeClassName = className + '-active';
-	
-	  if (node.rcEndListener) {
-	    node.rcEndListener();
-	  }
-	
-	  node.rcEndListener = function (e) {
-	    if (e && e.target !== node) {
-	      return;
-	    }
-	
-	    if (node.rcAnimTimeout) {
-	      clearTimeout(node.rcAnimTimeout);
-	      node.rcAnimTimeout = null;
-	    }
-	
-	    clearBrowserBugTimeout(node);
-	
-	    Css.removeClass(node, className);
-	    Css.removeClass(node, activeClassName);
-	
-	    Event.removeEndEventListener(node, node.rcEndListener);
-	    node.rcEndListener = null;
-	
-	    // Usually this optional callback is used for informing an owner of
-	    // a leave animation and telling it to remove the child.
-	    if (callback) {
-	      callback();
-	    }
-	  };
-	
-	  Event.addEndEventListener(node, node.rcEndListener);
-	
-	  Css.addClass(node, className);
-	
-	  node.rcAnimTimeout = setTimeout(function () {
-	    node.rcAnimTimeout = null;
-	    Css.addClass(node, activeClassName);
-	    fixBrowserByTimeout(node);
-	  }, 0);
-	
-	  return {
-	    stop: function stop() {
-	      if (node.rcEndListener) {
-	        node.rcEndListener();
-	      }
-	    }
-	  };
-	};
-	
-	cssAnimation.style = function (node, style, callback) {
-	  if (node.rcEndListener) {
-	    node.rcEndListener();
-	  }
-	
-	  node.rcEndListener = function (e) {
-	    if (e && e.target !== node) {
-	      return;
-	    }
-	
-	    if (node.rcAnimTimeout) {
-	      clearTimeout(node.rcAnimTimeout);
-	      node.rcAnimTimeout = null;
-	    }
-	
-	    clearBrowserBugTimeout(node);
-	
-	    Event.removeEndEventListener(node, node.rcEndListener);
-	    node.rcEndListener = null;
-	
-	    // Usually this optional callback is used for informing an owner of
-	    // a leave animation and telling it to remove the child.
-	    if (callback) {
-	      callback();
-	    }
-	  };
-	
-	  Event.addEndEventListener(node, node.rcEndListener);
-	
-	  node.rcAnimTimeout = setTimeout(function () {
-	    for (var s in style) {
-	      if (style.hasOwnProperty(s)) {
-	        node.style[s] = style[s];
-	      }
-	    }
-	    node.rcAnimTimeout = null;
-	    fixBrowserByTimeout(node);
-	  }, 0);
-	};
-	
-	cssAnimation.setTransition = function (node, p, value) {
-	  var property = p;
-	  var v = value;
-	  if (value === undefined) {
-	    v = property;
-	    property = '';
-	  }
-	  property = property || '';
-	  ['Webkit', 'Moz', 'O',
-	  // ms is special .... !
-	  'ms'].forEach(function (prefix) {
-	    node.style[prefix + 'Transition' + property] = v;
-	  });
-	};
-	
-	cssAnimation.addClass = Css.addClass;
-	cssAnimation.removeClass = Css.removeClass;
-	cssAnimation.isCssAnimationSupported = isCssAnimationSupported;
-	
-	module.exports = cssAnimation;
-
-/***/ },
-/* 200 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	var EVENT_NAME_MAP = {
-	  transitionend: {
-	    transition: 'transitionend',
-	    WebkitTransition: 'webkitTransitionEnd',
-	    MozTransition: 'mozTransitionEnd',
-	    OTransition: 'oTransitionEnd',
-	    msTransition: 'MSTransitionEnd'
-	  },
-	
-	  animationend: {
-	    animation: 'animationend',
-	    WebkitAnimation: 'webkitAnimationEnd',
-	    MozAnimation: 'mozAnimationEnd',
-	    OAnimation: 'oAnimationEnd',
-	    msAnimation: 'MSAnimationEnd'
-	  }
-	};
-	
-	var endEvents = [];
-	
-	function detectEvents() {
-	  var testEl = document.createElement('div');
-	  var style = testEl.style;
-	
-	  if (!('AnimationEvent' in window)) {
-	    delete EVENT_NAME_MAP.animationend.animation;
-	  }
-	
-	  if (!('TransitionEvent' in window)) {
-	    delete EVENT_NAME_MAP.transitionend.transition;
-	  }
-	
-	  for (var baseEventName in EVENT_NAME_MAP) {
-	    if (EVENT_NAME_MAP.hasOwnProperty(baseEventName)) {
-	      var baseEvents = EVENT_NAME_MAP[baseEventName];
-	      for (var styleName in baseEvents) {
-	        if (styleName in style) {
-	          endEvents.push(baseEvents[styleName]);
-	          break;
-	        }
-	      }
-	    }
-	  }
-	}
-	
-	if (typeof window !== 'undefined') {
-	  detectEvents();
-	}
-	
-	function addEventListener(node, eventName, eventListener) {
-	  node.addEventListener(eventName, eventListener, false);
-	}
-	
-	function removeEventListener(node, eventName, eventListener) {
-	  node.removeEventListener(eventName, eventListener, false);
-	}
-	
-	var TransitionEvents = {
-	  addEndEventListener: function addEndEventListener(node, eventListener) {
-	    if (endEvents.length === 0) {
-	      window.setTimeout(eventListener, 0);
-	      return;
-	    }
-	    endEvents.forEach(function (endEvent) {
-	      addEventListener(node, endEvent, eventListener);
-	    });
-	  },
-	
-	  endEvents: endEvents,
-	
-	  removeEndEventListener: function removeEndEventListener(node, eventListener) {
-	    if (endEvents.length === 0) {
-	      return;
-	    }
-	    endEvents.forEach(function (endEvent) {
-	      removeEventListener(node, endEvent, eventListener);
-	    });
-	  }
-	};
-	
-	module.exports = TransitionEvents;
-
-/***/ },
-/* 201 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	var SPACE = ' ';
-	var RE_CLASS = /[\n\t\r]/g;
-	
-	function norm(elemClass) {
-	  return (SPACE + elemClass + SPACE).replace(RE_CLASS, SPACE);
-	}
-	
-	module.exports = {
-	  addClass: function addClass(elem, className) {
-	    elem.className += ' ' + className;
-	  },
-	
-	  removeClass: function removeClass(elem, n) {
-	    var elemClass = elem.className.trim();
-	    var className = norm(elemClass);
-	    var needle = n.trim();
-	    needle = SPACE + needle + SPACE;
-	    // 一个 cls 有可能多次出现：'link link2 link link3 link'
-	    while (className.indexOf(needle) >= 0) {
-	      className = className.replace(needle, SPACE);
-	    }
-	    elem.className = className.trim();
-	  }
-	};
-
-/***/ },
-/* 202 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var util = {
-	  isAppearSupported: function isAppearSupported(props) {
-	    return props.transitionName && props.transitionAppear || props.animation.appear;
-	  },
-	  isEnterSupported: function isEnterSupported(props) {
-	    return props.transitionName && props.transitionEnter || props.animation.enter;
-	  },
-	  isLeaveSupported: function isLeaveSupported(props) {
-	    return props.transitionName && props.transitionLeave || props.animation.leave;
-	  },
-	
-	  allowAppearCallback: function allowAppearCallback(props) {
-	    return props.transitionAppear || props.animation.appear;
-	  },
-	  allowEnterCallback: function allowEnterCallback(props) {
-	    return props.transitionEnter || props.animation.enter;
-	  },
-	  allowLeaveCallback: function allowLeaveCallback(props) {
-	    return props.transitionLeave || props.animation.leave;
-	  }
-	};
-	exports["default"] = util;
-	module.exports = exports["default"];
-
-/***/ },
-/* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24353,21 +22819,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _util = __webpack_require__(204);
+	var _util = __webpack_require__(193);
 	
-	var _rcMenu = __webpack_require__(205);
+	var _rcMenu = __webpack_require__(194);
 	
-	var _rcMenu2 = _interopRequireDefault(_rcMenu);
-	
-	var _OptGroup = __webpack_require__(190);
+	var _OptGroup = __webpack_require__(191);
 	
 	var _OptGroup2 = _interopRequireDefault(_OptGroup);
 	
-	var _objectAssign = __webpack_require__(215);
+	var _rcUtil = __webpack_require__(179);
 	
-	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+	var _DropdownPanel = __webpack_require__(216);
 	
-	var _rcUtil = __webpack_require__(178);
+	var _DropdownPanel2 = _interopRequireDefault(_DropdownPanel);
+	
+	var _rcAlign = __webpack_require__(217);
+	
+	var _rcAlign2 = _interopRequireDefault(_rcAlign);
+	
+	var _rcAnimate = __webpack_require__(204);
+	
+	var _rcAnimate2 = _interopRequireDefault(_rcAnimate);
 	
 	var SelectDropdown = (function (_React$Component) {
 	  _inherits(SelectDropdown, _React$Component);
@@ -24387,6 +22859,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'getDropdownPrefixCls',
 	    value: function getDropdownPrefixCls() {
 	      return this.props.prefixCls + '-dropdown';
+	    }
+	  }, {
+	    key: 'getMenuComponent',
+	    value: function getMenuComponent() {
+	      return this.refs.panel.refs.menu;
 	    }
 	  }, {
 	    key: 'renderFilterOptionsFromChildren',
@@ -24453,34 +22930,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return this.renderFilterOptionsFromChildren(this.props.children, true);
 	    }
 	  }, {
-	    key: 'renderMenu',
-	    value: function renderMenu(menuItems) {
-	      var props = this.props;
-	      var menuProps = {};
-	      if (props.isMultipleOrTags) {
-	        menuProps.onDeselect = props.onMenuDeselect;
-	      }
-	      var value = props.value;
-	      var selectedKeys = (0, _util.getSelectKeys)(menuItems, value);
-	      var activeKey = undefined;
-	      if (!props.isMultipleOrTags) {
-	        if (!activeKey && selectedKeys.length === 1) {
-	          activeKey = selectedKeys[0];
-	        }
-	      }
-	      return _react2['default'].createElement(_rcMenu2['default'], _extends({
-	        ref: 'menu',
-	        style: props.dropdownMenuStyle,
-	        onSelect: props.onMenuSelect,
-	        activeFirst: true,
-	        activeKey: activeKey,
-	        multiple: props.isMultipleOrTags,
-	        focusable: false
-	      }, menuProps, {
-	        selectedKeys: selectedKeys,
-	        prefixCls: this.getDropdownPrefixCls() + '-menu' }), menuItems);
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _className;
@@ -24489,19 +22938,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var prefixCls = props.prefixCls;
 	      var dropdownPrefixCls = this.getDropdownPrefixCls();
 	      var menuItems = this.renderFilterOptions();
-	      var style = (0, _objectAssign2['default'])({}, props.dropdownStyle);
+	      var visible = props.visible;
 	      var search = props.isMultipleOrTagsOrCombobox || !props.showSearch ? null : _react2['default'].createElement('span', { className: prefixCls + '-search ' + prefixCls + '-search--dropdown' }, props.inputElement);
 	      if (!search && !menuItems.length) {
-	        style.visibility = 'hidden';
+	        visible = false;
 	      }
-	      var className = (_className = {}, _defineProperty(_className, dropdownPrefixCls, 1), _defineProperty(_className, dropdownPrefixCls + '--below', 1), _defineProperty(_className, dropdownPrefixCls + '-hidden', !props.visible), _className);
+	      var className = (_className = {}, _defineProperty(_className, dropdownPrefixCls, 1), _defineProperty(_className, dropdownPrefixCls + '--below', 1), _defineProperty(_className, dropdownPrefixCls + '-hidden', !visible), _defineProperty(_className, props.className, !!props.className), _defineProperty(_className, dropdownPrefixCls + '--' + (props.isMultipleOrTags ? 'multiple' : 'single'), 1), _className);
 	      // single and not combobox, input is inside dropdown
-	      return _react2['default'].createElement('span', { key: 'dropdown',
+	      return _react2['default'].createElement(_rcAnimate2['default'], {
+	        component: '',
+	        exclusive: true,
+	        transitionAppear: true,
+	        showProp: 'selectOpen',
+	        transitionName: props.transitionName }, _react2['default'].createElement(_rcAlign2['default'], { target: props.getAlignTarget,
+	        key: 'dropdown',
+	        selectOpen: visible,
+	        disabled: !visible,
+	        align: { points: ['tl', 'bl'], offset: [0, 4] } }, _react2['default'].createElement('div', { key: 'dropdown',
 	        onFocus: props.onDropdownFocus,
 	        onBlur: props.onDropdownBlur,
-	        style: style,
+	        style: props.dropdownStyle,
 	        className: (0, _rcUtil.classSet)(className),
-	        tabIndex: '-1' }, search, this.renderMenu(menuItems));
+	        tabIndex: '-1' }, _react2['default'].createElement(_DropdownPanel2['default'], _extends({ ref: 'panel' }, props, { menuItems: menuItems, visible: visible, search: search })))));
 	    }
 	  }, {
 	    key: 'filterOption',
@@ -24534,7 +22992,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 204 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24548,14 +23006,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.isMultipleOrTags = isMultipleOrTags;
 	exports.isMultipleOrTagsOrCombobox = isMultipleOrTagsOrCombobox;
 	exports.isSingleMode = isSingleMode;
-	exports.normValue = normValue;
+	exports.toArray = toArray;
 	exports.getSelectKeys = getSelectKeys;
 	
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _rcMenu = __webpack_require__(205);
+	var _rcMenu = __webpack_require__(194);
 	
 	var _react = __webpack_require__(9);
 	
@@ -24595,7 +23053,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return !isMultipleOrTagsOrCombobox(props);
 	}
 	
-	function normValue(value) {
+	function toArray(value) {
 	  var ret = value;
 	  if (value === undefined) {
 	    ret = [];
@@ -24625,7 +23083,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 205 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24638,23 +23096,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _Menu = __webpack_require__(206);
+	var _Menu = __webpack_require__(195);
 	
 	var _Menu2 = _interopRequireDefault(_Menu);
 	
-	var _SubMenu = __webpack_require__(210);
+	var _SubMenu = __webpack_require__(202);
 	
 	var _SubMenu2 = _interopRequireDefault(_SubMenu);
 	
-	var _MenuItem = __webpack_require__(212);
+	var _MenuItem = __webpack_require__(213);
 	
 	var _MenuItem2 = _interopRequireDefault(_MenuItem);
 	
-	var _MenuItemGroup = __webpack_require__(213);
+	var _MenuItemGroup = __webpack_require__(214);
 	
 	var _MenuItemGroup2 = _interopRequireDefault(_MenuItemGroup);
 	
-	var _Divider = __webpack_require__(214);
+	var _Divider = __webpack_require__(215);
 	
 	var _Divider2 = _interopRequireDefault(_Divider);
 	
@@ -24667,7 +23125,268 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 206 */
+/* 195 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	var _react = __webpack_require__(9);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _MenuMixin = __webpack_require__(196);
+	
+	var _MenuMixin2 = _interopRequireDefault(_MenuMixin);
+	
+	var _objectAssign = __webpack_require__(200);
+	
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+	
+	var _util = __webpack_require__(201);
+	
+	var Menu = _react2['default'].createClass({
+	  displayName: 'Menu',
+	
+	  propTypes: {
+	    openSubMenuOnMouseEnter: _react2['default'].PropTypes.bool,
+	    closeSubMenuOnMouseLeave: _react2['default'].PropTypes.bool,
+	    selectedKeys: _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.string),
+	    defaultSelectedKeys: _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.string),
+	    defaultOpenKeys: _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.string),
+	    openKeys: _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.string),
+	    mode: _react2['default'].PropTypes.string,
+	    onClick: _react2['default'].PropTypes.func,
+	    onSelect: _react2['default'].PropTypes.func,
+	    onDeselect: _react2['default'].PropTypes.func,
+	    onDestroy: _react2['default'].PropTypes.func,
+	    openTransitionName: _react2['default'].PropTypes.string,
+	    openAnimation: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.string, _react2['default'].PropTypes.object]),
+	    level: _react2['default'].PropTypes.number,
+	    eventKey: _react2['default'].PropTypes.string,
+	    selectable: _react2['default'].PropTypes.bool
+	  },
+	
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      openSubMenuOnMouseEnter: true,
+	      closeSubMenuOnMouseLeave: true,
+	      selectable: true,
+	      onClick: _util.noop,
+	      onSelect: _util.noop,
+	      onOpen: _util.noop,
+	      onClose: _util.noop,
+	      onDeselect: _util.noop,
+	      defaultSelectedKeys: [],
+	      defaultOpenKeys: []
+	    };
+	  },
+	
+	  mixins: [_MenuMixin2['default']],
+	
+	  getInitialState: function getInitialState() {
+	    var props = this.props;
+	    var selectedKeys = props.defaultSelectedKeys;
+	    var openKeys = props.defaultOpenKeys;
+	    if ('selectedKeys' in props) {
+	      selectedKeys = props.selectedKeys || [];
+	    }
+	    if ('openKeys' in props) {
+	      openKeys = props.openKeys || [];
+	    }
+	    return {
+	      selectedKeys: selectedKeys, openKeys: openKeys
+	    };
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    var props = {};
+	    if ('selectedKeys' in nextProps) {
+	      props.selectedKeys = nextProps.selectedKeys;
+	    }
+	    if ('openKeys' in nextProps) {
+	      props.openKeys = nextProps.openKeys;
+	    }
+	    this.setState(props);
+	  },
+	
+	  onDestroy: function onDestroy(key) {
+	    var state = this.state;
+	    var props = this.props;
+	    var selectedKeys = state.selectedKeys;
+	    var openKeys = state.openKeys;
+	    var index = selectedKeys.indexOf(key);
+	    if (!('selectedKeys' in props) && index !== -1) {
+	      selectedKeys.splice(index, 1);
+	    }
+	    index = openKeys.indexOf(key);
+	    if (!('openKeys' in props) && index !== -1) {
+	      openKeys.splice(index, 1);
+	    }
+	  },
+	
+	  onItemHover: function onItemHover(e) {
+	    var _this = this;
+	
+	    var item = e.item;
+	
+	    // special for top sub menu
+	    if (this.props.mode !== 'inline' && !this.props.closeSubMenuOnMouseLeave && item.isSubMenu) {
+	      (function () {
+	        var activeKey = _this.state.activeKey;
+	        var activeItem = _this.instanceArray.filter(function (c) {
+	          return c.props.eventKey === activeKey;
+	        })[0];
+	        if (activeItem && activeItem.props.open) {
+	          _this.onOpenChange({
+	            key: item.props.eventKey,
+	            item: e.item,
+	            open: true
+	          });
+	        }
+	      })();
+	    }
+	
+	    this.onCommonItemHover(e);
+	  },
+	
+	  onSelect: function onSelect(selectInfo) {
+	    var props = this.props;
+	    if (props.selectable) {
+	      // root menu
+	      var selectedKeys = this.state.selectedKeys;
+	      var selectedKey = selectInfo.key;
+	      if (props.multiple) {
+	        selectedKeys = selectedKeys.concat([selectedKey]);
+	      } else {
+	        selectedKeys = [selectedKey];
+	      }
+	      if (!('selectedKeys' in props)) {
+	        this.setState({
+	          selectedKeys: selectedKeys
+	        });
+	      }
+	      props.onSelect((0, _objectAssign2['default'])({}, selectInfo, {
+	        selectedKeys: selectedKeys
+	      }));
+	    }
+	  },
+	
+	  onClick: function onClick(e) {
+	    var props = this.props;
+	    props.onClick(e);
+	  },
+	
+	  onOpenChange: function onOpenChange(e) {
+	    var openKeys = this.state.openKeys;
+	    var props = this.props;
+	    var changed = true;
+	    if (e.open) {
+	      changed = openKeys.indexOf(e.key) === -1;
+	      if (changed) {
+	        openKeys = openKeys.concat(e.key);
+	      }
+	    } else {
+	      var index = openKeys.indexOf(e.key);
+	      changed = index !== -1;
+	      if (changed) {
+	        openKeys = openKeys.concat();
+	        openKeys.splice(index, 1);
+	      }
+	    }
+	    if (changed) {
+	      if (!('openKeys' in this.props)) {
+	        // hack: batch does not update state
+	        this.state.openKeys = openKeys;
+	        this.setState({ openKeys: openKeys });
+	      }
+	      var info = (0, _objectAssign2['default'])({ openKeys: openKeys }, e);
+	      if (e.open) {
+	        props.onOpen(info);
+	      } else {
+	        props.onClose(info);
+	      }
+	    }
+	  },
+	
+	  onDeselect: function onDeselect(selectInfo) {
+	    var props = this.props;
+	    if (props.selectable) {
+	      var selectedKeys = this.state.selectedKeys.concat();
+	      var selectedKey = selectInfo.key;
+	      var index = selectedKeys.indexOf(selectedKey);
+	      if (index !== -1) {
+	        selectedKeys.splice(index, 1);
+	      }
+	      if (!('selectedKeys' in props)) {
+	        this.setState({
+	          selectedKeys: selectedKeys
+	        });
+	      }
+	      props.onDeselect((0, _objectAssign2['default'])({}, selectInfo, {
+	        selectedKeys: selectedKeys
+	      }));
+	    }
+	  },
+	
+	  getOpenTransitionName: function getOpenTransitionName() {
+	    var props = this.props;
+	    var transitionName = props.openTransitionName;
+	    var animationName = props.openAnimation;
+	    if (!transitionName && typeof animationName === 'string') {
+	      transitionName = props.prefixCls + '-open-' + animationName;
+	    }
+	    return transitionName;
+	  },
+	
+	  renderMenuItem: function renderMenuItem(c, i) {
+	    var key = (0, _util.getKeyFromChildrenIndex)(c, this.props.eventKey, i);
+	    var state = this.state;
+	    var extraProps = {
+	      openKeys: state.openKeys,
+	      open: state.openKeys.indexOf(key) !== -1,
+	      selectedKeys: state.selectedKeys,
+	      selected: state.selectedKeys.indexOf(key) !== -1,
+	      openSubMenuOnMouseEnter: this.props.openSubMenuOnMouseEnter
+	    };
+	    return this.renderCommonMenuItem(c, i, extraProps);
+	  },
+	
+	  render: function render() {
+	    var props = (0, _objectAssign2['default'])({}, this.props);
+	    props.className += ' ' + props.prefixCls + '-root';
+	    return this.renderRoot(props);
+	  },
+	
+	  isInlineMode: function isInlineMode() {
+	    return this.props.mode === 'inline';
+	  },
+	
+	  lastOpenSubMenu: function lastOpenSubMenu() {
+	    var _this2 = this;
+	
+	    var lastOpen = [];
+	    if (this.state.openKeys.length) {
+	      lastOpen = this.instanceArray.filter(function (c) {
+	        return _this2.state.openKeys.indexOf(c.props.eventKey) !== -1;
+	      });
+	    }
+	    return lastOpen[0];
+	  }
+	});
+	
+	exports['default'] = Menu;
+	module.exports = exports['default'];
+
+/***/ },
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24686,36 +23405,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }return target;
 	};
 	
-	var _createClass = (function () {
-	  function defineProperties(target, props) {
-	    for (var i = 0; i < props.length; i++) {
-	      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ('value' in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-	    }
-	  }return function (Constructor, protoProps, staticProps) {
-	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-	  };
-	})();
-	
-	var _get = function get(_x, _x2, _x3) {
-	  var _again = true;_function: while (_again) {
-	    var object = _x,
-	        property = _x2,
-	        receiver = _x3;desc = parent = getter = undefined;_again = false;if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
-	      var parent = Object.getPrototypeOf(object);if (parent === null) {
-	        return undefined;
-	      } else {
-	        _x = parent;_x2 = property;_x3 = receiver;_again = true;continue _function;
-	      }
-	    } else if ('value' in desc) {
-	      return desc.value;
-	    } else {
-	      var getter = desc.get;if (getter === undefined) {
-	        return undefined;
-	      }return getter.call(receiver);
-	    }
-	  }
-	};
-	
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
@@ -24728,61 +23417,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }return obj;
 	}
 	
-	function _classCallCheck(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError('Cannot call a class as a function');
-	  }
-	}
-	
-	function _inherits(subClass, superClass) {
-	  if (typeof superClass !== 'function' && superClass !== null) {
-	    throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
-	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-	}
-	
 	var _react = __webpack_require__(9);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcUtil = __webpack_require__(178);
+	var _rcUtil = __webpack_require__(179);
 	
-	var _domScrollIntoView = __webpack_require__(207);
+	var _domScrollIntoView = __webpack_require__(197);
 	
 	var _domScrollIntoView2 = _interopRequireDefault(_domScrollIntoView);
 	
-	function noop() {}
+	var _objectAssign = __webpack_require__(200);
 	
-	var now = Date.now();
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
-	function getChildIndexInChildren(child, children) {
-	  var index = -1;
-	  _react2['default'].Children.forEach(children, function (c, i) {
-	    if (c === child) {
-	      index = i;
-	    }
-	  });
-	  return index;
-	}
-	
-	function getKeyFromChildren(child, children) {
-	  return child.key || 'rcMenuItem_' + now + '_' + getChildIndexInChildren(child, children);
-	}
+	var _util = __webpack_require__(201);
 	
 	function getActiveKey(props) {
 	  var activeKey = props.activeKey;
 	  var children = props.children;
+	  var eventKey = props.eventKey;
 	  if (activeKey) {
-	    return activeKey;
-	  }
-	  _react2['default'].Children.forEach(children, function (c) {
-	    if (c.props.active) {
-	      activeKey = getKeyFromChildren(c, children);
+	    var found = undefined;
+	    _react2['default'].Children.forEach(children, function (c, i) {
+	      if (!c.props.disabled && activeKey === (0, _util.getKeyFromChildrenIndex)(c, eventKey, i)) {
+	        found = true;
+	      }
+	    });
+	    if (found) {
+	      return activeKey;
 	    }
-	  });
-	  if (!activeKey && props.activeFirst) {
-	    _react2['default'].Children.forEach(children, function (c) {
+	  }
+	  activeKey = null;
+	  if (props.defaultActiveFirst) {
+	    _react2['default'].Children.forEach(children, function (c, i) {
 	      if (!activeKey && !c.props.disabled) {
-	        activeKey = getKeyFromChildren(c, children);
+	        activeKey = (0, _util.getKeyFromChildrenIndex)(c, eventKey, i);
 	      }
 	    });
 	    return activeKey;
@@ -24796,276 +23466,227 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 	
-	var Menu = (function (_React$Component) {
-	  _inherits(Menu, _React$Component);
+	var MenuMixin = {
+	  propTypes: {
+	    focusable: _react2['default'].PropTypes.bool,
+	    multiple: _react2['default'].PropTypes.bool,
+	    style: _react2['default'].PropTypes.object,
+	    defaultActiveFirst: _react2['default'].PropTypes.bool,
+	    visible: _react2['default'].PropTypes.bool,
+	    activeKey: _react2['default'].PropTypes.string,
+	    selectedKeys: _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.string),
+	    defaultSelectedKeys: _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.string),
+	    defaultOpenKeys: _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.string),
+	    openKeys: _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.string)
+	  },
 	
-	  function Menu(props) {
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      prefixCls: 'rc-menu',
+	      className: '',
+	      mode: 'vertical',
+	      level: 1,
+	      inlineIndent: 24,
+	      visible: true,
+	      focusable: true,
+	      style: {}
+	    };
+	  },
+	
+	  getInitialState: function getInitialState() {
+	    var props = this.props;
+	    return {
+	      activeKey: getActiveKey(props)
+	    };
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    var props = {};
+	    if ('activeKey' in nextProps) {
+	      props.activeKey = getActiveKey(nextProps);
+	    }
+	    this.setState(props);
+	  },
+	
+	  shouldComponentUpdate: function shouldComponentUpdate(nextProps) {
+	    return this.props.visible || nextProps.visible;
+	  },
+	
+	  componentWillMount: function componentWillMount() {
+	    this.instanceArray = [];
+	  },
+	
+	  // all keyboard events callbacks run from here at first
+	  onKeyDown: function onKeyDown(e) {
 	    var _this = this;
 	
-	    _classCallCheck(this, Menu);
-	
-	    _get(Object.getPrototypeOf(Menu.prototype), 'constructor', this).call(this, props);
-	    this.state = {
-	      activeKey: getActiveKey.call(this, props),
-	      selectedKeys: props.selectedKeys || []
-	    };
-	
-	    ['onItemHover', 'onDeselect', 'onSelect', 'onKeyDown', 'onDestroy', 'renderMenuItem'].forEach(function (m) {
-	      _this[m] = _this[m].bind(_this);
+	    var keyCode = e.keyCode;
+	    var handled = undefined;
+	    this.instanceArray.forEach(function (obj) {
+	      if (obj.props.active) {
+	        handled = obj.onKeyDown(e);
+	      }
 	    });
-	  }
-	
-	  _createClass(Menu, [{
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(nextProps) {
-	      var props = {
-	        activeKey: getActiveKey.call(this, nextProps)
-	      };
-	      if ('selectedKeys' in nextProps) {
-	        props.selectedKeys = nextProps.selectedKeys || [];
-	      }
-	      this.setState(props);
+	    if (handled) {
+	      return 1;
 	    }
-	
-	    // all keyboard events callbacks run from here at first
-	  }, {
-	    key: 'onKeyDown',
-	    value: function onKeyDown(e) {
-	      var _this2 = this;
-	
-	      var keyCode = e.keyCode;
-	      var ond = undefined;
-	      this.instanceArray.forEach(function (obj) {
-	        if (obj.props.active) {
-	          ond = obj.onKeyDown(e);
-	        }
-	      });
-	      if (ond) {
-	        return 1;
-	      }
-	      var activeItem = undefined;
-	      switch (keyCode) {
-	        case _rcUtil.KeyCode.UP:
-	          activeItem = this.step(-1);
-	          break;
-	        case _rcUtil.KeyCode.DOWN:
-	          activeItem = this.step(1);
-	          break;
-	        default:
-	      }
-	      if (activeItem) {
-	        e.preventDefault();
-	        this.setState({
-	          activeKey: activeItem.props.eventKey
-	        }, function () {
-	          (0, _domScrollIntoView2['default'])(_react2['default'].findDOMNode(activeItem), _react2['default'].findDOMNode(_this2), {
-	            onlyScrollIfNeeded: true
-	          });
-	        });
-	        return 1;
-	      }
+	    var activeItem = undefined;
+	    switch (keyCode) {
+	      case _rcUtil.KeyCode.UP:
+	        activeItem = this.step(-1);
+	        break;
+	      case _rcUtil.KeyCode.DOWN:
+	        activeItem = this.step(1);
+	        break;
+	      default:
 	    }
-	  }, {
-	    key: 'onItemHover',
-	    value: function onItemHover(key) {
+	    if (activeItem) {
+	      e.preventDefault();
 	      this.setState({
-	        activeKey: key
+	        activeKey: activeItem.props.eventKey
+	      }, function () {
+	        (0, _domScrollIntoView2['default'])(_react2['default'].findDOMNode(activeItem), _react2['default'].findDOMNode(_this), {
+	          onlyScrollIfNeeded: true
+	        });
 	      });
+	      return 1;
 	    }
-	  }, {
-	    key: 'onSelect',
-	    value: function onSelect(key, child, e) {
-	      var props = this.props;
-	      // not from submenu
-	      // top menu
-	      // TODO: remove sub judge
-	      if (!props.sub) {
-	        if (!props.multiple) {
-	          var selectedDescendant = this.selectedDescendant;
-	          if (selectedDescendant) {
-	            if (selectedDescendant !== child) {
-	              var selectedDescendantProps = selectedDescendant.props;
-	              selectedDescendantProps.onDeselect(selectedDescendantProps.eventKey, selectedDescendant, e, child);
-	            }
-	          }
-	          this.selectedDescendant = child;
-	        }
-	      }
-	      var state = this.state;
-	      // my child
-	      if (this.instanceArray.indexOf(child) !== -1) {
-	        var selectedKeys = undefined;
-	        if (props.multiple) {
-	          selectedKeys = state.selectedKeys.concat([key]);
-	        } else {
-	          selectedKeys = [key];
-	        }
-	        this.setState({
-	          selectedKeys: selectedKeys
+	  },
+	
+	  onCommonItemHover: function onCommonItemHover(e) {
+	    var mode = this.props.mode;
+	    var key = e.key;
+	    var hover = e.hover;
+	    var trigger = e.trigger;
+	
+	    var activeKey = this.state.activeKey;
+	    if (!trigger || hover || this.props.closeSubMenuOnMouseLeave || !e.item.isSubMenu || mode === 'inline') {
+	      this.setState({
+	        activeKey: hover ? key : null
+	      });
+	    } else {}
+	    // keep active for sub menu for click active
+	    // empty
+	
+	    // clear last open status
+	    if (hover && mode !== 'inline') {
+	      var activeItem = this.instanceArray.filter(function (c) {
+	        return c.props.eventKey === activeKey;
+	      })[0];
+	      if (activeItem && activeItem.isSubMenu && activeItem.props.eventKey !== key) {
+	        this.onOpenChange({
+	          item: activeItem,
+	          key: activeItem.props.eventKey,
+	          open: false
 	        });
 	      }
-	
-	      if (props.onSelect) {
-	        props.onSelect(key, child, e);
-	      }
 	    }
-	  }, {
-	    key: 'onDeselect',
-	    value: function onDeselect(key, child, e, __childToBeSelected) {
-	      var state = this.state;
-	      var children = this.instanceArray;
-	      // my children
-	      if (children.indexOf(child) !== -1 && children.indexOf(__childToBeSelected) === -1) {
-	        var selectedKeys = state.selectedKeys;
-	        var index = selectedKeys.indexOf(key);
-	        if (index !== -1) {
-	          selectedKeys = selectedKeys.concat([]);
-	          selectedKeys.splice(index, 1);
-	          this.setState({
-	            selectedKeys: selectedKeys
-	          });
+	  },
+	
+	  renderCommonMenuItem: function renderCommonMenuItem(child, i, extraProps) {
+	    var state = this.state;
+	    var props = this.props;
+	    var key = (0, _util.getKeyFromChildrenIndex)(child, props.eventKey, i);
+	    var childProps = child.props;
+	    var newChildProps = (0, _objectAssign2['default'])({
+	      mode: props.mode,
+	      level: props.level,
+	      inlineIndent: props.inlineIndent,
+	      renderMenuItem: this.renderMenuItem,
+	      rootPrefixCls: props.prefixCls,
+	      ref: (0, _rcUtil.createChainedFunction)(child.ref, saveRef.bind(this, key)),
+	      eventKey: key,
+	      closeSubMenuOnMouseLeave: props.closeSubMenuOnMouseLeave,
+	      onItemHover: this.onItemHover,
+	      active: !childProps.disabled && key === state.activeKey,
+	      multiple: props.multiple,
+	      onClick: this.onClick,
+	      openTransitionName: this.getOpenTransitionName(),
+	      openAnimation: props.openAnimation,
+	      onOpenChange: this.onOpenChange,
+	      onDeselect: this.onDeselect,
+	      onDestroy: this.onDestroy,
+	      onSelect: this.onSelect
+	    }, extraProps);
+	    if (props.mode === 'inline') {
+	      newChildProps.closeSubMenuOnMouseLeave = newChildProps.openSubMenuOnMouseEnter = false;
+	    }
+	    return _react2['default'].cloneElement(child, newChildProps);
+	  },
+	
+	  renderRoot: function renderRoot(props) {
+	    var _classes;
+	
+	    this.instanceArray = [];
+	    var classes = (_classes = {}, _defineProperty(_classes, props.prefixCls, 1), _defineProperty(_classes, props.prefixCls + '-' + props.mode, 1), _defineProperty(_classes, props.className, !!props.className), _classes);
+	    var domProps = {
+	      className: (0, _rcUtil.classSet)(classes),
+	      role: 'menu',
+	      'aria-activedescendant': ''
+	    };
+	    if (props.id) {
+	      domProps.id = props.id;
+	    }
+	    if (props.focusable) {
+	      domProps.tabIndex = '0';
+	      domProps.onKeyDown = this.onKeyDown;
+	    }
+	    return _react2['default'].createElement('ul', _extends({ style: props.style,
+	      'data-visible': props.visible
+	    }, domProps), _react2['default'].Children.map(props.children, this.renderMenuItem));
+	  },
+	
+	  step: function step(direction) {
+	    var children = this.instanceArray;
+	    var activeKey = this.state.activeKey;
+	    var len = children.length;
+	    if (direction < 0) {
+	      children = children.concat().reverse();
+	    }
+	    // find current activeIndex
+	    var activeIndex = -1;
+	    children.every(function (c, ci) {
+	      if (c.props.eventKey === activeKey) {
+	        activeIndex = ci;
+	        return false;
+	      }
+	      return true;
+	    });
+	    var start = (activeIndex + 1) % len;
+	    var i = start;
+	    for (;;) {
+	      var child = children[i];
+	      if (child.props.disabled) {
+	        i = (i + 1 + len) % len;
+	        // complete a loop
+	        if (i === start) {
+	          return null;
 	        }
-	      }
-	      this.props.onDeselect.apply(null, arguments);
-	    }
-	  }, {
-	    key: 'onDestroy',
-	    value: function onDestroy(key) {
-	      var state = this.state;
-	      var selectedKeys = state.selectedKeys;
-	      var index = selectedKeys.indexOf(key);
-	      if (index !== -1) {
-	        // selectedKeys = selectedKeys.concat([]);
-	        selectedKeys.splice(index, 1);
-	        // can not call setState in unmount, will cause render and update unmounted children
-	        // https://github.com/facebook/react/pull/3795
-	        // this.setState({
-	        //   selectedKeys: selectedKeys
-	        // });
+	      } else {
+	        return child;
 	      }
 	    }
-	  }, {
-	    key: 'renderMenuItem',
-	    value: function renderMenuItem(child) {
-	      var state = this.state;
-	      var props = this.props;
-	      var key = getKeyFromChildren(child, props.children);
-	      var childProps = child.props;
-	      return _react2['default'].cloneElement(child, {
-	        renderMenuItem: this.renderMenuItem,
-	        rootPrefixCls: props.prefixCls,
-	        ref: (0, _rcUtil.createChainedFunction)(child.ref, saveRef.bind(this, key)),
-	        eventKey: key,
-	        onHover: this.onItemHover,
-	        active: !childProps.disabled && key === state.activeKey,
-	        multiple: props.multiple,
-	        selected: state.selectedKeys.indexOf(key) !== -1,
-	        onClick: props.onClick,
-	        onDeselect: (0, _rcUtil.createChainedFunction)(childProps.onDeselect, this.onDeselect),
-	        onDestroy: this.onDestroy,
-	        onSelect: (0, _rcUtil.createChainedFunction)(childProps.onSelect, this.onSelect)
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _classes;
-	
-	      var props = this.props;
-	      this.instanceArray = [];
-	      var classes = (_classes = {}, _defineProperty(_classes, props.prefixCls, 1), _defineProperty(_classes, props.prefixCls + '-horizontal', !!props.horizontal), _defineProperty(_classes, props.prefixCls + '-vertical', !!props.vertical), _defineProperty(_classes, props.className, !!props.className), _classes);
-	      var domProps = {
-	        className: (0, _rcUtil.classSet)(classes),
-	        role: 'menu',
-	        'aria-activedescendant': ''
-	      };
-	      if (props.id) {
-	        domProps.id = props.id;
-	      }
-	      if (props.focusable) {
-	        domProps.tabIndex = '0';
-	        domProps.onKeyDown = this.onKeyDown;
-	      }
-	      return _react2['default'].createElement('ul', _extends({
-	        style: this.props.style
-	      }, domProps), _react2['default'].Children.map(props.children, this.renderMenuItem));
-	    }
-	  }, {
-	    key: 'step',
-	    value: function step(direction) {
-	      var children = this.instanceArray;
-	      var activeKey = this.state.activeKey;
-	      var len = children.length;
-	      if (direction < 0) {
-	        children = children.concat().reverse();
-	      }
-	      // find current activeIndex
-	      var activeIndex = -1;
-	      children.every(function (c, ci) {
-	        if (c.props.eventKey === activeKey) {
-	          activeIndex = ci;
-	          return false;
-	        }
-	        return true;
-	      });
-	      var start = (activeIndex + 1) % len;
-	      var i = start;
-	      for (;;) {
-	        var child = children[i];
-	        if (child.props.disabled) {
-	          i = (i + 1 + len) % len;
-	          // complete a loop
-	          if (i === start) {
-	            return null;
-	          }
-	        } else {
-	          return child;
-	        }
-	      }
-	    }
-	  }]);
-	
-	  return Menu;
-	})(_react2['default'].Component);
-	
-	Menu.propTypes = {
-	  focusable: _react2['default'].PropTypes.bool,
-	  multiple: _react2['default'].PropTypes.bool,
-	  onSelect: _react2['default'].PropTypes.func,
-	  style: _react2['default'].PropTypes.object,
-	  onDeselect: _react2['default'].PropTypes.func,
-	  activeFirst: _react2['default'].PropTypes.bool,
-	  activeKey: _react2['default'].PropTypes.string,
-	  selectedKeys: _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.string)
+	  }
 	};
 	
-	Menu.defaultProps = {
-	  prefixCls: 'rc-menu',
-	  focusable: true,
-	  style: {},
-	  onSelect: noop,
-	  onClick: noop,
-	  onDeselect: noop
-	};
-	
-	exports['default'] = Menu;
+	exports['default'] = MenuMixin;
 	module.exports = exports['default'];
 
 /***/ },
-/* 207 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	module.exports = __webpack_require__(208);
+	module.exports = __webpack_require__(198);
 
 /***/ },
-/* 208 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var util = __webpack_require__(209);
+	var util = __webpack_require__(199);
 	
 	function scrollIntoView(elem, container, config) {
 	  config = config || {};
@@ -25181,7 +23802,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = scrollIntoView;
 
 /***/ },
-/* 209 */
+/* 199 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25617,7 +24238,71 @@ return /******/ (function(modules) { // webpackBootstrap
 	mix(utils, domUtils);
 
 /***/ },
-/* 210 */
+/* 200 */
+/***/ function(module, exports) {
+
+	'use strict';
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+	
+	function ToObject(val) {
+		if (val == null) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+	
+		return Object(val);
+	}
+	
+	function ownEnumerableKeys(obj) {
+		var keys = Object.getOwnPropertyNames(obj);
+	
+		if (Object.getOwnPropertySymbols) {
+			keys = keys.concat(Object.getOwnPropertySymbols(obj));
+		}
+	
+		return keys.filter(function (key) {
+			return propIsEnumerable.call(obj, key);
+		});
+	}
+	
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var keys;
+		var to = ToObject(target);
+	
+		for (var s = 1; s < arguments.length; s++) {
+			from = arguments[s];
+			keys = ownEnumerableKeys(Object(from));
+	
+			for (var i = 0; i < keys.length; i++) {
+				to[keys[i]] = from[keys[i]];
+			}
+		}
+	
+		return to;
+	};
+
+/***/ },
+/* 201 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	var now = Date.now();
+	exports['default'] = {
+	  noop: function noop() {},
+	
+	  getKeyFromChildrenIndex: function getKeyFromChildrenIndex(child, menuEventKey, index) {
+	    var prefix = menuEventKey || '';
+	    return child.key || prefix + 'item_' + now + '_' + index;
+	  }
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25648,53 +24333,65 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }return obj;
 	}
 	
-	var _Menu = __webpack_require__(206);
+	var _SubPopupMenu = __webpack_require__(203);
 	
-	var _Menu2 = _interopRequireDefault(_Menu);
+	var _SubPopupMenu2 = _interopRequireDefault(_SubPopupMenu);
 	
 	var _react = __webpack_require__(9);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcUtil = __webpack_require__(178);
+	var _rcUtil = __webpack_require__(179);
+	
+	var _objectAssign = __webpack_require__(200);
+	
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
 	var SubMenu = _react2['default'].createClass({
 	  displayName: 'SubMenu',
 	
 	  propTypes: {
-	    openOnHover: _react2['default'].PropTypes.bool,
 	    title: _react2['default'].PropTypes.node,
 	    onClick: _react2['default'].PropTypes.func,
+	    onOpenChange: _react2['default'].PropTypes.func,
 	    rootPrefixCls: _react2['default'].PropTypes.string,
+	    eventKey: _react2['default'].PropTypes.string,
 	    multiple: _react2['default'].PropTypes.bool,
+	    active: _react2['default'].PropTypes.bool,
+	    open: _react2['default'].PropTypes.bool,
 	    onSelect: _react2['default'].PropTypes.func,
+	    closeSubMenuOnMouseLeave: _react2['default'].PropTypes.bool,
+	    openSubMenuOnMouseEnter: _react2['default'].PropTypes.bool,
 	    onDeselect: _react2['default'].PropTypes.func,
-	    onHover: _react2['default'].PropTypes.func
+	    onDestroy: _react2['default'].PropTypes.func,
+	    onItemHover: _react2['default'].PropTypes.func
 	  },
 	
-	  mixins: [__webpack_require__(211)],
+	  mixins: [__webpack_require__(212)],
 	
 	  getInitialState: function getInitialState() {
+	    this.isSubMenu = 1;
 	    return {
-	      activeFirst: false
+	      defaultActiveFirst: false
 	    };
-	  },
-	
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    if (!nextProps.active) {
-	      this.setOpenState(false);
-	    }
 	  },
 	
 	  getDefaultProps: function getDefaultProps() {
 	    return {
-	      openOnHover: true,
-	      align: {
-	        points: ['lt', 'rt']
-	      },
 	      onMouseEnter: function onMouseEnter() {},
 	      title: ''
 	    };
+	  },
+	
+	  componentWillUnmount: function componentWillUnmount() {
+	    var props = this.props;
+	    if (props.onDestroy) {
+	      props.onDestroy(props.eventKey);
+	    }
+	  },
+	
+	  onDestroy: function onDestroy(key) {
+	    this.props.onDestroy(key);
 	  },
 	
 	  onKeyDown: function onKeyDown(e) {
@@ -25704,76 +24401,115 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (keyCode === _rcUtil.KeyCode.ENTER) {
 	      this.onClick(e);
 	      this.setState({
-	        activeFirst: true
+	        defaultActiveFirst: true
 	      });
 	      return true;
 	    }
 	
 	    if (keyCode === _rcUtil.KeyCode.RIGHT) {
-	      if (this.state.open) {
+	      if (this.props.open) {
 	        menu.onKeyDown(e);
 	      } else {
-	        this.setOpenState(true);
+	        this.triggerOpenChange(true);
 	        this.setState({
-	          activeFirst: true
+	          defaultActiveFirst: true
 	        });
 	      }
 	      return true;
 	    }
 	    if (keyCode === _rcUtil.KeyCode.LEFT) {
 	      var handled = undefined;
-	      if (this.state.open) {
+	      if (this.props.open) {
 	        handled = menu.onKeyDown(e);
 	      } else {
 	        return undefined;
 	      }
 	      if (!handled) {
-	        this.setOpenState(false);
+	        this.triggerOpenChange(false);
 	        handled = true;
 	      }
 	      return handled;
 	    }
 	
-	    if (this.state.open && (keyCode === _rcUtil.KeyCode.UP || keyCode === _rcUtil.KeyCode.DOWN)) {
+	    if (this.props.open && (keyCode === _rcUtil.KeyCode.UP || keyCode === _rcUtil.KeyCode.DOWN)) {
 	      return menu.onKeyDown(e);
 	    }
 	  },
 	
+	  onSubTreeMouseEnter: function onSubTreeMouseEnter() {
+	    if (this.leaveTimer) {
+	      clearTimeout(this.leaveTimer);
+	      this.leaveTimer = null;
+	    }
+	  },
+	
+	  onOpenChange: function onOpenChange(e) {
+	    this.props.onOpenChange(e);
+	  },
+	
 	  onMouseEnter: function onMouseEnter() {
+	    if (this.leaveTimer) {
+	      clearTimeout(this.leaveTimer);
+	      this.leaveTimer = null;
+	    }
 	    var props = this.props;
-	    props.onHover(props.eventKey);
-	    if (props.openOnHover) {
-	      this.setOpenState(true);
-	      this.setState({
-	        activeFirst: false
-	      });
+	    props.onItemHover({
+	      key: this.props.eventKey,
+	      item: this,
+	      hover: true,
+	      trigger: 'mouseenter'
+	    });
+	    if (props.openSubMenuOnMouseEnter) {
+	      this.triggerOpenChange(true);
 	    }
-	  },
-	
-	  onMouseLeave: function onMouseLeave() {
-	    if (!this.state.open) {
-	      this.props.onHover(null);
-	    }
-	  },
-	
-	  onClick: function onClick() {
-	    this.setOpenState(true);
 	    this.setState({
-	      activeFirst: false
+	      defaultActiveFirst: false
 	    });
 	  },
 	
-	  onSubMenuClick: function onSubMenuClick(key, menuItem, e) {
-	    this.props.onClick(key, menuItem, e);
+	  onMouseLeave: function onMouseLeave() {
+	    var _this = this;
+	
+	    // prevent popup menu and submenu gap
+	    this.leaveTimer = setTimeout(function () {
+	      // leave whole sub tree
+	      // still active
+	      if (_this.isMounted() && _this.props.active) {
+	        _this.props.onItemHover({
+	          key: _this.props.eventKey,
+	          item: _this,
+	          hover: false,
+	          trigger: 'mouseleave'
+	        });
+	      }
+	      if (_this.isMounted() && _this.props.open) {
+	        if (_this.props.closeSubMenuOnMouseLeave) {
+	          _this.triggerOpenChange(false);
+	        }
+	      }
+	    }, 100);
 	  },
 	
-	  onSelect: function onSelect(childKey, child, e) {
-	    // propagate
-	    this.props.onSelect(childKey, child, e);
+	  onClick: function onClick() {
+	    if (this.props.openSubMenuOnMouseEnter) {
+	      return;
+	    }
+	    this.triggerOpenChange(!this.props.open, 'click');
+	    this.setState({
+	      defaultActiveFirst: false
+	    });
 	  },
 	
-	  onDeselect: function onDeselect() {
-	    this.props.onDeselect.apply(null, arguments);
+	  onSubMenuClick: function onSubMenuClick(info) {
+	    this.props.onClick(this.addKeyPath(info));
+	  },
+	
+	  onSelect: function onSelect(info) {
+	    this.props.onSelect(info);
+	  },
+	
+	  onDeselect: function onDeselect(info) {
+	    this.props.onDeselect(info);
 	  },
 	
 	  getPrefixCls: function getPrefixCls() {
@@ -25788,47 +24524,52 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return this.getPrefixCls() + '-disabled';
 	  },
 	
+	  getOpenClassName: function getOpenClassName() {
+	    return this.props.rootPrefixCls + '-submenu-open';
+	  },
+	
 	  renderChildren: function renderChildren(children) {
-	    if (!this.state.open) {
-	      // prevent destroy
-	      return this._cacheMenu || null;
-	    }
-	    var childrenCount = _react2['default'].Children.count(children);
+	    var props = this.props;
 	    var baseProps = {
-	      sub: true,
+	      mode: props.mode === 'horizontal' ? 'vertical' : props.mode,
+	      visible: props.open,
+	      level: props.level + 1,
+	      inlineIndent: props.inlineIndent,
 	      focusable: false,
 	      onClick: this.onSubMenuClick,
 	      onSelect: this.onSelect,
 	      onDeselect: this.onDeselect,
-	      activeFirst: this.state.activeFirst,
-	      multiple: this.props.multiple,
-	      prefixCls: this.props.rootPrefixCls,
+	      onDestroy: this.onDestroy,
+	      selectedKeys: props.selectedKeys,
+	      eventKey: props.eventKey + '-menu-',
+	      openKeys: props.openKeys,
+	      openTransitionName: props.openTransitionName,
+	      openAnimation: props.openAnimation,
+	      onOpenChange: this.onOpenChange,
+	      closeSubMenuOnMouseLeave: props.closeSubMenuOnMouseLeave,
+	      defaultActiveFirst: this.state.defaultActiveFirst,
+	      multiple: props.multiple,
+	      prefixCls: props.rootPrefixCls,
 	      id: this._menuId,
 	      ref: this.saveMenuInstance
 	    };
-	    if (childrenCount === 1 && children.type === _Menu2['default']) {
-	      var menu = children;
-	      baseProps.ref = (0, _rcUtil.createChainedFunction)(menu.ref, this.saveMenuInstance);
-	      baseProps.onClick = (0, _rcUtil.createChainedFunction)(menu.props.onClick, this.onSubMenuClick);
-	      this._cacheMenu = _react2['default'].cloneElement(menu, baseProps);
-	    } else {
-	      this._cacheMenu = _react2['default'].createElement(_Menu2['default'], baseProps, children);
-	    }
-	    return this._cacheMenu;
+	    return _react2['default'].createElement(_SubPopupMenu2['default'], baseProps, children);
 	  },
 	
 	  render: function render() {
+	    var _classes;
+	
+	    this.haveOpen = this.haveOpen || this.props.open;
 	    var props = this.props;
-	    var classes = _defineProperty({}, props.className, !!props.className);
 	    var prefixCls = this.getPrefixCls();
-	    classes[this.getOpenClassName()] = this.state.open;
+	    var classes = (_classes = {}, _defineProperty(_classes, props.className, !!props.className), _defineProperty(_classes, prefixCls + '-' + props.mode, 1), _classes);
+	
+	    classes[this.getOpenClassName()] = this.props.open;
 	    classes[this.getActiveClassName()] = props.active;
 	    classes[this.getDisabledClassName()] = props.disabled;
 	    this._menuId = this._menuId || (0, _rcUtil.guid)();
 	    classes[prefixCls] = true;
-	    if (props.align) {
-	      classes[prefixCls + '-' + props.align.points.join('-')] = 1;
-	    }
+	    classes[prefixCls + '-' + props.mode] = 1;
 	    var clickEvents = {};
 	    var mouseEvents = {};
 	    var titleMouseEvents = {};
@@ -25837,17 +24578,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        onClick: this.onClick
 	      };
 	      mouseEvents = {
-	        onMouseLeave: this.onMouseLeave
+	        onMouseLeave: this.onMouseLeave,
+	        onMouseEnter: this.onSubTreeMouseEnter
 	      };
 	      // only works in title, not outer li
 	      titleMouseEvents = {
 	        onMouseEnter: this.onMouseEnter
 	      };
 	    }
+	    var style = {};
+	    if (props.mode === 'inline') {
+	      style.paddingLeft = props.inlineIndent * props.level;
+	    }
 	    return _react2['default'].createElement('li', _extends({ className: (0, _rcUtil.classSet)(classes) }, mouseEvents), _react2['default'].createElement('div', _extends({
+	      style: style,
 	      className: prefixCls + '-title'
 	    }, titleMouseEvents, clickEvents, {
-	      'aria-expanded': props.active,
+	      'aria-open': props.open,
 	      'aria-owns': this._menuId,
 	      'aria-haspopup': 'true'
 	    }), props.title), this.renderChildren(props.children));
@@ -25855,6 +24602,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  saveMenuInstance: function saveMenuInstance(c) {
 	    this.menuInstance = c;
+	  },
+	
+	  addKeyPath: function addKeyPath(info) {
+	    return (0, _objectAssign2['default'])({}, info, {
+	      keyPath: info.keyPath.concat(this.props.eventKey)
+	    });
+	  },
+	
+	  triggerOpenChange: function triggerOpenChange(open, type) {
+	    var key = this.props.eventKey;
+	    this.onOpenChange({
+	      key: key,
+	      item: this,
+	      trigger: type,
+	      open: open
+	    });
 	  }
 	});
 	
@@ -25862,7 +24625,149 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 211 */
+/* 203 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = arguments[i];for (var key in source) {
+	      if (Object.prototype.hasOwnProperty.call(source, key)) {
+	        target[key] = source[key];
+	      }
+	    }
+	  }return target;
+	};
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	var _react = __webpack_require__(9);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _MenuMixin = __webpack_require__(196);
+	
+	var _MenuMixin2 = _interopRequireDefault(_MenuMixin);
+	
+	var _objectAssign = __webpack_require__(200);
+	
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+	
+	var _util = __webpack_require__(201);
+	
+	var _rcAnimate = __webpack_require__(204);
+	
+	var _rcAnimate2 = _interopRequireDefault(_rcAnimate);
+	
+	var SubPopupMenu = _react2['default'].createClass({
+	  displayName: 'SubPopupMenu',
+	
+	  propTypes: {
+	    onSelect: _react2['default'].PropTypes.func,
+	    onClick: _react2['default'].PropTypes.func,
+	    onDeselect: _react2['default'].PropTypes.func,
+	    onOpenChange: _react2['default'].PropTypes.func,
+	    onDestroy: _react2['default'].PropTypes.func,
+	    openTransitionName: _react2['default'].PropTypes.string,
+	    openAnimation: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.string, _react2['default'].PropTypes.object]),
+	    openKeys: _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.string),
+	    closeSubMenuOnMouseLeave: _react2['default'].PropTypes.bool,
+	    visible: _react2['default'].PropTypes.bool
+	  },
+	
+	  mixins: [_MenuMixin2['default']],
+	
+	  onDeselect: function onDeselect(selectInfo) {
+	    this.props.onDeselect(selectInfo);
+	  },
+	
+	  onSelect: function onSelect(selectInfo) {
+	    this.props.onSelect(selectInfo);
+	  },
+	
+	  onClick: function onClick(e) {
+	    this.props.onClick(e);
+	  },
+	
+	  onOpenChange: function onOpenChange(e) {
+	    this.props.onOpenChange(e);
+	  },
+	
+	  onDestroy: function onDestroy(key) {
+	    this.props.onDestroy(key);
+	  },
+	
+	  onItemHover: function onItemHover(e) {
+	    this.onCommonItemHover(e);
+	  },
+	
+	  getOpenTransitionName: function getOpenTransitionName() {
+	    return this.props.openTransitionName;
+	  },
+	
+	  renderMenuItem: function renderMenuItem(c, i) {
+	    var props = this.props;
+	    var key = (0, _util.getKeyFromChildrenIndex)(c, props.eventKey, i);
+	    var extraProps = {
+	      openKeys: props.openKeys,
+	      selectedKeys: props.selectedKeys,
+	      open: props.openKeys.indexOf(key) !== -1,
+	      selected: props.selectedKeys.indexOf(key) !== -1,
+	      openSubMenuOnMouseEnter: true
+	    };
+	    return this.renderCommonMenuItem(c, i, extraProps);
+	  },
+	
+	  render: function render() {
+	    var renderFirst = this.renderFirst;
+	    this.renderFirst = 1;
+	    this.haveOpened = this.haveOpened || this.props.visible;
+	    if (!this.haveOpened) {
+	      return null;
+	    }
+	    var transitionAppear = true;
+	    if (!renderFirst && this.props.visible) {
+	      transitionAppear = false;
+	    }
+	    var props = (0, _objectAssign2['default'])({}, this.props);
+	    props.className += ' ' + props.prefixCls + '-sub';
+	    var animProps = {};
+	    if (props.openTransitionName) {
+	      animProps.transitionName = props.openTransitionName;
+	    } else if (typeof props.openAnimation === 'object') {
+	      animProps.animation = (0, _objectAssign2['default'])({}, props.openAnimation);
+	      if (!transitionAppear) {
+	        delete animProps.animation.appear;
+	      }
+	    }
+	    return _react2['default'].createElement(_rcAnimate2['default'], _extends({}, animProps, {
+	      showProp: 'data-visible',
+	      component: '',
+	      transitionAppear: transitionAppear }), this.renderRoot(props));
+	  }
+	});
+	
+	exports['default'] = SubPopupMenu;
+	module.exports = exports['default'];
+
+/***/ },
+/* 204 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// export this package's api
+	'use strict';
+	
+	module.exports = __webpack_require__(205);
+
+/***/ },
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25875,61 +24780,914 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _rcUtil = __webpack_require__(178);
+	function _defineProperty(obj, key, value) {
+	  if (key in obj) {
+	    Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+	  } else {
+	    obj[key] = value;
+	  }return obj;
+	}
 	
-	var _rcUtil2 = _interopRequireDefault(_rcUtil);
+	var _react = __webpack_require__(9);
 	
-	exports['default'] = {
-	  getInitialState: function getInitialState() {
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _ChildrenUtils = __webpack_require__(206);
+	
+	var _ChildrenUtils2 = _interopRequireDefault(_ChildrenUtils);
+	
+	var _AnimateChild = __webpack_require__(207);
+	
+	var _AnimateChild2 = _interopRequireDefault(_AnimateChild);
+	
+	var _util = __webpack_require__(211);
+	
+	var _util2 = _interopRequireDefault(_util);
+	
+	var defaultKey = 'rc_animate_' + Date.now();
+	
+	function getChildrenFromProps(props) {
+	  var children = props.children;
+	  if (_react2['default'].isValidElement(children)) {
+	    if (!children.key) {
+	      return _react2['default'].cloneElement(children, {
+	        key: defaultKey
+	      });
+	    }
+	  }
+	  return children;
+	}
+	
+	function noop() {}
+	
+	var Animate = _react2['default'].createClass({
+	  displayName: 'Animate',
+	
+	  propTypes: {
+	    component: _react2['default'].PropTypes.any,
+	    animation: _react2['default'].PropTypes.object,
+	    transitionName: _react2['default'].PropTypes.string,
+	    transitionEnter: _react2['default'].PropTypes.bool,
+	    transitionAppear: _react2['default'].PropTypes.bool,
+	    transitionLeave: _react2['default'].PropTypes.bool,
+	    onEnd: _react2['default'].PropTypes.func,
+	    onEnter: _react2['default'].PropTypes.func,
+	    onLeave: _react2['default'].PropTypes.func,
+	    onAppear: _react2['default'].PropTypes.func,
+	    showProp: _react2['default'].PropTypes.string
+	  },
+	
+	  getDefaultProps: function getDefaultProps() {
 	    return {
-	      open: this.props.open || false
+	      animation: {},
+	      component: 'span',
+	      transitionEnter: true,
+	      transitionLeave: true,
+	      transitionAppear: false,
+	      onEnd: noop,
+	      onEnter: noop,
+	      onLeave: noop,
+	      onAppear: noop
 	    };
 	  },
 	
-	  getOpenClassName: function getOpenClassName() {
-	    return this.props.openClassName || this.props.rootPrefixCls + '-submenu-open';
+	  getInitialState: function getInitialState() {
+	    this.currentlyAnimatingKeys = {};
+	    this.keysToEnter = [];
+	    this.keysToLeave = [];
+	    return {
+	      children: (0, _ChildrenUtils.toArrayChildren)(getChildrenFromProps(this.props))
+	    };
 	  },
 	
-	  setOpenState: function setOpenState(newState, onStateChangeComplete) {
-	    if (newState) {
-	      this.bindRootCloseHandlers();
+	  componentDidMount: function componentDidMount() {
+	    var _this = this;
+	
+	    var showProp = this.props.showProp;
+	    var children = this.state.children;
+	    if (showProp) {
+	      children = children.filter(function (c) {
+	        return !!c.props[showProp];
+	      });
+	    }
+	    children.forEach(function (c) {
+	      _this.performAppear(c.key);
+	    });
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    var _this2 = this;
+	
+	    var nextChildren = (0, _ChildrenUtils.toArrayChildren)(getChildrenFromProps(nextProps));
+	    var props = this.props;
+	    var showProp = props.showProp;
+	    var exclusive = props.exclusive;
+	    var currentlyAnimatingKeys = this.currentlyAnimatingKeys;
+	    // last props children if exclusive
+	    // exclusive needs immediate response
+	    var currentChildren = this.state.children;
+	    // in case destroy in showProp mode
+	    var newChildren = [];
+	    if (showProp) {
+	      currentChildren.forEach(function (currentChild) {
+	        var nextChild = (0, _ChildrenUtils.findChildInChildrenByKey)(nextChildren, currentChild.key);
+	        var newChild = undefined;
+	        if ((!nextChild || !nextChild.props[showProp]) && currentChild.props[showProp]) {
+	          newChild = _react2['default'].cloneElement(nextChild || currentChild, _defineProperty({}, showProp, true));
+	        } else {
+	          newChild = nextChild;
+	        }
+	        if (newChild) {
+	          newChildren.push(newChild);
+	        }
+	      });
 	    } else {
-	      this.unbindRootCloseHandlers();
+	      newChildren = _ChildrenUtils2['default'].mergeChildren(currentChildren, nextChildren);
 	    }
 	
+	    // exclusive needs immediate response
+	    if (exclusive) {
+	      Object.keys(currentlyAnimatingKeys).forEach(function (key) {
+	        _this2.stop(key);
+	      });
+	      currentChildren = (0, _ChildrenUtils.toArrayChildren)(getChildrenFromProps(props));
+	    }
+	
+	    // need render to avoid update
 	    this.setState({
-	      open: newState
-	    }, onStateChangeComplete);
+	      children: newChildren
+	    });
+	
+	    nextChildren.forEach(function (c) {
+	      var key = c.key;
+	      if (currentlyAnimatingKeys[key]) {
+	        return;
+	      }
+	      var hasPrev = (0, _ChildrenUtils.findChildInChildrenByKey)(currentChildren, key);
+	      if (showProp) {
+	        var showInNext = c.props[showProp];
+	        if (hasPrev) {
+	          var showInNow = (0, _ChildrenUtils.findShownChildInChildrenByKey)(currentChildren, key, showProp);
+	          if (!showInNow && showInNext) {
+	            _this2.keysToEnter.push(key);
+	          }
+	        } else if (showInNext) {
+	          _this2.keysToEnter.push(key);
+	        }
+	      } else if (!hasPrev) {
+	        _this2.keysToEnter.push(key);
+	      }
+	    });
+	
+	    currentChildren.forEach(function (c) {
+	      var key = c.key;
+	      if (currentlyAnimatingKeys[key]) {
+	        return;
+	      }
+	      var hasNext = (0, _ChildrenUtils.findChildInChildrenByKey)(nextChildren, key);
+	      if (showProp) {
+	        var showInNow = c.props[showProp];
+	        if (hasNext) {
+	          var showInNext = (0, _ChildrenUtils.findShownChildInChildrenByKey)(nextChildren, key, showProp);
+	          if (!showInNext && showInNow) {
+	            _this2.keysToLeave.push(key);
+	          }
+	        } else if (showInNow) {
+	          _this2.keysToLeave.push(key);
+	        }
+	      } else if (!hasNext) {
+	        _this2.keysToLeave.push(key);
+	      }
+	    });
+	  },
+	
+	  componentDidUpdate: function componentDidUpdate() {
+	    var keysToEnter = this.keysToEnter;
+	    this.keysToEnter = [];
+	    keysToEnter.forEach(this.performEnter);
+	    var keysToLeave = this.keysToLeave;
+	    this.keysToLeave = [];
+	    keysToLeave.forEach(this.performLeave);
+	  },
+	
+	  render: function render() {
+	    var props = this.props;
+	    var stateChildren = this.state.children;
+	    var children = null;
+	    if (stateChildren) {
+	      children = stateChildren.map(function (child) {
+	        if (!child.key) {
+	          throw new Error('must set key for <rc-animate> children');
+	        }
+	        return _react2['default'].createElement(_AnimateChild2['default'], {
+	          key: child.key,
+	          ref: child.key,
+	          animation: props.animation,
+	          transitionName: props.transitionName,
+	          transitionEnter: props.transitionEnter,
+	          transitionAppear: props.transitionAppear,
+	          transitionLeave: props.transitionLeave }, child);
+	      });
+	    }
+	    var Component = props.component;
+	    if (Component) {
+	      return _react2['default'].createElement(Component, this.props, children);
+	    }
+	    return children[0] || null;
+	  },
+	
+	  performEnter: function performEnter(key) {
+	    // may already remove by exclusive
+	    if (this.refs[key]) {
+	      this.currentlyAnimatingKeys[key] = true;
+	      this.refs[key].componentWillEnter(this.handleDoneAdding.bind(this, key, 'enter'));
+	    }
+	  },
+	
+	  performAppear: function performAppear(key) {
+	    if (this.refs[key]) {
+	      this.currentlyAnimatingKeys[key] = true;
+	      this.refs[key].componentWillAppear(this.handleDoneAdding.bind(this, key, 'appear'));
+	    }
+	  },
+	
+	  handleDoneAdding: function handleDoneAdding(key, type) {
+	    var props = this.props;
+	    delete this.currentlyAnimatingKeys[key];
+	    var currentChildren = (0, _ChildrenUtils.toArrayChildren)(getChildrenFromProps(props));
+	    if (!this.isValidChildByKey(currentChildren, key)) {
+	      // exclusive will not need this
+	      this.performLeave(key);
+	    } else {
+	      if (type === 'appear') {
+	        if (_util2['default'].allowAppearCallback(props)) {
+	          props.onAppear(key);
+	          props.onEnd(key, true);
+	        }
+	      } else {
+	        if (_util2['default'].allowEnterCallback(props)) {
+	          props.onEnter(key);
+	          props.onEnd(key, true);
+	        }
+	      }
+	    }
+	  },
+	
+	  performLeave: function performLeave(key) {
+	    // may already remove by exclusive
+	    if (this.refs[key]) {
+	      this.currentlyAnimatingKeys[key] = true;
+	      this.refs[key].componentWillLeave(this.handleDoneLeaving.bind(this, key));
+	    }
+	  },
+	
+	  handleDoneLeaving: function handleDoneLeaving(key) {
+	    var props = this.props;
+	    delete this.currentlyAnimatingKeys[key];
+	    var currentChildren = (0, _ChildrenUtils.toArrayChildren)(getChildrenFromProps(props));
+	    // in case state change is too fast
+	    if (this.isValidChildByKey(currentChildren, key)) {
+	      this.performEnter(key);
+	    } else {
+	      if (_util2['default'].allowLeaveCallback(props)) {
+	        props.onLeave(key);
+	        props.onEnd(key, false);
+	      }
+	      if (this.isMounted() && !(0, _ChildrenUtils.isSameChildren)(this.state.children, currentChildren, props.showProp)) {
+	        this.setState({
+	          children: currentChildren
+	        });
+	      }
+	    }
+	  },
+	
+	  isValidChildByKey: function isValidChildByKey(currentChildren, key) {
+	    var showProp = this.props.showProp;
+	    if (showProp) {
+	      return (0, _ChildrenUtils.findShownChildInChildrenByKey)(currentChildren, key, showProp);
+	    }
+	    return (0, _ChildrenUtils.findChildInChildrenByKey)(currentChildren, key);
+	  },
+	
+	  stop: function stop(key) {
+	    delete this.currentlyAnimatingKeys[key];
+	    var component = this.refs[key];
+	    if (component) {
+	      component.stop();
+	    }
+	  }
+	});
+	
+	exports['default'] = Animate;
+	module.exports = exports['default'];
+
+/***/ },
+/* 206 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	var _react = __webpack_require__(9);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var utils = {
+	  toArrayChildren: function toArrayChildren(children) {
+	    var ret = [];
+	    _react2['default'].Children.forEach(children, function (c) {
+	      ret.push(c);
+	    });
+	    return ret;
+	  },
+	
+	  findChildInChildrenByKey: function findChildInChildrenByKey(children, key) {
+	    var ret = null;
+	    if (children) {
+	      children.forEach(function (c) {
+	        if (ret) {
+	          return;
+	        }
+	        if (c.key === key) {
+	          ret = c;
+	        }
+	      });
+	    }
+	    return ret;
+	  },
+	
+	  findShownChildInChildrenByKey: function findShownChildInChildrenByKey(children, key, showProp) {
+	    var ret = null;
+	    if (children) {
+	      children.forEach(function (c) {
+	        if (c.key === key && c.props[showProp]) {
+	          if (ret) {
+	            throw new Error('two child with same key for <rc-animate> children');
+	          }
+	          ret = c;
+	        }
+	      });
+	    }
+	    return ret;
+	  },
+	
+	  findHiddenChildInChildrenByKey: function findHiddenChildInChildrenByKey(children, key, showProp) {
+	    var found = 0;
+	    if (children) {
+	      children.forEach(function (c) {
+	        if (found) {
+	          return;
+	        }
+	        found = c.key === key && !c.props[showProp];
+	      });
+	    }
+	    return found;
+	  },
+	
+	  isSameChildren: function isSameChildren(c1, c2, showProp) {
+	    var same = c1.length === c2.length;
+	    if (same) {
+	      c1.forEach(function (child, i) {
+	        var child2 = c2[i];
+	        if (child.key !== child2.key) {
+	          same = false;
+	        } else if (showProp && child.props[showProp] !== child2.props[showProp]) {
+	          same = false;
+	        }
+	      });
+	    }
+	    return same;
+	  },
+	
+	  mergeChildren: function mergeChildren(prev, next) {
+	    var ret = [];
+	
+	    // For each key of `next`, the list of keys to insert before that key in
+	    // the combined list
+	    var nextChildrenPending = {};
+	    var pendingChildren = [];
+	    prev.forEach(function (c) {
+	      if (utils.findChildInChildrenByKey(next, c.key)) {
+	        if (pendingChildren.length) {
+	          nextChildrenPending[c.key] = pendingChildren;
+	          pendingChildren = [];
+	        }
+	      } else {
+	        pendingChildren.push(c);
+	      }
+	    });
+	
+	    next.forEach(function (c) {
+	      if (nextChildrenPending.hasOwnProperty(c.key)) {
+	        ret = ret.concat(nextChildrenPending[c.key]);
+	      }
+	      ret.push(c);
+	    });
+	
+	    ret = ret.concat(pendingChildren);
+	
+	    return ret;
+	  }
+	};
+	
+	exports['default'] = utils;
+	module.exports = exports['default'];
+
+/***/ },
+/* 207 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	var _react = __webpack_require__(9);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _cssAnimation = __webpack_require__(208);
+	
+	var _cssAnimation2 = _interopRequireDefault(_cssAnimation);
+	
+	var _util = __webpack_require__(211);
+	
+	var _util2 = _interopRequireDefault(_util);
+	
+	var transitionMap = {
+	  enter: 'transitionEnter',
+	  appear: 'transitionAppear',
+	  leave: 'transitionLeave'
+	};
+	
+	var AnimateChild = _react2['default'].createClass({
+	  displayName: 'AnimateChild',
+	
+	  propTypes: {
+	    children: _react2['default'].PropTypes.any
+	  },
+	
+	  transition: function transition(animationType, finishCallback) {
+	    var _this = this;
+	
+	    var node = _react2['default'].findDOMNode(this);
+	    var props = this.props;
+	    var transitionName = props.transitionName;
+	    this.stop();
+	    var end = function end() {
+	      _this.stopper = null;
+	      finishCallback();
+	    };
+	    if ((_cssAnimation.isCssAnimationSupported || !props.animation[animationType]) && transitionName && props[transitionMap[animationType]]) {
+	      this.stopper = (0, _cssAnimation2['default'])(node, transitionName + '-' + animationType, end);
+	    } else {
+	      this.stopper = props.animation[animationType](node, end);
+	    }
+	  },
+	
+	  stop: function stop() {
+	    if (this.stopper) {
+	      this.stopper.stop();
+	      this.stopper = null;
+	    }
+	  },
+	
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.stop();
+	  },
+	
+	  componentWillEnter: function componentWillEnter(done) {
+	    if (_util2['default'].isEnterSupported(this.props)) {
+	      this.transition('enter', done);
+	    } else {
+	      done();
+	    }
+	  },
+	
+	  componentWillAppear: function componentWillAppear(done) {
+	    if (_util2['default'].isAppearSupported(this.props)) {
+	      this.transition('appear', done);
+	    } else {
+	      done();
+	    }
+	  },
+	
+	  componentWillLeave: function componentWillLeave(done) {
+	    if (_util2['default'].isLeaveSupported(this.props)) {
+	      this.transition('leave', done);
+	    } else {
+	      done();
+	    }
+	  },
+	
+	  render: function render() {
+	    return this.props.children;
+	  }
+	});
+	
+	exports['default'] = AnimateChild;
+	module.exports = exports['default'];
+
+/***/ },
+/* 208 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Event = __webpack_require__(209);
+	var Css = __webpack_require__(210);
+	var isCssAnimationSupported = Event.endEvents.length !== 0;
+	
+	function getDuration(node, name) {
+	  var style = window.getComputedStyle(node);
+	  var prefixes = ['-webkit-', '-moz-', '-o-', 'ms-', ''];
+	  var ret = '';
+	  for (var i = 0; i < prefixes.length; i++) {
+	    ret = style.getPropertyValue(prefixes[i] + name);
+	    if (ret) {
+	      break;
+	    }
+	  }
+	  return ret;
+	}
+	
+	function fixBrowserByTimeout(node) {
+	  if (isCssAnimationSupported) {
+	    var transitionDuration = parseFloat(getDuration(node, 'transition-duration')) || 0;
+	    var animationDuration = parseFloat(getDuration(node, 'animation-duration')) || 0;
+	    var time = Math.max(transitionDuration, animationDuration);
+	    // sometimes, browser bug
+	    node.rcEndAnimTimeout = setTimeout(function () {
+	      node.rcEndAnimTimeout = null;
+	      if (node.rcEndListener) {
+	        node.rcEndListener();
+	      }
+	    }, time * 1000 + 200);
+	  }
+	}
+	
+	function clearBrowserBugTimeout(node) {
+	  if (node.rcEndAnimTimeout) {
+	    clearTimeout(node.rcEndAnimTimeout);
+	    node.rcEndAnimTimeout = null;
+	  }
+	}
+	
+	var cssAnimation = function cssAnimation(node, transitionName, callback) {
+	  var className = transitionName;
+	  var activeClassName = className + '-active';
+	
+	  if (node.rcEndListener) {
+	    node.rcEndListener();
+	  }
+	
+	  node.rcEndListener = function (e) {
+	    if (e && e.target !== node) {
+	      return;
+	    }
+	
+	    if (node.rcAnimTimeout) {
+	      clearTimeout(node.rcAnimTimeout);
+	      node.rcAnimTimeout = null;
+	    }
+	
+	    clearBrowserBugTimeout(node);
+	
+	    Css.removeClass(node, className);
+	    Css.removeClass(node, activeClassName);
+	
+	    Event.removeEndEventListener(node, node.rcEndListener);
+	    node.rcEndListener = null;
+	
+	    // Usually this optional callback is used for informing an owner of
+	    // a leave animation and telling it to remove the child.
+	    if (callback) {
+	      callback();
+	    }
+	  };
+	
+	  Event.addEndEventListener(node, node.rcEndListener);
+	
+	  Css.addClass(node, className);
+	
+	  node.rcAnimTimeout = setTimeout(function () {
+	    node.rcAnimTimeout = null;
+	    Css.addClass(node, activeClassName);
+	    fixBrowserByTimeout(node);
+	  }, 0);
+	
+	  return {
+	    stop: function stop() {
+	      if (node.rcEndListener) {
+	        node.rcEndListener();
+	      }
+	    }
+	  };
+	};
+	
+	cssAnimation.style = function (node, style, callback) {
+	  if (node.rcEndListener) {
+	    node.rcEndListener();
+	  }
+	
+	  node.rcEndListener = function (e) {
+	    if (e && e.target !== node) {
+	      return;
+	    }
+	
+	    if (node.rcAnimTimeout) {
+	      clearTimeout(node.rcAnimTimeout);
+	      node.rcAnimTimeout = null;
+	    }
+	
+	    clearBrowserBugTimeout(node);
+	
+	    Event.removeEndEventListener(node, node.rcEndListener);
+	    node.rcEndListener = null;
+	
+	    // Usually this optional callback is used for informing an owner of
+	    // a leave animation and telling it to remove the child.
+	    if (callback) {
+	      callback();
+	    }
+	  };
+	
+	  Event.addEndEventListener(node, node.rcEndListener);
+	
+	  node.rcAnimTimeout = setTimeout(function () {
+	    for (var s in style) {
+	      if (style.hasOwnProperty(s)) {
+	        node.style[s] = style[s];
+	      }
+	    }
+	    node.rcAnimTimeout = null;
+	    fixBrowserByTimeout(node);
+	  }, 0);
+	};
+	
+	cssAnimation.setTransition = function (node, p, value) {
+	  var property = p;
+	  var v = value;
+	  if (value === undefined) {
+	    v = property;
+	    property = '';
+	  }
+	  property = property || '';
+	  ['Webkit', 'Moz', 'O',
+	  // ms is special .... !
+	  'ms'].forEach(function (prefix) {
+	    node.style[prefix + 'Transition' + property] = v;
+	  });
+	};
+	
+	cssAnimation.addClass = Css.addClass;
+	cssAnimation.removeClass = Css.removeClass;
+	cssAnimation.isCssAnimationSupported = isCssAnimationSupported;
+	
+	module.exports = cssAnimation;
+
+/***/ },
+/* 209 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var EVENT_NAME_MAP = {
+	  transitionend: {
+	    transition: 'transitionend',
+	    WebkitTransition: 'webkitTransitionEnd',
+	    MozTransition: 'mozTransitionEnd',
+	    OTransition: 'oTransitionEnd',
+	    msTransition: 'MSTransitionEnd'
+	  },
+	
+	  animationend: {
+	    animation: 'animationend',
+	    WebkitAnimation: 'webkitAnimationEnd',
+	    MozAnimation: 'mozAnimationEnd',
+	    OAnimation: 'oAnimationEnd',
+	    msAnimation: 'MSAnimationEnd'
+	  }
+	};
+	
+	var endEvents = [];
+	
+	function detectEvents() {
+	  var testEl = document.createElement('div');
+	  var style = testEl.style;
+	
+	  if (!('AnimationEvent' in window)) {
+	    delete EVENT_NAME_MAP.animationend.animation;
+	  }
+	
+	  if (!('TransitionEvent' in window)) {
+	    delete EVENT_NAME_MAP.transitionend.transition;
+	  }
+	
+	  for (var baseEventName in EVENT_NAME_MAP) {
+	    if (EVENT_NAME_MAP.hasOwnProperty(baseEventName)) {
+	      var baseEvents = EVENT_NAME_MAP[baseEventName];
+	      for (var styleName in baseEvents) {
+	        if (styleName in style) {
+	          endEvents.push(baseEvents[styleName]);
+	          break;
+	        }
+	      }
+	    }
+	  }
+	}
+	
+	if (typeof window !== 'undefined') {
+	  detectEvents();
+	}
+	
+	function addEventListener(node, eventName, eventListener) {
+	  node.addEventListener(eventName, eventListener, false);
+	}
+	
+	function removeEventListener(node, eventName, eventListener) {
+	  node.removeEventListener(eventName, eventListener, false);
+	}
+	
+	var TransitionEvents = {
+	  addEndEventListener: function addEndEventListener(node, eventListener) {
+	    if (endEvents.length === 0) {
+	      window.setTimeout(eventListener, 0);
+	      return;
+	    }
+	    endEvents.forEach(function (endEvent) {
+	      addEventListener(node, endEvent, eventListener);
+	    });
+	  },
+	
+	  endEvents: endEvents,
+	
+	  removeEndEventListener: function removeEndEventListener(node, eventListener) {
+	    if (endEvents.length === 0) {
+	      return;
+	    }
+	    endEvents.forEach(function (endEvent) {
+	      removeEventListener(node, endEvent, eventListener);
+	    });
+	  }
+	};
+	
+	module.exports = TransitionEvents;
+
+/***/ },
+/* 210 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var SPACE = ' ';
+	var RE_CLASS = /[\n\t\r]/g;
+	
+	function norm(elemClass) {
+	  return (SPACE + elemClass + SPACE).replace(RE_CLASS, SPACE);
+	}
+	
+	module.exports = {
+	  addClass: function addClass(elem, className) {
+	    elem.className += ' ' + className;
+	  },
+	
+	  removeClass: function removeClass(elem, n) {
+	    var elemClass = elem.className.trim();
+	    var className = norm(elemClass);
+	    var needle = n.trim();
+	    needle = SPACE + needle + SPACE;
+	    // 一个 cls 有可能多次出现：'link link2 link link3 link'
+	    while (className.indexOf(needle) >= 0) {
+	      className = className.replace(needle, SPACE);
+	    }
+	    elem.className = className.trim();
+	  }
+	};
+
+/***/ },
+/* 211 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var util = {
+	  isAppearSupported: function isAppearSupported(props) {
+	    return props.transitionName && props.transitionAppear || props.animation.appear;
+	  },
+	  isEnterSupported: function isEnterSupported(props) {
+	    return props.transitionName && props.transitionEnter || props.animation.enter;
+	  },
+	  isLeaveSupported: function isLeaveSupported(props) {
+	    return props.transitionName && props.transitionLeave || props.animation.leave;
+	  },
+	
+	  allowAppearCallback: function allowAppearCallback(props) {
+	    return props.transitionAppear || props.animation.appear;
+	  },
+	  allowEnterCallback: function allowEnterCallback(props) {
+	    return props.transitionEnter || props.animation.enter;
+	  },
+	  allowLeaveCallback: function allowLeaveCallback(props) {
+	    return props.transitionLeave || props.animation.leave;
+	  }
+	};
+	exports["default"] = util;
+	module.exports = exports["default"];
+
+/***/ },
+/* 212 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	var _rcUtil = __webpack_require__(179);
+	
+	var _rcUtil2 = _interopRequireDefault(_rcUtil);
+	
+	var _react = __webpack_require__(9);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	exports['default'] = {
+	  componentDidMount: function componentDidMount() {
+	    this.componentDidUpdate();
+	  },
+	
+	  componentDidUpdate: function componentDidUpdate() {
+	    if (this.props.mode !== 'inline') {
+	      if (this.props.open) {
+	        this.bindRootCloseHandlers();
+	      } else {
+	        this.unbindRootCloseHandlers();
+	      }
+	    }
 	  },
 	
 	  handleDocumentKeyUp: function handleDocumentKeyUp(e) {
 	    if (e.keyCode === _rcUtil.KeyCode.ESC) {
-	      this.setOpenState(false);
+	      this.props.onItemHover({
+	        key: this.props.eventKey,
+	        item: this,
+	        hover: false
+	      });
 	    }
 	  },
 	
 	  handleDocumentClick: function handleDocumentClick(e) {
 	    // If the click originated from within this component
 	    // don't do anything.
-	    if (_rcUtil2['default'].Dom.contains(React.findDOMNode(this), e.target)) {
+	    if (_rcUtil2['default'].Dom.contains(_react2['default'].findDOMNode(this), e.target)) {
 	      return;
 	    }
-	    // de active menu cause sub menu hide its menu
-	    this.props.onHover(null);
+	    var props = this.props;
+	    props.onItemHover({
+	      hover: false,
+	      item: this,
+	      key: this.props.eventKey
+	    });
+	    this.triggerOpenChange(false);
 	  },
 	
 	  bindRootCloseHandlers: function bindRootCloseHandlers() {
-	    this._onDocumentClickListener = _rcUtil2['default'].Dom.addEventListener(document, 'click', this.handleDocumentClick);
-	    this._onDocumentKeyupListener = _rcUtil2['default'].Dom.addEventListener(document, 'keyup', this.handleDocumentKeyUp);
+	    if (!this._onDocumentClickListener) {
+	      this._onDocumentClickListener = _rcUtil2['default'].Dom.addEventListener(document, 'click', this.handleDocumentClick);
+	      this._onDocumentKeyupListener = _rcUtil2['default'].Dom.addEventListener(document, 'keyup', this.handleDocumentKeyUp);
+	    }
 	  },
 	
 	  unbindRootCloseHandlers: function unbindRootCloseHandlers() {
 	    if (this._onDocumentClickListener) {
 	      this._onDocumentClickListener.remove();
+	      this._onDocumentClickListener = null;
 	    }
 	
 	    if (this._onDocumentKeyupListener) {
 	      this._onDocumentKeyupListener.remove();
+	      this._onDocumentKeyupListener = null;
 	    }
 	  },
 	
@@ -25940,7 +25698,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26009,7 +25767,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcUtil = __webpack_require__(178);
+	var _rcUtil = __webpack_require__(179);
 	
 	var MenuItem = (function (_React$Component) {
 	  _inherits(MenuItem, _React$Component);
@@ -26045,28 +25803,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onMouseLeave',
 	    value: function onMouseLeave() {
-	      this.props.onHover(null);
+	      var eventKey = this.props.eventKey;
+	      this.props.onItemHover({
+	        key: eventKey,
+	        item: this,
+	        hover: false,
+	        trigger: 'mouseleave'
+	      });
 	    }
 	  }, {
 	    key: 'onMouseEnter',
 	    value: function onMouseEnter() {
 	      var props = this.props;
-	      props.onHover(props.eventKey);
+	      var eventKey = props.eventKey;
+	      props.onItemHover({
+	        key: eventKey,
+	        item: this,
+	        hover: true,
+	        trigger: 'mouseenter'
+	      });
 	    }
 	  }, {
 	    key: 'onClick',
 	    value: function onClick(e) {
 	      var props = this.props;
 	      var eventKey = props.eventKey;
-	      props.onClick(eventKey, this, e);
+	      var info = {
+	        key: eventKey,
+	        keyPath: [eventKey],
+	        item: this,
+	        domEvent: e
+	      };
+	      props.onClick(info);
 	      if (props.multiple) {
 	        if (props.selected) {
-	          props.onDeselect(eventKey, this, e);
+	          props.onDeselect(info);
 	        } else {
-	          props.onSelect(eventKey, this, e);
+	          props.onSelect(info);
 	        }
 	      } else if (!props.selected) {
-	        props.onSelect(eventKey, this, e);
+	        props.onSelect(info);
 	      }
 	    }
 	  }, {
@@ -26113,7 +25889,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	          onMouseEnter: this.onMouseEnter
 	        };
 	      }
-	      return _react2['default'].createElement('li', _extends({}, attrs, mouseEvent), props.children);
+	      var style = {};
+	      if (props.mode === 'inline') {
+	        style.paddingLeft = props.inlineIndent * props.level;
+	      }
+	      return _react2['default'].createElement('li', _extends({ style: style
+	      }, attrs, mouseEvent), props.children);
 	    }
 	  }]);
 	
@@ -26122,6 +25903,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	MenuItem.propTypes = {
 	  rootPrefixCls: _react2['default'].PropTypes.string,
+	  eventKey: _react2['default'].PropTypes.string,
 	  active: _react2['default'].PropTypes.bool,
 	  selected: _react2['default'].PropTypes.bool,
 	  disabled: _react2['default'].PropTypes.bool,
@@ -26129,7 +25911,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  onSelect: _react2['default'].PropTypes.func,
 	  onClick: _react2['default'].PropTypes.func,
 	  onDeselect: _react2['default'].PropTypes.func,
-	  onHover: _react2['default'].PropTypes.func,
+	  onItemHover: _react2['default'].PropTypes.func,
 	  onDestroy: _react2['default'].PropTypes.func
 	};
 	
@@ -26142,7 +25924,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26235,7 +26017,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26335,51 +26117,1159 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 215 */
+/* 216 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = arguments[i];for (var key in source) {
+	      if (Object.prototype.hasOwnProperty.call(source, key)) {
+	        target[key] = source[key];
+	      }
+	    }
+	  }return target;
+	};
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	var _react = __webpack_require__(9);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _util = __webpack_require__(193);
+	
+	var _rcMenu = __webpack_require__(194);
+	
+	var _rcMenu2 = _interopRequireDefault(_rcMenu);
+	
+	var Panel = _react2['default'].createClass({
+	  displayName: 'Panel',
+	
+	  propTypes: {
+	    prefixCls: _react2['default'].PropTypes.string,
+	    menuItems: _react2['default'].PropTypes.any,
+	    search: _react2['default'].PropTypes.any
+	  },
+	
+	  shouldComponentUpdate: function shouldComponentUpdate(nextProps) {
+	    return nextProps.visible;
+	  },
+	
+	  getDropdownPrefixCls: function getDropdownPrefixCls() {
+	    return this.props.prefixCls + '-dropdown';
+	  },
+	
+	  renderMenu: function renderMenu() {
+	    var props = this.props;
+	    var menuItems = props.menuItems;
+	    if (menuItems && menuItems.length) {
+	      var menuProps = {};
+	      if (props.isMultipleOrTags) {
+	        menuProps.onDeselect = props.onMenuDeselect;
+	        menuProps.onSelect = props.onMenuSelect;
+	      } else {
+	        menuProps.onClick = props.onMenuSelect;
+	      }
+	      var value = props.value;
+	      var selectedKeys = (0, _util.getSelectKeys)(menuItems, value);
+	      var activeKey = undefined;
+	      if (!props.isMultipleOrTags) {
+	        if (!activeKey && selectedKeys.length === 1) {
+	          activeKey = selectedKeys[0];
+	        }
+	      }
+	      return _react2['default'].createElement(_rcMenu2['default'], _extends({
+	        ref: 'menu',
+	        style: props.dropdownMenuStyle,
+	        defaultActiveFirst: true,
+	        activeKey: activeKey,
+	        multiple: props.isMultipleOrTags,
+	        focusable: false
+	      }, menuProps, {
+	        selectedKeys: selectedKeys,
+	        prefixCls: this.getDropdownPrefixCls() + '-menu' }), menuItems);
+	    }
+	    return null;
+	  },
+	  render: function render() {
+	    return _react2['default'].createElement('div', null, this.props.search, this.renderMenu());
+	  }
+	});
+	
+	exports['default'] = Panel;
+	module.exports = exports['default'];
+
+/***/ },
+/* 217 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	// export this package's api
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	var _Align = __webpack_require__(218);
+	
+	var _Align2 = _interopRequireDefault(_Align);
+	
+	exports['default'] = _Align2['default'];
+	module.exports = exports['default'];
+
+/***/ },
+/* 218 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	var _createClass = (function () {
+	  function defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ('value' in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+	    }
+	  }return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	  };
+	})();
+	
+	var _get = function get(_x, _x2, _x3) {
+	  var _again = true;_function: while (_again) {
+	    var object = _x,
+	        property = _x2,
+	        receiver = _x3;desc = parent = getter = undefined;_again = false;if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+	      var parent = Object.getPrototypeOf(object);if (parent === null) {
+	        return undefined;
+	      } else {
+	        _x = parent;_x2 = property;_x3 = receiver;_again = true;continue _function;
+	      }
+	    } else if ('value' in desc) {
+	      return desc.value;
+	    } else {
+	      var getter = desc.get;if (getter === undefined) {
+	        return undefined;
+	      }return getter.call(receiver);
+	    }
+	  }
+	};
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	function _classCallCheck(instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError('Cannot call a class as a function');
+	  }
+	}
+	
+	function _inherits(subClass, superClass) {
+	  if (typeof superClass !== 'function' && superClass !== null) {
+	    throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+	}
+	
+	var _react = __webpack_require__(9);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _domAlign = __webpack_require__(219);
+	
+	var _domAlign2 = _interopRequireDefault(_domAlign);
+	
+	var _rcUtil = __webpack_require__(179);
+	
+	var _rcUtil2 = _interopRequireDefault(_rcUtil);
+	
+	function isWindow(obj) {
+	  /*eslint-disable eqeqeq */
+	  return obj != null && obj == obj.window;
+	  /*eslint-enable eqeqeq */
+	}
+	
+	function buffer(fn, ms) {
+	  var timer;
+	  return function () {
+	    if (timer) {
+	      clearTimeout(timer);
+	    }
+	    timer = setTimeout(fn, ms);
+	  };
+	}
+	
+	var Align = (function (_React$Component) {
+	  _inherits(Align, _React$Component);
+	
+	  function Align(props) {
+	    _classCallCheck(this, Align);
+	
+	    _get(Object.getPrototypeOf(Align.prototype), 'constructor', this).apply(this, arguments);
+	    this.handleWindowResize = this.handleWindowResize.bind(this);
+	  }
+	
+	  _createClass(Align, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var props = this.props;
+	      // if parent ref not attached .... use document.getElementById
+	      if (!props.disabled) {
+	        var source = _react2['default'].findDOMNode(this);
+	        props.onAlign(source, (0, _domAlign2['default'])(source, props.target(), props.align));
+	        if (props.monitorWindowResize) {
+	          this.startMonitorWindowResize();
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'startMonitorWindowResize',
+	    value: function startMonitorWindowResize() {
+	      if (!this.resizeHandler) {
+	        this.resizeHandler = _rcUtil2['default'].Dom.addEventListener(window, 'resize', buffer(this.handleWindowResize, this.props.monitorBufferTime));
+	      }
+	    }
+	  }, {
+	    key: 'stopMonitorWindowResize',
+	    value: function stopMonitorWindowResize() {
+	      if (this.resizeHandler) {
+	        this.resizeHandler.remove();
+	        this.resizeHandler = null;
+	      }
+	    }
+	  }, {
+	    key: 'handleWindowResize',
+	    value: function handleWindowResize() {
+	      var props = this.props;
+	      if (!props.disabled) {
+	        var source = _react2['default'].findDOMNode(this);
+	        props.onAlign(source, (0, _domAlign2['default'])(source, props.target(), props.align));
+	      }
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      this.stopMonitorWindowResize();
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate(prevProps) {
+	      var reAlign = false;
+	      var props = this.props;
+	      var currentTarget;
+	
+	      if (!props.disabled) {
+	        if (prevProps.disabled || prevProps.align !== props.align) {
+	          reAlign = true;
+	          currentTarget = props.target();
+	        } else {
+	          var lastTarget = prevProps.target();
+	          currentTarget = props.target();
+	          if (isWindow(lastTarget) && isWindow(currentTarget)) {
+	            reAlign = false;
+	          } else if (lastTarget !== currentTarget) {
+	            reAlign = true;
+	          }
+	        }
+	      }
+	
+	      if (reAlign) {
+	        var source = _react2['default'].findDOMNode(this);
+	        props.onAlign(source, (0, _domAlign2['default'])(source, currentTarget, props.align));
+	      }
+	
+	      if (props.monitorWindowResize && !props.disabled) {
+	        this.startMonitorWindowResize();
+	      } else {
+	        this.stopMonitorWindowResize();
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2['default'].Children.only(this.props.children);
+	    }
+	  }]);
+	
+	  return Align;
+	})(_react2['default'].Component);
+	
+	Align.defaultProps = {
+	  target: function target() {
+	    return window;
+	  },
+	  onAlign: function onAlign() {},
+	  monitorBufferTime: 50,
+	  monitorWindowResize: false,
+	  disabled: false
+	};
+	
+	Align.PropTypes = {
+	  align: _react2['default'].PropTypes.object.isRequired,
+	  target: _react2['default'].PropTypes.func,
+	  onAlign: _react2['default'].PropTypes.func,
+	  monitorBufferTime: _react2['default'].PropTypes.number,
+	  monitorWindowResize: _react2['default'].PropTypes.bool,
+	  disabled: _react2['default'].PropTypes.bool
+	};
+	
+	exports['default'] = Align;
+	module.exports = exports['default'];
+
+/***/ },
+/* 219 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * align dom node flexibly
+	 * @author yiminghe@gmail.com
+	 */
+	
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	var _utils = __webpack_require__(220);
+	
+	var _utils2 = _interopRequireDefault(_utils);
+	
+	// http://yiminghe.iteye.com/blog/1124720
+	
+	/**
+	 * 获取 node 上的 align 对齐点 相对于页面的坐标
+	 */
+	
+	function getAlignOffset(region, align) {
+	  var V = align.charAt(0);
+	  var H = align.charAt(1);
+	  var w = region.width;
+	  var h = region.height;
+	  var x = undefined;
+	  var y = undefined;
+	
+	  x = region.left;
+	  y = region.top;
+	
+	  if (V === 'c') {
+	    y += h / 2;
+	  } else if (V === 'b') {
+	    y += h;
+	  }
+	
+	  if (H === 'c') {
+	    x += w / 2;
+	  } else if (H === 'r') {
+	    x += w;
+	  }
+	
+	  return {
+	    left: x,
+	    top: y
+	  };
+	}
+	
+	/**
+	 * 得到会导致元素显示不全的祖先元素
+	 */
+	
+	function getOffsetParent(element) {
+	  // ie 这个也不是完全可行
+	  /*
+	   <div style="width: 50px;height: 100px;overflow: hidden">
+	   <div style="width: 50px;height: 100px;position: relative;" id="d6">
+	   元素 6 高 100px 宽 50px<br/>
+	   </div>
+	   </div>
+	   */
+	  // element.offsetParent does the right thing in ie7 and below. Return parent with layout!
+	  //  In other browsers it only includes elements with position absolute, relative or
+	  // fixed, not elements with overflow set to auto or scroll.
+	  //        if (UA.ie && ieMode < 8) {
+	  //            return element.offsetParent;
+	  //        }
+	  // 统一的 offsetParent 方法
+	  var doc = element.ownerDocument;
+	  var body = doc.body;
+	  var parent = undefined;
+	  var positionStyle = _utils2['default'].css(element, 'position');
+	  var skipStatic = positionStyle === 'fixed' || positionStyle === 'absolute';
+	
+	  if (!skipStatic) {
+	    return element.nodeName.toLowerCase() === 'html' ? null : element.parentNode;
+	  }
+	
+	  for (parent = element.parentNode; parent && parent !== body; parent = parent.parentNode) {
+	    positionStyle = _utils2['default'].css(parent, 'position');
+	    if (positionStyle !== 'static') {
+	      return parent;
+	    }
+	  }
+	  return null;
+	}
+	
+	/**
+	 * 获得元素的显示部分的区域
+	 */
+	
+	function getVisibleRectForElement(element) {
+	  var visibleRect = {
+	    left: 0,
+	    right: Infinity,
+	    top: 0,
+	    bottom: Infinity
+	  };
+	  var el = element;
+	  var scrollX = undefined;
+	  var scrollY = undefined;
+	  var winSize = undefined;
+	  var doc = element.ownerDocument;
+	  var win = doc.defaultView || doc.parentWindow;
+	  var body = doc.body;
+	  var documentElement = doc.documentElement;
+	
+	  // Determine the size of the visible rect by climbing the dom accounting for
+	  // all scrollable containers.
+	  while (el) {
+	    // clientWidth is zero for inline block elements in ie.
+	    if ((navigator.userAgent.indexOf('MSIE') === -1 || el.clientWidth !== 0) && (
+	    // body may have overflow set on it, yet we still get the entire
+	    // viewport. In some browsers, el.offsetParent may be
+	    // document.documentElement, so check for that too.
+	    el !== body && el !== documentElement && _utils2['default'].css(el, 'overflow') !== 'visible')) {
+	      var pos = _utils2['default'].offset(el);
+	      // add border
+	      pos.left += el.clientLeft;
+	      pos.top += el.clientTop;
+	      visibleRect.top = Math.max(visibleRect.top, pos.top);
+	      visibleRect.right = Math.min(visibleRect.right,
+	      // consider area without scrollBar
+	      pos.left + el.clientWidth);
+	      visibleRect.bottom = Math.min(visibleRect.bottom, pos.top + el.clientHeight);
+	      visibleRect.left = Math.max(visibleRect.left, pos.left);
+	    } else if (el === body || el === documentElement) {
+	      break;
+	    }
+	    el = getOffsetParent(el);
+	  }
+	
+	  // Clip by window's viewport.
+	  scrollX = _utils2['default'].getWindowScrollLeft(win);
+	  scrollY = _utils2['default'].getWindowScrollTop(win);
+	  visibleRect.left = Math.max(visibleRect.left, scrollX);
+	  visibleRect.top = Math.max(visibleRect.top, scrollY);
+	  winSize = {
+	    width: _utils2['default'].viewportWidth(win),
+	    height: _utils2['default'].viewportHeight(win)
+	  };
+	  visibleRect.right = Math.min(visibleRect.right, scrollX + winSize.width);
+	  visibleRect.bottom = Math.min(visibleRect.bottom, scrollY + winSize.height);
+	  return visibleRect.top >= 0 && visibleRect.left >= 0 && visibleRect.bottom > visibleRect.top && visibleRect.right > visibleRect.left ? visibleRect : null;
+	}
+	
+	function getElFuturePos(elRegion, refNodeRegion, points, offset) {
+	  var xy = undefined;
+	  var diff = undefined;
+	  var p1 = undefined;
+	  var p2 = undefined;
+	
+	  xy = {
+	    left: elRegion.left,
+	    top: elRegion.top
+	  };
+	
+	  p1 = getAlignOffset(refNodeRegion, points[1]);
+	  p2 = getAlignOffset(elRegion, points[0]);
+	
+	  diff = [p2.left - p1.left, p2.top - p1.top];
+	
+	  return {
+	    left: xy.left - diff[0] + +offset[0],
+	    top: xy.top - diff[1] + +offset[1]
+	  };
+	}
+	
+	function isFailX(elFuturePos, elRegion, visibleRect) {
+	  return elFuturePos.left < visibleRect.left || elFuturePos.left + elRegion.width > visibleRect.right;
+	}
+	
+	function isFailY(elFuturePos, elRegion, visibleRect) {
+	  return elFuturePos.top < visibleRect.top || elFuturePos.top + elRegion.height > visibleRect.bottom;
+	}
+	
+	function adjustForViewport(elFuturePos, elRegion, visibleRect, overflow) {
+	  var pos = _utils2['default'].clone(elFuturePos);
+	  var size = {
+	    width: elRegion.width,
+	    height: elRegion.height
+	  };
+	
+	  if (overflow.adjustX && pos.left < visibleRect.left) {
+	    pos.left = visibleRect.left;
+	  }
+	
+	  // Left edge inside and right edge outside viewport, try to resize it.
+	  if (overflow.resizeWidth && pos.left >= visibleRect.left && pos.left + size.width > visibleRect.right) {
+	    size.width -= pos.left + size.width - visibleRect.right;
+	  }
+	
+	  // Right edge outside viewport, try to move it.
+	  if (overflow.adjustX && pos.left + size.width > visibleRect.right) {
+	    // 保证左边界和可视区域左边界对齐
+	    pos.left = Math.max(visibleRect.right - size.width, visibleRect.left);
+	  }
+	
+	  // Top edge outside viewport, try to move it.
+	  if (overflow.adjustY && pos.top < visibleRect.top) {
+	    pos.top = visibleRect.top;
+	  }
+	
+	  // Top edge inside and bottom edge outside viewport, try to resize it.
+	  if (overflow.resizeHeight && pos.top >= visibleRect.top && pos.top + size.height > visibleRect.bottom) {
+	    size.height -= pos.top + size.height - visibleRect.bottom;
+	  }
+	
+	  // Bottom edge outside viewport, try to move it.
+	  if (overflow.adjustY && pos.top + size.height > visibleRect.bottom) {
+	    // 保证上边界和可视区域上边界对齐
+	    pos.top = Math.max(visibleRect.bottom - size.height, visibleRect.top);
+	  }
+	
+	  return _utils2['default'].mix(pos, size);
+	}
+	
+	function flip(points, reg, map) {
+	  var ret = [];
+	  _utils2['default'].each(points, function (p) {
+	    ret.push(p.replace(reg, function (m) {
+	      return map[m];
+	    }));
+	  });
+	  return ret;
+	}
+	
+	function flipOffset(offset, index) {
+	  offset[index] = -offset[index];
+	  return offset;
+	}
+	
+	function getRegion(node) {
+	  var offset = undefined;
+	  var w = undefined;
+	  var h = undefined;
+	  if (!_utils2['default'].isWindow(node) && node.nodeType !== 9) {
+	    offset = _utils2['default'].offset(node);
+	    w = _utils2['default'].outerWidth(node);
+	    h = _utils2['default'].outerHeight(node);
+	  } else {
+	    var win = _utils2['default'].getWindow(node);
+	    offset = {
+	      left: _utils2['default'].getWindowScrollLeft(win),
+	      top: _utils2['default'].getWindowScrollTop(win)
+	    };
+	    w = _utils2['default'].viewportWidth(win);
+	    h = _utils2['default'].viewportHeight(win);
+	  }
+	  offset.width = w;
+	  offset.height = h;
+	  return offset;
+	}
+	
+	/*
+	 * align node
+	 * @param {Element} node current dom node
+	 * @param {Object} align align config
+	 *
+	 *    @example
+	 *    {
+	 *      node: null,         // 参考元素, falsy 或 window 为可视区域, 'trigger' 为触发元素, 其他为指定元素
+	 *      points: ['cc','cc'], // ['tr', 'tl'] 表示 overlay 的 tr 与参考节点的 tl 对齐
+	 *      offset: [0, 0]      // 有效值为 [n, m]
+	 *    }
+	 */
+	function domAlign(el, refNode, align) {
+	  var points = align.points;
+	  var offset = align.offset;
+	  var overflow = align.overflow;
+	  offset = offset && [].concat(offset) || [0, 0];
+	  overflow = overflow || {};
+	  var newOverflowCfg = {};
+	
+	  var fail = 0;
+	  // 当前节点可以被放置的显示区域
+	  var visibleRect = getVisibleRectForElement(el);
+	  // 当前节点所占的区域, left/top/width/height
+	  var elRegion = getRegion(el);
+	  // 参照节点所占的区域, left/top/width/height
+	  var refNodeRegion = getRegion(refNode);
+	  // 当前节点将要被放置的位置
+	  var elFuturePos = getElFuturePos(elRegion, refNodeRegion, points, offset);
+	  // 当前节点将要所处的区域
+	  var newElRegion = _utils2['default'].merge(elRegion, elFuturePos);
+	
+	  // 如果可视区域不能完全放置当前节点时允许调整
+	  if (visibleRect && (overflow.adjustX || overflow.adjustY)) {
+	    if (overflow.adjustX) {
+	      // 如果横向不能放下
+	      if (isFailX(elFuturePos, elRegion, visibleRect)) {
+	        fail = 1;
+	        // 对齐位置反下
+	        points = flip(points, /[lr]/ig, {
+	          l: 'r',
+	          r: 'l'
+	        });
+	        // 偏移量也反下
+	        offset = flipOffset(offset, 0);
+	      }
+	    }
+	
+	    if (overflow.adjustY) {
+	      // 如果纵向不能放下
+	      if (isFailY(elFuturePos, elRegion, visibleRect)) {
+	        fail = 1;
+	        // 对齐位置反下
+	        points = flip(points, /[tb]/ig, {
+	          t: 'b',
+	          b: 't'
+	        });
+	        // 偏移量也反下
+	        offset = flipOffset(offset, 1);
+	      }
+	    }
+	
+	    // 如果失败，重新计算当前节点将要被放置的位置
+	    if (fail) {
+	      elFuturePos = getElFuturePos(elRegion, refNodeRegion, points, offset);
+	      _utils2['default'].mix(newElRegion, elFuturePos);
+	    }
+	
+	    // 检查反下后的位置是否可以放下了
+	    // 如果仍然放不下只有指定了可以调整当前方向才调整
+	    newOverflowCfg.adjustX = overflow.adjustX && isFailX(elFuturePos, elRegion, visibleRect);
+	
+	    newOverflowCfg.adjustY = overflow.adjustY && isFailY(elFuturePos, elRegion, visibleRect);
+	
+	    // 确实要调整，甚至可能会调整高度宽度
+	    if (newOverflowCfg.adjustX || newOverflowCfg.adjustY) {
+	      newElRegion = adjustForViewport(elFuturePos, elRegion, visibleRect, newOverflowCfg);
+	    }
+	  }
+	
+	  // https://github.com/kissyteam/kissy/issues/190
+	  // http://localhost:8888/kissy/src/overlay/demo/other/relative_align/align.html
+	  // 相对于屏幕位置没变，而 left/top 变了
+	  // 例如 <div 'relative'><el absolute></div>
+	  _utils2['default'].offset(el, { left: newElRegion.left, top: newElRegion.top });
+	
+	  // need judge to in case set fixed with in css on height auto element
+	  if (newElRegion.width !== elRegion.width) {
+	    _utils2['default'].css(el, 'width', el.width() + newElRegion.width - elRegion.width);
+	  }
+	
+	  if (newElRegion.height !== elRegion.height) {
+	    _utils2['default'].css(el, 'height', el.height() + newElRegion.height - elRegion.height);
+	  }
+	
+	  return {
+	    points: points,
+	    offset: offset,
+	    overflow: newOverflowCfg
+	  };
+	}
+	
+	domAlign.__getOffsetParent = getOffsetParent;
+	
+	domAlign.__getVisibleRectForElement = getVisibleRectForElement;
+	
+	exports['default'] = domAlign;
+	
+	/**
+	 *  2012-04-26 yiminghe@gmail.com
+	 *   - 优化智能对齐算法
+	 *   - 慎用 resizeXX
+	 *
+	 *  2011-07-13 yiminghe@gmail.com note:
+	 *   - 增加智能对齐，以及大小调整选项
+	 **/
+	module.exports = exports['default'];
+
+/***/ },
+/* 220 */
 /***/ function(module, exports) {
 
 	'use strict';
-	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 	
-	function ToObject(val) {
-		if (val == null) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	var RE_NUM = /[\-+]?(?:\d*\.|)\d+(?:[eE][\-+]?\d+|)/.source;
 	
-		return Object(val);
+	var getComputedStyleX = undefined;
+	
+	function css(el, name, v) {
+	  var value = v;
+	  if (typeof name === 'object') {
+	    for (var i in name) {
+	      if (name.hasOwnProperty(i)) {
+	        css(el, i, name[i]);
+	      }
+	    }
+	    return undefined;
+	  }
+	  if (typeof value !== 'undefined') {
+	    if (typeof value === 'number') {
+	      value = value + 'px';
+	    }
+	    el.style[name] = value;
+	    return undefined;
+	  }
+	  return getComputedStyleX(el, name);
 	}
 	
-	function ownEnumerableKeys(obj) {
-		var keys = Object.getOwnPropertyNames(obj);
+	function getClientPosition(elem) {
+	  var box = undefined;
+	  var x = undefined;
+	  var y = undefined;
+	  var doc = elem.ownerDocument;
+	  var body = doc.body;
+	  var docElem = doc && doc.documentElement;
+	  // 根据 GBS 最新数据，A-Grade Browsers 都已支持 getBoundingClientRect 方法，不用再考虑传统的实现方式
+	  box = elem.getBoundingClientRect();
 	
-		if (Object.getOwnPropertySymbols) {
-			keys = keys.concat(Object.getOwnPropertySymbols(obj));
-		}
+	  // 注：jQuery 还考虑减去 docElem.clientLeft/clientTop
+	  // 但测试发现，这样反而会导致当 html 和 body 有边距/边框样式时，获取的值不正确
+	  // 此外，ie6 会忽略 html 的 margin 值，幸运地是没有谁会去设置 html 的 margin
 	
-		return keys.filter(function (key) {
-			return propIsEnumerable.call(obj, key);
-		});
+	  x = box.left;
+	  y = box.top;
+	
+	  // In IE, most of the time, 2 extra pixels are added to the top and left
+	  // due to the implicit 2-pixel inset border.  In IE6/7 quirks mode and
+	  // IE6 standards mode, this border can be overridden by setting the
+	  // document element's border to zero -- thus, we cannot rely on the
+	  // offset always being 2 pixels.
+	
+	  // In quirks mode, the offset can be determined by querying the body's
+	  // clientLeft/clientTop, but in standards mode, it is found by querying
+	  // the document element's clientLeft/clientTop.  Since we already called
+	  // getClientBoundingRect we have already forced a reflow, so it is not
+	  // too expensive just to query them all.
+	
+	  // ie 下应该减去窗口的边框吧，毕竟默认 absolute 都是相对窗口定位的
+	  // 窗口边框标准是设 documentElement ,quirks 时设置 body
+	  // 最好禁止在 body 和 html 上边框 ，但 ie < 9 html 默认有 2px ，减去
+	  // 但是非 ie 不可能设置窗口边框，body html 也不是窗口 ,ie 可以通过 html,body 设置
+	  // 标准 ie 下 docElem.clientTop 就是 border-top
+	  // ie7 html 即窗口边框改变不了。永远为 2
+	  // 但标准 firefox/chrome/ie9 下 docElem.clientTop 是窗口边框，即使设了 border-top 也为 0
+	
+	  x -= docElem.clientLeft || body.clientLeft || 0;
+	  y -= docElem.clientTop || body.clientTop || 0;
+	
+	  return { left: x, top: y };
 	}
 	
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var keys;
-		var to = ToObject(target);
+	function getScroll(w, top) {
+	  var ret = w['page' + (top ? 'Y' : 'X') + 'Offset'];
+	  var method = 'scroll' + (top ? 'Top' : 'Left');
+	  if (typeof ret !== 'number') {
+	    var d = w.document;
+	    // ie6,7,8 standard mode
+	    ret = d.documentElement[method];
+	    if (typeof ret !== 'number') {
+	      // quirks mode
+	      ret = d.body[method];
+	    }
+	  }
+	  return ret;
+	}
 	
-		for (var s = 1; s < arguments.length; s++) {
-			from = arguments[s];
-			keys = ownEnumerableKeys(Object(from));
+	function getScrollLeft(w) {
+	  return getScroll(w);
+	}
 	
-			for (var i = 0; i < keys.length; i++) {
-				to[keys[i]] = from[keys[i]];
-			}
-		}
+	function getScrollTop(w) {
+	  return getScroll(w, true);
+	}
 	
-		return to;
+	function getOffset(el) {
+	  var pos = getClientPosition(el);
+	  var doc = el.ownerDocument;
+	  var w = doc.defaultView || doc.parentWindow;
+	  pos.left += getScrollLeft(w);
+	  pos.top += getScrollTop(w);
+	  return pos;
+	}
+	function _getComputedStyle(elem, name, cs) {
+	  var computedStyle = cs;
+	  var val = '';
+	  var d = elem.ownerDocument;
+	
+	  // https://github.com/kissyteam/kissy/issues/61
+	  if (computedStyle = computedStyle || d.defaultView.getComputedStyle(elem, null)) {
+	    val = computedStyle.getPropertyValue(name) || computedStyle[name];
+	  }
+	
+	  return val;
+	}
+	
+	var _RE_NUM_NO_PX = new RegExp('^(' + RE_NUM + ')(?!px)[a-z%]+$', 'i');
+	var RE_POS = /^(top|right|bottom|left)$/;
+	var CURRENT_STYLE = 'currentStyle';
+	var RUNTIME_STYLE = 'runtimeStyle';
+	var LEFT = 'left';
+	var PX = 'px';
+	
+	function _getComputedStyleIE(elem, name) {
+	  // currentStyle maybe null
+	  // http://msdn.microsoft.com/en-us/library/ms535231.aspx
+	  var ret = elem[CURRENT_STYLE] && elem[CURRENT_STYLE][name];
+	
+	  // 当 width/height 设置为百分比时，通过 pixelLeft 方式转换的 width/height 值
+	  // 一开始就处理了! CUSTOM_STYLE.height,CUSTOM_STYLE.width ,cssHook 解决@2011-08-19
+	  // 在 ie 下不对，需要直接用 offset 方式
+	  // borderWidth 等值也有问题，但考虑到 borderWidth 设为百分比的概率很小，这里就不考虑了
+	
+	  // From the awesome hack by Dean Edwards
+	  // http://erik.eae.net/archives/2007/07/27/18.54.15/#comment-102291
+	  // If we're not dealing with a regular pixel number
+	  // but a number that has a weird ending, we need to convert it to pixels
+	  // exclude left right for relativity
+	  if (_RE_NUM_NO_PX.test(ret) && !RE_POS.test(name)) {
+	    // Remember the original values
+	    var style = elem.style;
+	    var left = style[LEFT];
+	    var rsLeft = elem[RUNTIME_STYLE][LEFT];
+	
+	    // prevent flashing of content
+	    elem[RUNTIME_STYLE][LEFT] = elem[CURRENT_STYLE][LEFT];
+	
+	    // Put in the new values to get a computed value out
+	    style[LEFT] = name === 'fontSize' ? '1em' : ret || 0;
+	    ret = style.pixelLeft + PX;
+	
+	    // Revert the changed values
+	    style[LEFT] = left;
+	
+	    elem[RUNTIME_STYLE][LEFT] = rsLeft;
+	  }
+	  return ret === '' ? 'auto' : ret;
+	}
+	
+	if (typeof window !== 'undefined') {
+	  getComputedStyleX = window.getComputedStyle ? _getComputedStyle : _getComputedStyleIE;
+	}
+	
+	// 设置 elem 相对 elem.ownerDocument 的坐标
+	function setOffset(elem, offset) {
+	  // set position first, in-case top/left are set even on static elem
+	  if (css(elem, 'position') === 'static') {
+	    elem.style.position = 'relative';
+	  }
+	  var preset = -9999;
+	  if ('left' in offset) {
+	    elem.style.left = preset + 'px';
+	  }
+	  if ('top' in offset) {
+	    elem.style.top = preset + 'px';
+	  }
+	  var old = getOffset(elem);
+	  var ret = {};
+	  var key = undefined;
+	  for (key in offset) {
+	    if (offset.hasOwnProperty(key)) {
+	      ret[key] = preset + offset[key] - old[key];
+	    }
+	  }
+	  css(elem, ret);
+	}
+	
+	function each(arr, fn) {
+	  for (var i = 0; i < arr.length; i++) {
+	    fn(arr[i]);
+	  }
+	}
+	
+	function isBorderBoxFn(elem) {
+	  return getComputedStyleX(elem, 'boxSizing') === 'border-box';
+	}
+	
+	var BOX_MODELS = ['margin', 'border', 'padding'];
+	var CONTENT_INDEX = -1;
+	var PADDING_INDEX = 2;
+	var BORDER_INDEX = 1;
+	var MARGIN_INDEX = 0;
+	
+	function swap(elem, options, callback) {
+	  var old = {};
+	  var style = elem.style;
+	  var name = undefined;
+	
+	  // Remember the old values, and insert the new ones
+	  for (name in options) {
+	    if (options.hasOwnProperty(name)) {
+	      old[name] = style[name];
+	      style[name] = options[name];
+	    }
+	  }
+	
+	  callback.call(elem);
+	
+	  // Revert the old values
+	  for (name in options) {
+	    if (options.hasOwnProperty(name)) {
+	      style[name] = old[name];
+	    }
+	  }
+	}
+	
+	function getPBMWidth(elem, props, which) {
+	  var value = 0;
+	  var prop = undefined;
+	  var j = undefined;
+	  var i = undefined;
+	  for (j = 0; j < props.length; j++) {
+	    prop = props[j];
+	    if (prop) {
+	      for (i = 0; i < which.length; i++) {
+	        var cssProp = undefined;
+	        if (prop === 'border') {
+	          cssProp = prop + which[i] + 'Width';
+	        } else {
+	          cssProp = prop + which[i];
+	        }
+	        value += parseFloat(getComputedStyleX(elem, cssProp)) || 0;
+	      }
+	    }
+	  }
+	  return value;
+	}
+	
+	/**
+	 * A crude way of determining if an object is a window
+	 * @member util
+	 */
+	function isWindow(obj) {
+	  // must use == for ie8
+	  /* eslint eqeqeq:0 */
+	  return obj !== null && obj !== undefined && obj == obj.window;
+	}
+	
+	var domUtils = {};
+	
+	each(['Width', 'Height'], function (name) {
+	  domUtils['doc' + name] = function (refWin) {
+	    var d = refWin.document;
+	    return Math.max(
+	    // firefox chrome documentElement.scrollHeight< body.scrollHeight
+	    // ie standard mode : documentElement.scrollHeight> body.scrollHeight
+	    d.documentElement['scroll' + name],
+	    // quirks : documentElement.scrollHeight 最大等于可视窗口多一点？
+	    d.body['scroll' + name], domUtils['viewport' + name](d));
+	  };
+	
+	  domUtils['viewport' + name] = function (win) {
+	    // pc browser includes scrollbar in window.innerWidth
+	    var prop = 'client' + name;
+	    var doc = win.document;
+	    var body = doc.body;
+	    var documentElement = doc.documentElement;
+	    var documentElementProp = documentElement[prop];
+	    // 标准模式取 documentElement
+	    // backcompat 取 body
+	    return doc.compatMode === 'CSS1Compat' && documentElementProp || body && body[prop] || documentElementProp;
+	  };
+	});
+	
+	/*
+	 得到元素的大小信息
+	 @param elem
+	 @param name
+	 @param {String} [extra]  'padding' : (css width) + padding
+	 'border' : (css width) + padding + border
+	 'margin' : (css width) + padding + border + margin
+	 */
+	function getWH(elem, name, ex) {
+	  var extra = ex;
+	  if (isWindow(elem)) {
+	    return name === 'width' ? domUtils.viewportWidth(elem) : domUtils.viewportHeight(elem);
+	  } else if (elem.nodeType === 9) {
+	    return name === 'width' ? domUtils.docWidth(elem) : domUtils.docHeight(elem);
+	  }
+	  var which = name === 'width' ? ['Left', 'Right'] : ['Top', 'Bottom'];
+	  var borderBoxValue = name === 'width' ? elem.offsetWidth : elem.offsetHeight;
+	  var computedStyle = getComputedStyleX(elem);
+	  var isBorderBox = isBorderBoxFn(elem, computedStyle);
+	  var cssBoxValue = 0;
+	  if (borderBoxValue === null || borderBoxValue === undefined || borderBoxValue <= 0) {
+	    borderBoxValue = undefined;
+	    // Fall back to computed then un computed css if necessary
+	    cssBoxValue = getComputedStyleX(elem, name);
+	    if (cssBoxValue === null || cssBoxValue === undefined || Number(cssBoxValue) < 0) {
+	      cssBoxValue = elem.style[name] || 0;
+	    }
+	    // Normalize '', auto, and prepare for extra
+	    cssBoxValue = parseFloat(cssBoxValue) || 0;
+	  }
+	  if (extra === undefined) {
+	    extra = isBorderBox ? BORDER_INDEX : CONTENT_INDEX;
+	  }
+	  var borderBoxValueOrIsBorderBox = borderBoxValue !== undefined || isBorderBox;
+	  var val = borderBoxValue || cssBoxValue;
+	  if (extra === CONTENT_INDEX) {
+	    if (borderBoxValueOrIsBorderBox) {
+	      return val - getPBMWidth(elem, ['border', 'padding'], which, computedStyle);
+	    }
+	    return cssBoxValue;
+	  } else if (borderBoxValueOrIsBorderBox) {
+	    if (extra === BORDER_INDEX) {
+	      return val;
+	    }
+	    return val + (extra === PADDING_INDEX ? -getPBMWidth(elem, ['border'], which, computedStyle) : getPBMWidth(elem, ['margin'], which, computedStyle));
+	  }
+	  return cssBoxValue + getPBMWidth(elem, BOX_MODELS.slice(extra), which, computedStyle);
+	}
+	
+	var cssShow = { position: 'absolute', visibility: 'hidden', display: 'block' };
+	
+	// fix #119 : https://github.com/kissyteam/kissy/issues/119
+	function getWHIgnoreDisplay() {
+	  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	    args[_key] = arguments[_key];
+	  }
+	
+	  var val = undefined;
+	  var elem = args[0];
+	  // in case elem is window
+	  // elem.offsetWidth === undefined
+	  if (elem.offsetWidth !== 0) {
+	    val = getWH.apply(undefined, args);
+	  } else {
+	    swap(elem, cssShow, function () {
+	      val = getWH.apply(undefined, args);
+	    });
+	  }
+	  return val;
+	}
+	
+	each(['width', 'height'], function (name) {
+	  var first = name.charAt(0).toUpperCase() + name.slice(1);
+	  domUtils['outer' + first] = function (el, includeMargin) {
+	    return el && getWHIgnoreDisplay(el, name, includeMargin ? MARGIN_INDEX : BORDER_INDEX);
+	  };
+	  var which = name === 'width' ? ['Left', 'Right'] : ['Top', 'Bottom'];
+	
+	  domUtils[name] = function (elem, v) {
+	    var val = v;
+	    if (val !== undefined) {
+	      if (elem) {
+	        var computedStyle = getComputedStyleX(elem);
+	        var isBorderBox = isBorderBoxFn(elem);
+	        if (isBorderBox) {
+	          val += getPBMWidth(elem, ['padding', 'border'], which, computedStyle);
+	        }
+	        return css(elem, name, val);
+	      }
+	      return undefined;
+	    }
+	    return elem && getWHIgnoreDisplay(elem, name, CONTENT_INDEX);
+	  };
+	});
+	
+	function mix(to, from) {
+	  for (var i in from) {
+	    if (from.hasOwnProperty(i)) {
+	      to[i] = from[i];
+	    }
+	  }
+	  return to;
+	}
+	
+	var utils = {
+	  getWindow: function getWindow(node) {
+	    if (node && node.document && node.setTimeout) {
+	      return node;
+	    }
+	    var doc = node.ownerDocument || node;
+	    return doc.defaultView || doc.parentWindow;
+	  },
+	  offset: function offset(el, value) {
+	    if (typeof value !== 'undefined') {
+	      setOffset(el, value);
+	    } else {
+	      return getOffset(el);
+	    }
+	  },
+	  isWindow: isWindow,
+	  each: each,
+	  css: css,
+	  clone: function clone(obj) {
+	    var i = undefined;
+	    var ret = {};
+	    for (i in obj) {
+	      if (obj.hasOwnProperty(i)) {
+	        ret[i] = obj[i];
+	      }
+	    }
+	    var overflow = obj.overflow;
+	    if (overflow) {
+	      for (i in obj) {
+	        if (obj.hasOwnProperty(i)) {
+	          ret.overflow[i] = obj.overflow[i];
+	        }
+	      }
+	    }
+	    return ret;
+	  },
+	  mix: mix,
+	  getWindowScrollLeft: function getWindowScrollLeft(w) {
+	    return getScrollLeft(w);
+	  },
+	  getWindowScrollTop: function getWindowScrollTop(w) {
+	    return getScrollTop(w);
+	  },
+	  merge: function merge() {
+	    var ret = {};
+	
+	    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+	      args[_key2] = arguments[_key2];
+	    }
+	
+	    for (var i = 0; i < args.length; i++) {
+	      utils.mix(ret, args[i]);
+	    }
+	    return ret;
+	  },
+	  viewportWidth: 0,
+	  viewportHeight: 0
 	};
+	
+	mix(utils, domUtils);
+	
+	exports['default'] = utils;
+	module.exports = exports['default'];
 
 /***/ },
-/* 216 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26444,7 +27334,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 217 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26458,7 +27348,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var InputFormField = __webpack_require__(169);
-	var assign = __webpack_require__(160);
+	var assign = __webpack_require__(84);
 	
 	var NumberInputFormField = (function (_InputFormField) {
 	    _inherits(NumberInputFormField, _InputFormField);
@@ -26523,7 +27413,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = NumberInputFormField;
 
 /***/ },
-/* 218 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26542,9 +27432,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var FormField = __webpack_require__(167);
 	var Constants = __webpack_require__(166);
-	var classnames = __webpack_require__(164);
+	var classnames = __webpack_require__(4);
 	var Calendar = __webpack_require__(5);
-	var assign = __webpack_require__(160);
+	var assign = __webpack_require__(84);
+	var update = React.addons.update;
 	
 	var DateFormField = (function (_FormField) {
 	    _inherits(DateFormField, _FormField);
@@ -26562,11 +27453,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	            me.handleDataChange(new Date(value).toJSON());
 	        }
 	    }, {
+	        key: 'handleCascadeChange',
+	        value: function handleCascadeChange(i, value) {
+	            var me = this;
+	            var values = update(me.state.value, {}) || [];
+	            if (!!values[i]) {
+	                values = values.slice(0, i);
+	                values.push(new Date(value).toJSON());
+	            } else {
+	                values[i] = new Date(value).toJSON();
+	            }
+	            me.handleDataChange(values);
+	        }
+	    }, {
 	        key: 'addSpecificClass',
 	        value: function addSpecificClass() {
 	            var me = this;
 	            if (me.props.jsxprefixCls == "kuma-form-field") {
-	                return me.props.jsxprefixCls + " kuma-date-form-field";
+	                var str = me.props.jsxprefixCls + " kuma-date-form-field";
+	                if (me.props.jsxtype == "cascade") {
+	                    str += " kuma-cascade-date-form-field";
+	                }
+	                return str;
 	            } else {
 	                return me.props.jsxprefixCls;
 	            }
@@ -26580,14 +27488,71 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var style = _me$props.style;
 	            var prefixCls = _me$props.prefixCls;
 	            var value = _me$props.value;
+	            var jsxtype = _me$props.jsxtype;
+	            var jsxfrom = _me$props.jsxfrom;
+	            var jsxto = _me$props.jsxto;
+	            var disabledDate = _me$props.disabledDate;
 	
-	            var others = _objectWithoutProperties(_me$props, ['onSelect', 'style', 'prefixCls', 'value']);
+	            var others = _objectWithoutProperties(_me$props, ['onSelect', 'style', 'prefixCls', 'value', 'jsxtype', 'jsxfrom', 'jsxto', 'disabledDate']);
 	
+	            var from = !!jsxfrom ? new Date(jsxfrom).getTime() : 0;
+	            var to = !!jsxto ? new Date(jsxto).getTime() : Infinity;
 	            if (me.props.mode == Constants.MODE.EDIT) {
-	                return React.createElement(Calendar, _extends({
-	                    value: me.state.value,
-	                    onSelect: me.handleChange.bind(me)
-	                }, others));
+	                if (jsxtype == "single") {
+	                    return React.createElement(Calendar, _extends({
+	                        value: me.state.value,
+	                        onSelect: me.handleChange.bind(me),
+	                        disabledDate: function (current, value) {
+	                            return current.getTime() < from || current.getTime() > to;
+	                        }
+	                    }, others));
+	                } else if (jsxtype == "cascade") {
+	                    var arr = [];
+	                    var others1 = assign({}, others);
+	                    var others2 = assign({}, others);
+	                    if (me.state.value && me.state.value[0]) {
+	                        others1 = assign({}, others, {
+	                            value: me.state.value[0]
+	                        });
+	                    } else {
+	                        others1 = assign({}, others, {
+	                            value: null
+	                        });
+	                    }
+	                    if (me.state.value && me.state.value[1]) {
+	                        others2 = assign({}, others, {
+	                            value: me.state.value[1]
+	                        });
+	                    } else {
+	                        others2 = assign({}, others, {
+	                            value: null
+	                        });
+	                    }
+	                    arr.push(React.createElement(Calendar, _extends({
+	                        key: 'calendar1',
+	                        onSelect: me.handleCascadeChange.bind(me, 0),
+	                        disabledDate: function (current, value) {
+	                            return current.getTime() < from || current.getTime() > to;
+	                        }
+	                    }, others1)));
+	                    arr.push(React.createElement(
+	                        'span',
+	                        { key: 'split', className: 'kuma-form-split' },
+	                        '-'
+	                    ));
+	
+	                    arr.push(React.createElement(Calendar, _extends({
+	                        key: 'calendar2',
+	                        onSelect: me.handleCascadeChange.bind(me, 1),
+	                        disabledDate: function (current, value) {
+	                            var now = current.getTime();
+	                            var first = me.state.value ? me.state.value[0] : 0;
+	                            first = new Date(first).getTime();
+	                            return now < from || now > to || now < first;
+	                        }
+	                    }, others2)));
+	                    return arr;
+	                }
 	            } else if (me.props.mode == Constants.MODE.VIEW) {
 	                return React.createElement(
 	                    'span',
@@ -26602,15 +27567,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(FormField);
 	
 	DateFormField.displayName = "DateFormField";
-	DateFormField.propTypes = assign(FormField.propTypes, {});
+	DateFormField.propTypes = assign(FormField.propTypes, {
+	    jsxtype: React.PropTypes.string,
+	    jsxfrom: React.PropTypes.string,
+	    jsxto: React.PropTypes.string
+	});
 	DateFormField.defaultProps = assign(FormField.defaultProps, {
 	    locale: 'zh-cn',
-	    hasTrigger: true
+	    hasTrigger: true,
+	    jsxtype: "single"
 	});
 	module.exports = DateFormField;
 
 /***/ },
-/* 219 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26660,15 +27630,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (me.props.mode == Constants.MODE.EDIT) {
 	                return React.createElement(
 	                    CheckboxGroup,
-	                    { onChange: me.handleChange.bind(me), value: me.state.value },
+	                    { onChange: me.handleChange.bind(me), value: me.state.value || [] },
 	                    me.props.children
 	                );
 	            } else {
-	                return React.createElement(
-	                    "span",
-	                    null,
-	                    me.state.value instanceof Array && me.state.value.join(" ")
-	                );
+	                if (me.state.value instanceof Array) {
+	                    var textArr = me.props.children.filter(function (child, index) {
+	                        return me.state.value.indexOf(child.props.value) != -1;
+	                    }).map(function (item, index) {
+	                        return item.props.text;
+	                    });
+	                    return React.createElement(
+	                        "span",
+	                        null,
+	                        textArr.join(" ")
+	                    );
+	                }
 	            }
 	        }
 	    }]);
@@ -26684,7 +27661,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CheckboxGroupFormField;
 
 /***/ },
-/* 220 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26701,10 +27678,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var FormField = __webpack_require__(167);
 	var Constants = __webpack_require__(166);
-	var Select = __webpack_require__(174);
+	var Select = __webpack_require__(175);
 	var Option = Select.Option;
 	
-	var assign = __webpack_require__(160);
+	var assign = __webpack_require__(84);
 	var update = React.addons.update;
 	
 	var CascadeSelectFormField = (function (_FormField) {
@@ -26788,10 +27765,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            placeholder: me.props.jsxplaceholder
 	                        };
 	                        selectOptions.onChange = me.handleChange.bind(me, i);
-	                        if (!!stateValue[i]) {
-	                            // 虽然有两个地方判断了 stateValue[i] 是否存在，但这样显得逻辑更加清晰，因此保留。
-	                            selectOptions.value = stateValue[i];
-	                        }
+	                        selectOptions.value = stateValue[i] || null;
 	                        arr.push(React.createElement(
 	                            Select,
 	                            _extends({}, selectOptions, { key: i }),
@@ -26817,11 +27791,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	                if (typeof _ret === 'object') return _ret.v;
 	            } else if (me.props.mode == Constants.MODE.VIEW) {
-	                arr.push(React.createElement(
-	                    'span',
-	                    { key: 'cascade' },
-	                    me.state.value instanceof Array && me.state.value.join(" ")
-	                ));
+	                if (me.state.value instanceof Array) {
+	                    (function () {
+	                        var data = me.props.jsxdata;
+	                        var textArr = me.state.value.map(function (item, index) {
+	                            data = data.contents.filter(function (ele, i) {
+	                                return ele.value = item;
+	                            })[0];
+	                            return data.text;
+	                        });
+	                        arr.push(React.createElement(
+	                            'span',
+	                            { key: 'cascade' },
+	                            textArr.join(" ")
+	                        ));
+	                    })();
+	                }
 	            }
 	
 	            return arr;
@@ -26846,12 +27831,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CascadeSelectFormField;
 
 /***/ },
-/* 221 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
@@ -26863,11 +27846,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var FormField = __webpack_require__(167);
 	var Constants = __webpack_require__(166);
-	var assign = __webpack_require__(160);
-	var Upload = __webpack_require__(222);
+	var assign = __webpack_require__(84);
+	var Upload = __webpack_require__(227)['default'];
 	var update = React.addons.update;
-	
-	var isIE = /MSIE/i.test(navigator.userAgent);
 	
 	var UploadFormField = (function (_FormField) {
 	    _inherits(UploadFormField, _FormField);
@@ -26885,7 +27866,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'addSpecificClass',
 	        value: function addSpecificClass() {
 	            var me = this;
-	            if (me.props.jsxprefixCls == "kuma-form-field") {
+	            if (me.props.prefixCls == "kuma-form-field") {
 	                return me.props.jsxprefixCls + " kuma-upload-form-field";
 	            } else {
 	                return me.props.jsxprefixCls;
@@ -26896,2031 +27877,2154 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function renderField() {
 	            var me = this;
 	            var options = {
-	                action: me.props.jsxaction,
-	                data: me.props.jsxparams,
-	                onStart: function onStart(file) {
-	                    me.setState({
-	                        files: update(me.state.files, { $push: [{
-	                                name: file.name,
-	                                percent: "0%",
-	                                finished: false
-	                            }] })
-	                    });
-	                    me.props.jsxonStart();
-	                },
-	                onSuccess: function onSuccess(res, file) {
-	                    var files = update(me.state.files, {});
-	                    files.forEach(function (item, index) {
-	                        if (item.name == file.name) {
-	                            files[index].finished = true;
-	                        }
-	                    });
-	                    console.log("progress");
-	                    me.setState({
-	                        files: files
-	                    });
-	                    me.props.jsxonSuccess(res, file);
-	                },
-	                onProgress: function onProgress(step, file) {
-	                    var files = update(me.state.files, {});
-	                    files.forEach(function (item, index) {
-	                        if (item.name == file.name) {
-	                            files[index].percent = parseInt(step.percent) + "%";
-	                        }
-	                    });
-	                    me.setState({
-	                        files: files
-	                    });
-	                    me.props.jsxonProgress(step, file);
-	                },
-	                onError: function onError(err, res, file) {
-	                    console.log(err);
-	                    console.log(res);
-	                    me.props.jsxonError(err, res, file);
-	                }
+	                // 上传文件字段名称
+	                name: me.props.fileName,
+	                // 上传目标
+	                url: me.props.url,
+	                // 上传文件额外参数
+	                params: me.props.params,
+	                // 上传文件额外头, `flash下不支持`
+	                headers: me.props.headers,
+	                // 上传文件是否自动附带cookie等信息, `flash下不支持`
+	                withCredentials: me.props.withCredentials,
+	                // 上传超时
+	                timeout: me.props.withCredentials,
+	                // 是否允许分片上传, `flash下不支持`
+	                chunkEnable: me.props.chunkEnable,
+	                // 文件分片大小, 默认单位b，0不分片
+	                chunkSize: me.props.chunkSize,
+	                // 文件分片上传重试次数
+	                chunkRetries: me.props.chunkRetries,
+	                // 分片上传并发数
+	                chunkProcessThreads: me.props.chunkProcessThreads,
+	                // 文件上传并发数
+	                processThreads: me.props.processThreads,
+	                // 是否选择后自动等待上传
+	                autoPending: me.props.autoPending,
+	                // 队列容量，0无限
+	                queueCapcity: me.props.queueCapcity,
+	                // 是否多选
+	                multiple: me.props.multiple,
+	                // 允许文件类型
+	                accept: me.props.accept,
+	                // 文件大小限制
+	                fileSizeLimit: me.props.fileSizeLimit,
+	                // 是否防止文件重复
+	                preventDuplicate: me.props.preventDuplicate,
+	                // 过滤器
+	                filters: me.props.filters
 	            };
-	            !!me.props.jsxfileName && (options.name = me.props.jsxfileName);
-	            var arr = [];
-	            if (me.props.mode == Constants.MODE.EDIT) {
-	                arr.push(React.createElement(Upload, _extends({ key: 'upload' }, options)));
-	            }
-	            arr = arr.concat(me.state.files.map(function (file, index) {
-	                var str = file.name;
-	                if (!isIE) {
-	                    str += " " + file.percent;
-	                }
-	                str += file.finished ? " 完成" : "";
-	                return React.createElement(
-	                    'div',
-	                    { className: 'kuma-upload-file', key: index },
-	                    str
-	                );
-	            }));
-	            return arr;
+	            return React.createElement(Upload, options);
 	        }
 	    }]);
 	
 	    return UploadFormField;
 	})(FormField);
 	
-	UploadFormField.propTypes = assign({}, FormField.propTypes, {
-	    jsxaction: React.PropTypes.string,
-	    jsxparams: React.PropTypes.object,
-	    jsxfileName: React.PropTypes.string,
-	    jsxonStart: React.PropTypes.func,
-	    jsxonError: React.PropTypes.func,
-	    jsxonSuccess: React.PropTypes.func,
-	    jsxonProgress: React.PropTypes.func
-	});
+	UploadFormField.propTypes = assign({}, FormField.propTypes, {});
 	UploadFormField.defaultProps = assign({}, FormField.defaultProps, {
-	    jsxonStart: function jsxonStart() {},
-	    jsxonError: function jsxonError() {},
-	    jsxonSuccess: function jsxonSuccess() {},
-	    jsxonProgress: function jsxonProgress() {}
+	    // 上传文件字段名称
+	    fileName: 'file',
+	    // 上传目标
+	    url: '',
+	    // 上传文件额外参数
+	    params: {},
+	    // 上传文件额外头, `flash下不支持`
+	    headers: [],
+	    // 上传文件是否自动附带cookie等信息, `flash下不支持`
+	    withCredentials: true,
+	    // 上传超时
+	    timeout: 0,
+	    // 是否允许分片上传, `flash下不支持`
+	    chunkEnable: false,
+	    // 文件分片大小, 默认单位b，0不分片
+	    chunkSize: 0,
+	    // 文件分片上传重试次数
+	    chunkRetries: 0,
+	    // 分片上传并发数
+	    chunkProcessThreads: 2,
+	    // 文件上传并发数
+	    processThreads: 2,
+	    // 是否选择后自动等待上传
+	    autoPending: true,
+	    // 队列容量，0无限
+	    queueCapcity: 0,
+	    // 是否多选
+	    multiple: true,
+	    // 允许文件类型
+	    accept: null,
+	    // 文件大小限制
+	    fileSizeLimit: 0,
+	    // 是否防止文件重复
+	    preventDuplicate: true,
+	    // 过滤器
+	    filters: []
 	});
 	UploadFormField.displayName = "UploadFormField";
 	
 	module.exports = UploadFormField;
 
 /***/ },
-/* 222 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/**
-	 * RcUpload Component for uxcore
-	 * @author eternalsky
-	 *
-	 * Copyright 2014-2015, Uxcore Team, Alinw.
-	 * All rights reserved.
-	 */
-	
 	'use strict';
 	
-	module.exports = __webpack_require__(223);
-
-/***/ },
-/* 223 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * RcUpload Component for uxcore
-	 * @author eternalsky
-	 *
-	 * Copyright 2014-2015, Uxcore Team, Alinw.
-	 * All rights reserved.
-	 */
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
 	
-	"use strict";
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Upload = __webpack_require__(224);
+	var _react = __webpack_require__(9);
 	
-	var _require = __webpack_require__(2);
+	var _react2 = _interopRequireDefault(_react);
 	
-	var Button = _require.Button;
-	var ButtonGroup = _require.ButtonGroup;
+	var _uxcoreUploadcore = __webpack_require__(228);
 	
-	var assign = __webpack_require__(160);
+	var _progress2 = __webpack_require__(229);
 	
-	var RcUpload = (function (_React$Component) {
-	    _inherits(RcUpload, _React$Component);
+	var _progress3 = _interopRequireDefault(_progress2);
 	
-	    function RcUpload(props) {
-	        _classCallCheck(this, RcUpload);
-	
-	        _get(Object.getPrototypeOf(RcUpload.prototype), "constructor", this).call(this, props);
+	var CORE_INSTANCE = {};
+	function getCoreInstance(props) {
+	    var core = props.core;
+	    if (core instanceof _uxcoreUploadcore.UploadCore) {
+	        return core;
 	    }
 	
-	    _createClass(RcUpload, [{
-	        key: "render",
-	        value: function render() {
-	            var me = this;
-	            var options = {
-	                action: me.props.action,
-	                data: me.props.data,
-	                multiple: me.props.multiple,
-	                onStart: me.props.onStart,
-	                onError: me.props.onError,
-	                onSuccess: me.props.onSuccess,
-	                onProgress: me.props.onProgress
+	    var id = core;
+	    if (id && typeof id === 'string' && CORE_INSTANCE.hasOwnProperty(id)) {
+	        return CORE_INSTANCE[id];
+	    }
+	
+	    var options = props.options || {};
+	    ['name', 'url', 'params', 'action', 'data', 'headers', 'withCredentials', 'timeout', 'chunkEnable', 'chunkSize', 'chunkRetries', 'chunkProcessThreads', 'processThreads', 'queueCapcity', 'autoPending', 'multiple', 'accept', 'sizeLimit', 'preventDuplicate'].forEach(function (key) {
+	        if (props.hasOwnProperty(key)) {
+	            options[key] = props[key];
+	        }
+	    });
+	
+	    core = new _uxcoreUploadcore.UploadCore(options);
+	
+	    for (var key in props) {
+	        if (props.hasOwnProperty(key)) {
+	            var m = /^on(\w+)$/i.exec(key);
+	            if (!m) continue;
+	            if (_uxcoreUploadcore.Events.hasOwnProperty(m[1]) && typeof props[key] === 'function') {
+	                core.on(m[1], props[key]);
+	            }
+	        }
+	    }
+	
+	    if (id) {
+	        CORE_INSTANCE[id] = core;
+	    }
+	
+	    return core;
+	}
+	
+	var FileList = (function (_Component) {
+	    _inherits(FileList, _Component);
+	
+	    function FileList(props) {
+	        _classCallCheck(this, FileList);
+	
+	        _get(Object.getPrototypeOf(FileList.prototype), 'constructor', this).call(this, props);
+	
+	        this.core = this.props.core;
+	
+	        this.state = {
+	            items: this.core.getStat().getFiles()
+	        };
+	    }
+	
+	    _createClass(FileList, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this = this;
+	
+	            var statchange = function statchange(stat) {
+	                _this.setState({
+	                    items: stat.getFiles()
+	                });
 	            };
-	            !!me.props.accept && (options.accept = me.props.accept);
-	            !!me.props.name && (options.name = me.props.name);
-	            return React.createElement(
-	                "div",
-	                { className: "kuma-rc-upload" },
-	                React.createElement(
-	                    Upload,
-	                    options,
-	                    React.createElement(
-	                        Button,
-	                        { size: me.props.buttonSize },
-	                        React.createElement("i", { className: "kuma-icon kuma-icon-add" }),
-	                        "点击上传"
-	                    )
+	            this.core.on(_uxcoreUploadcore.Events.QUEUE_STAT_CHANGE, statchange);
+	            this.stopListen = function () {
+	                _this.core.off(_uxcoreUploadcore.Events.QUEUE_STAT_CHANGE, statchange);
+	            };
+	        }
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	            this.stopListen && this.stopListen();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+	
+	            return _react2['default'].createElement(
+	                'div',
+	                { className: "kuma-upload-filelist " + (this.props.mode === 'mini' ? 'minimode' : 'iconmode') },
+	                _react2['default'].createElement(
+	                    'div',
+	                    { className: 'inner' },
+	                    this.state.items.map(function (file) {
+	                        return _react2['default'].createElement(FileItem, { key: file.id, file: file, mode: _this2.props.mode });
+	                    }),
+	                    !this.core.isFull() && this.props.mode === 'icon' ? _react2['default'].createElement(
+	                        Picker,
+	                        { core: this.core },
+	                        _react2['default'].createElement('i', { className: 'kuma-upload-icon icon-add' })
+	                    ) : null
 	                )
 	            );
 	        }
 	    }]);
 	
-	    return RcUpload;
-	})(React.Component);
+	    return FileList;
+	})(_react.Component);
 	
-	RcUpload.defaultProps = {
-	    buttonSize: "medium",
-	    data: {},
-	    multiple: false,
-	    onStart: function onStart() {},
-	    onError: function onError() {},
-	    onSuccess: function onSuccess() {},
-	    onProgress: function onProgress() {}
+	FileList.defaultProps = {
+	    mode: 'mini'
 	};
 	
-	// http://facebook.github.io/react/docs/reusable-components.html
-	RcUpload.propTypes = {};
+	var Picker = (function (_Component2) {
+	    _inherits(Picker, _Component2);
 	
-	RcUpload.displayName = "RcUpload";
+	    function Picker() {
+	        _classCallCheck(this, Picker);
 	
-	module.exports = RcUpload;
-
-/***/ },
-/* 224 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// export this package's api
-	'use strict';
-	
-	module.exports = __webpack_require__(225);
-
-/***/ },
-/* 225 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	var React = __webpack_require__(9);
-	var PropTypes = React.PropTypes;
-	var AjaxUpload = __webpack_require__(226);
-	var IframeUpload = __webpack_require__(233);
-	var empty = function empty() {};
-	
-	var Upload = React.createClass({
-	  displayName: 'Upload',
-	
-	  propTypes: {
-	    action: PropTypes.string,
-	    name: PropTypes.string,
-	    multipart: PropTypes.bool,
-	    onError: PropTypes.func,
-	    onSuccess: PropTypes.func,
-	    onProgress: PropTypes.func,
-	    onStart: PropTypes.func,
-	    data: PropTypes.object,
-	    accept: PropTypes.string,
-	    multiple: PropTypes.bool
-	  },
-	
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      data: {},
-	      name: 'file',
-	      multipart: false,
-	      onProgress: empty,
-	      onStart: empty,
-	      onError: empty,
-	      onSuccess: empty,
-	      multiple: false
-	    };
-	  },
-	
-	  render: function render() {
-	    var props = this.props;
-	    var isNode = typeof window === 'undefined';
-	    // node环境或者支持FormData的情况使用AjaxUpload
-	    if (isNode || typeof FormData !== 'undefined') {
-	      return React.createElement(AjaxUpload, props);
+	        _get(Object.getPrototypeOf(Picker.prototype), 'constructor', this).apply(this, arguments);
 	    }
 	
-	    return React.createElement(IframeUpload, props);
-	  }
-	});
+	    _createClass(Picker, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.area = this.props.core.getPickerCollector().addArea(_react2['default'].findDOMNode(this));
+	        }
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	            this.area && this.area.destroy();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2['default'].createElement(
+	                'div',
+	                { className: 'kuma-upload-picker' },
+	                this.props.children
+	            );
+	        }
+	    }]);
 	
-	module.exports = Upload;
-
-/***/ },
-/* 226 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	var React = __webpack_require__(9);
-	var request = __webpack_require__(227);
-	var uid = __webpack_require__(230);
+	    return Picker;
+	})(_react.Component);
 	
-	var AjaxUploader = React.createClass({
-	  displayName: 'AjaxUploader',
+	var Uploader = (function (_Component3) {
+	    _inherits(Uploader, _Component3);
 	
-	  _onChange: function _onChange(e) {
-	    var files = e.target.files;
-	    this._uploadFiles(files);
-	  },
+	    function Uploader(props) {
+	        var _this3 = this;
 	
-	  _onClick: function _onClick() {
-	    var el = React.findDOMNode(this.refs.file);
-	    if (!el) {
-	      return;
-	    }
-	    el.click();
-	    el.value = '';
-	  },
+	        _classCallCheck(this, Uploader);
 	
-	  _uploadFiles: function _uploadFiles(files) {
-	    var len = files.length;
-	    if (len > 0) {
-	      for (var i = 0; i < len; i++) {
-	        var file = files.item(i);
-	        this._post(file);
-	      }
-	    }
-	  },
+	        _get(Object.getPrototypeOf(Uploader.prototype), 'constructor', this).call(this, props);
 	
-	  _post: function _post(file) {
+	        this.core = getCoreInstance(this.props);
 	
-	    file.uid = uid();
-	    var props = this.props;
-	    props.onStart(file);
-	    var req = request.post(props.action).attach(props.name, file, file.name);
+	        this.state = {
+	            total: this.core.getTotal()
+	        };
 	
-	    for (var key in props.data) {
-	      req.field(key, props.data[key]);
-	    }
-	
-	    var progress = function progress(e) {
-	      props.onProgress(e, file);
-	    };
-	
-	    req.on('progress', progress);
-	
-	    req.end(function (err, ret) {
-	      req.off('progress', progress);
-	      if (err || ret.status !== 200) {
-	        props.onError(err, ret, file);
-	        return;
-	      }
-	
-	      props.onSuccess(ret.body || ret.text, file);
-	    });
-	  },
-	
-	  _onFileDrop: function _onFileDrop(e) {
-	    if (e.type === 'dragover') {
-	      return e.preventDefault();
+	        var statchange = function statchange(stat) {
+	            var total = stat.getTotal();
+	            if (total !== _this3.state.total) {
+	                _this3.setState({ total: total });
+	            }
+	        };
+	        this.core.on(_uxcoreUploadcore.Events.QUEUE_STAT_CHANGE, statchange);
+	        this.stopListen = function () {
+	            _this3.core.off(_uxcoreUploadcore.Events.QUEUE_STAT_CHANGE, statchange);
+	        };
 	    }
 	
-	    var files = e.dataTransfer.files;
-	    this._uploadFiles(files);
+	    _createClass(Uploader, [{
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	            this.stopListen && this.stopListen();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var children = this.props.children;
+	            if (!children || children.length < 1) {
+	                children = _react2['default'].createElement(
+	                    'button',
+	                    { className: 'kuma-upload-button' },
+	                    _react2['default'].createElement('i', { className: 'kuma-upload-icon icon-upload' }),
+	                    'UPLOAD'
+	                );
+	            }
+	            return _react2['default'].createElement(
+	                'div',
+	                { className: "kuma-uploader " + (this.props.className || '') },
+	                this.core.isFull() ? null : _react2['default'].createElement(
+	                    Picker,
+	                    { core: this.core },
+	                    children
+	                ),
+	                this.state.total > 0 ? _react2['default'].createElement(FileList, { core: this.core, mode: 'mini' }) : null
+	            );
+	        }
+	    }]);
 	
-	    e.preventDefault();
-	  },
+	    return Uploader;
+	})(_react.Component);
 	
-	  render: function render() {
-	    var hidden = { display: 'none' };
-	    var props = this.props;
-	    return React.createElement('span', { onClick: this._onClick, onDrop: this._onFileDrop, onDragOver: this._onFileDrop }, React.createElement('input', { type: 'file',
-	      ref: 'file',
-	      style: hidden,
-	      accept: props.accept,
-	      multiple: this.props.multiple,
-	      onChange: this._onChange }), props.children);
-	  }
-	});
+	exports['default'] = Uploader;
 	
-	module.exports = AjaxUploader;
-
-/***/ },
-/* 227 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Module dependencies.
-	 */
+	var Droparea = (function (_Component4) {
+	    _inherits(Droparea, _Component4);
 	
-	'use strict';
+	    function Droparea(props) {
+	        var _this4 = this;
 	
-	var Emitter = __webpack_require__(228);
-	var reduce = __webpack_require__(229);
+	        _classCallCheck(this, Droparea);
 	
-	/**
-	 * Root reference for iframes.
-	 */
+	        _get(Object.getPrototypeOf(Droparea.prototype), 'constructor', this).call(this, props);
 	
-	var root = 'undefined' == typeof window ? undefined || self : window;
+	        this.core = getCoreInstance(this.props);
 	
-	/**
-	 * Noop.
-	 */
+	        this.state = {
+	            blink: 0,
+	            highlight: 0,
+	            total: this.core.getTotal()
+	        };
 	
-	function noop() {};
+	        var statchange = function statchange(stat) {
+	            var total = stat.getTotal();
+	            if (total !== _this4.state.total) {
+	                _this4.setState({ total: total });
+	            }
+	        };
+	        this.core.on(_uxcoreUploadcore.Events.QUEUE_STAT_CHANGE, statchange);
+	        this.stopListen = function () {
+	            _this4.core.off(_uxcoreUploadcore.Events.QUEUE_STAT_CHANGE, statchange);
+	        };
+	    }
 	
-	/**
-	 * Check if `obj` is a host object,
-	 * we don't want to serialize these :)
-	 *
-	 * TODO: future proof, move to compoent land
-	 *
-	 * @param {Object} obj
-	 * @return {Boolean}
-	 * @api private
-	 */
+	    _createClass(Droparea, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this5 = this;
 	
-	function isHost(obj) {
-	  var str = ({}).toString.call(obj);
+	            var areaNode = _react2['default'].findDOMNode(this);
 	
-	  switch (str) {
-	    case '[object File]':
-	    case '[object Blob]':
-	    case '[object FormData]':
-	      return true;
-	    default:
-	      return false;
-	  }
+	            var dndArea = this.core.getDndCollector().addArea(areaNode);
+	            dndArea.on('start', function () {
+	                _this5.setState({ blink: 1 });
+	            }).on('response', function (e) {
+	                if (areaNode.contains(e.target)) {
+	                    _this5.setState({ highlight: 1 });
+	                } else {
+	                    _this5.setState({ highlight: 0 });
+	                }
+	            }).on('end', function () {
+	                _this5.setState({ blink: 0, highlight: 0 });
+	            });
+	            this.dndArea = dndArea;
+	        }
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	            this.dndArea && this.dndArea.destroy();
+	            this.stopListen && this.stopListen();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var className = "kuma-uploader kuma-upload-droparea";
+	            if (this.props.className) {
+	                className += ' ' + this.props.className;
+	            }
+	            if (this.state.blink) {
+	                className += ' blink';
+	            }
+	            if (this.state.highlight) {
+	                className += ' enter';
+	            }
+	            var children = this.props.children;
+	            if (!children || children.length < 1) {
+	                children = _react2['default'].createElement('i', { className: 'kuma-upload-icon icon-add' });
+	            }
+	            return _react2['default'].createElement(
+	                'div',
+	                { className: className },
+	                this.state.total > 0 ? _react2['default'].createElement(FileList, { core: this.core, mode: 'icon' }) : _react2['default'].createElement(
+	                    Picker,
+	                    { core: this.core },
+	                    children
+	                ),
+	                _react2['default'].createElement('div', { className: 'kuma-upload-responser' })
+	            );
+	        }
+	    }]);
+	
+	    return Droparea;
+	})(_react.Component);
+	
+	exports.Droparea = Droparea;
+	
+	var FileItem = (function (_Component5) {
+	    _inherits(FileItem, _Component5);
+	
+	    function FileItem(props) {
+	        _classCallCheck(this, FileItem);
+	
+	        _get(Object.getPrototypeOf(FileItem.prototype), 'constructor', this).call(this, props);
+	
+	        var file = this.props.file;
+	        this.file = file;
+	
+	        this.state = {
+	            percentage: file.progress ? file.progress.percentage : 0,
+	            status: file.getStatusName()
+	        };
+	    }
+	
+	    _createClass(FileItem, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this6 = this;
+	
+	            var file = this.file;
+	            var statuschange = function statuschange() {
+	                var state = {
+	                    status: file.getStatusName()
+	                };
+	                if (state.status === 'error') {
+	                    state.percentage = 0;
+	                }
+	                _this6.setState(state);
+	            };
+	            var progress = function progress(_progress) {
+	                _this6.setState({
+	                    percentage: _progress.percentage
+	                });
+	            };
+	            file.on(_uxcoreUploadcore.Events.FILE_STATUS_CHANGE, statuschange);
+	            file.on(_uxcoreUploadcore.Events.FILE_UPLOAD_PROGRESS, progress);
+	
+	            this.stopListen = function () {
+	                file.off(_uxcoreUploadcore.Events.FILE_STATUS_CHANGE, statuschange);
+	                file.off(_uxcoreUploadcore.Events.FILE_UPLOAD_PROGRESS, progress);
+	            };
+	        }
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	            this.stopListen && this.stopListen();
+	        }
+	    }, {
+	        key: 'onPending',
+	        value: function onPending() {
+	            this.file.pending();
+	        }
+	    }, {
+	        key: 'onCancel',
+	        value: function onCancel() {
+	            this.file.cancel();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            if (this.props.mode === 'icon') {
+	                return _react2['default'].createElement(
+	                    'div',
+	                    { className: "kuma-upload-fileitem status-" + this.state.status },
+	                    _react2['default'].createElement(
+	                        'a',
+	                        { className: 'kuma-upload-action action-remove', onClick: this.onCancel.bind(this), title: '移除' },
+	                        _react2['default'].createElement('i', { className: 'kuma-upload-icon icon-remove' })
+	                    ),
+	                    _react2['default'].createElement(
+	                        'div',
+	                        { className: 'filepreview' },
+	                        _react2['default'].createElement(Preview, { file: this.props.file }),
+	                        this.state.status === 'error' ? _react2['default'].createElement(
+	                            'a',
+	                            { className: 'kuma-upload-action action-retry', onClick: this.onPending.bind(this), title: '重传' },
+	                            _react2['default'].createElement('i', { className: 'kuma-upload-icon icon-retry' })
+	                        ) : null,
+	                        this.state.status === 'queued' ? _react2['default'].createElement(
+	                            'a',
+	                            { className: 'kuma-upload-action action-upload', onClick: this.onPending.bind(this), title: '上传' },
+	                            _react2['default'].createElement('i', { className: 'kuma-upload-icon icon-start' })
+	                        ) : null,
+	                        this.state.status === 'progress' || this.state.status === 'pending' ? _react2['default'].createElement(_progress3['default'], { percentage: this.state.percentage }) : null
+	                    ),
+	                    this.state.status === 'error' ? _react2['default'].createElement(
+	                        'a',
+	                        { className: 'kuma-upload-status status-error', title: '上传失败' },
+	                        _react2['default'].createElement('i', { className: 'kuma-upload-icon icon-error' })
+	                    ) : null,
+	                    this.state.status === 'success' ? _react2['default'].createElement(
+	                        'a',
+	                        { className: 'kuma-upload-status status-success' },
+	                        _react2['default'].createElement('i', { className: 'kuma-upload-icon icon-success' })
+	                    ) : null,
+	                    _react2['default'].createElement(
+	                        'div',
+	                        { className: 'filename', title: this.file.name },
+	                        natcut(this.file.name, 10)
+	                    )
+	                );
+	            } else {
+	                var size = humanSizeFormat(this.file.size);
+	                return _react2['default'].createElement(
+	                    'div',
+	                    { className: "kuma-upload-fileitem status-" + this.state.status },
+	                    _react2['default'].createElement(
+	                        'label',
+	                        { className: 'field-info' },
+	                        _react2['default'].createElement('i', { className: 'kuma-upload-fileicon', 'data-ext': this.file.ext, 'data-type': this.file.type }),
+	                        _react2['default'].createElement(
+	                            'span',
+	                            { className: 'filename', title: this.file.name },
+	                            natcut(this.file.name, 12)
+	                        ),
+	                        _react2['default'].createElement(
+	                            'span',
+	                            { className: 'filesize' },
+	                            '/' + size
+	                        )
+	                    ),
+	                    _react2['default'].createElement(
+	                        'label',
+	                        { className: 'field-status' },
+	                        this.state.status === 'error' ? _react2['default'].createElement(
+	                            'a',
+	                            { className: 'kuma-upload-status status-error', title: '上传失败' },
+	                            _react2['default'].createElement('i', { className: 'kuma-upload-icon icon-error' })
+	                        ) : null,
+	                        this.state.status === 'success' ? _react2['default'].createElement(
+	                            'a',
+	                            { className: 'kuma-upload-status status-success' },
+	                            _react2['default'].createElement('i', { className: 'kuma-upload-icon icon-success' })
+	                        ) : null,
+	                        this.state.status === 'error' ? _react2['default'].createElement(
+	                            'a',
+	                            { className: 'kuma-upload-action action-retry', onClick: this.onPending.bind(this), title: '重传' },
+	                            _react2['default'].createElement('i', { className: 'kuma-upload-icon icon-retry' })
+	                        ) : null,
+	                        this.state.status === 'queued' ? _react2['default'].createElement(
+	                            'a',
+	                            { className: 'kuma-upload-action action-upload', onClick: this.onPending.bind(this), title: '上传' },
+	                            _react2['default'].createElement('i', { className: 'kuma-upload-icon icon-start' })
+	                        ) : null,
+	                        _react2['default'].createElement(
+	                            'a',
+	                            { className: 'kuma-upload-action action-remove', onClick: this.onCancel.bind(this), title: '移除' },
+	                            _react2['default'].createElement('i', { className: 'kuma-upload-icon icon-remove' })
+	                        )
+	                    ),
+	                    _react2['default'].createElement(_progress3['default'], { percentage: this.state.percentage, mode: 'bar' })
+	                );
+	            }
+	        }
+	    }]);
+	
+	    return FileItem;
+	})(_react.Component);
+	
+	FileItem.defaultProps = {
+	    mode: 'mini'
+	};
+	
+	var Preview = (function (_Component6) {
+	    _inherits(Preview, _Component6);
+	
+	    function Preview(props) {
+	        var _this7 = this;
+	
+	        _classCallCheck(this, Preview);
+	
+	        _get(Object.getPrototypeOf(Preview.prototype), 'constructor', this).call(this, props);
+	
+	        this.state = {};
+	
+	        var file = this.props.file;
+	        if (file.isImage()) {
+	            file.getAsDataUrl(1000).done(function (url) {
+	                return _this7.setState({ url: url });
+	            });
+	        }
+	    }
+	
+	    _createClass(Preview, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2['default'].createElement(
+	                'div',
+	                { className: 'previewer' },
+	                this.state.url ? _react2['default'].createElement('img', { src: this.state.url }) : _react2['default'].createElement('i', { className: 'kuma-upload-fileicon', 'data-ext': this.props.file.ext, 'data-type': this.props.file.type })
+	            );
+	        }
+	    }]);
+	
+	    return Preview;
+	})(_react.Component);
+	
+	function natcut(title, len) {
+	    var max = len * 2,
+	        length = title.length,
+	        l = 0,
+	        i = 0,
+	        part = undefined,
+	        s = undefined;
+	    for (i = 0; i < length && l <= max; i++) {
+	        l += title.charCodeAt(i) > 255 ? 2 : 1;
+	    }
+	    if (l <= max) {
+	        return title;
+	    }
+	    i = 0;
+	    l = 0;
+	    len -= 2;
+	    while (l < len) {
+	        s = title.charCodeAt(i) > 255 ? 2 : 1;
+	        if (l + s > len) {
+	            break;
+	        } else {
+	            i++;
+	            l += s;
+	        }
+	    }
+	    part = title.substr(0, i);
+	    l += 3;
+	
+	    i = length;
+	    while (l < max) {
+	        s = title.charCodeAt(i - 1) > 255 ? 2 : 1;
+	        if (l + s > max) {
+	            break;
+	        } else {
+	            i--;
+	            l += s;
+	        }
+	    }
+	    return part + '...' + title.substring(Math.min(i, length - 1), length);
 	}
-	
-	/**
-	 * Determine XHR.
-	 */
-	
-	request.getXHR = function () {
-	  if (root.XMLHttpRequest && (!root.location || 'file:' != root.location.protocol || !root.ActiveXObject)) {
-	    return new XMLHttpRequest();
-	  } else {
-	    try {
-	      return new ActiveXObject('Microsoft.XMLHTTP');
-	    } catch (e) {}
-	    try {
-	      return new ActiveXObject('Msxml2.XMLHTTP.6.0');
-	    } catch (e) {}
-	    try {
-	      return new ActiveXObject('Msxml2.XMLHTTP.3.0');
-	    } catch (e) {}
-	    try {
-	      return new ActiveXObject('Msxml2.XMLHTTP');
-	    } catch (e) {}
-	  }
-	  return false;
-	};
-	
-	/**
-	 * Removes leading and trailing whitespace, added to support IE.
-	 *
-	 * @param {String} s
-	 * @return {String}
-	 * @api private
-	 */
-	
-	var trim = ''.trim ? function (s) {
-	  return s.trim();
-	} : function (s) {
-	  return s.replace(/(^\s*|\s*$)/g, '');
-	};
-	
-	/**
-	 * Check if `obj` is an object.
-	 *
-	 * @param {Object} obj
-	 * @return {Boolean}
-	 * @api private
-	 */
-	
-	function isObject(obj) {
-	  return obj === Object(obj);
+	function humanSizeFormat(size) {
+	    size = parseFloat(size);
+	    var prefixesSI = ['', 'k', 'm', 'g', 't', 'p', 'e', 'z', 'y'];
+	    var base = 1000,
+	        index = size ? Math.floor(Math.log(size) / Math.log(base)) : 0;
+	    index = Math.min(index, prefixesSI.length - 1);
+	    var powedPrecision = Math.pow(10, index < 2 ? 0 : index > 2 ? 2 : 1);
+	    size = size / Math.pow(base, index);
+	    size = Math.round(size * powedPrecision) / powedPrecision;
+	    if (size > 500) {
+	        size = Math.round(size / 100) / 10;
+	        index++;
+	    }
+	    return size + prefixesSI[index];
 	}
-	
-	/**
-	 * Serialize the given `obj`.
-	 *
-	 * @param {Object} obj
-	 * @return {String}
-	 * @api private
-	 */
-	
-	function serialize(obj) {
-	  if (!isObject(obj)) return obj;
-	  var pairs = [];
-	  for (var key in obj) {
-	    if (null != obj[key]) {
-	      pairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]));
-	    }
-	  }
-	  return pairs.join('&');
-	}
-	
-	/**
-	 * Expose serialization method.
-	 */
-	
-	request.serializeObject = serialize;
-	
-	/**
-	 * Parse the given x-www-form-urlencoded `str`.
-	 *
-	 * @param {String} str
-	 * @return {Object}
-	 * @api private
-	 */
-	
-	function parseString(str) {
-	  var obj = {};
-	  var pairs = str.split('&');
-	  var parts;
-	  var pair;
-	
-	  for (var i = 0, len = pairs.length; i < len; ++i) {
-	    pair = pairs[i];
-	    parts = pair.split('=');
-	    obj[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
-	  }
-	
-	  return obj;
-	}
-	
-	/**
-	 * Expose parser.
-	 */
-	
-	request.parseString = parseString;
-	
-	/**
-	 * Default MIME type map.
-	 *
-	 *     superagent.types.xml = 'application/xml';
-	 *
-	 */
-	
-	request.types = {
-	  html: 'text/html',
-	  json: 'application/json',
-	  xml: 'application/xml',
-	  urlencoded: 'application/x-www-form-urlencoded',
-	  'form': 'application/x-www-form-urlencoded',
-	  'form-data': 'application/x-www-form-urlencoded'
-	};
-	
-	/**
-	 * Default serialization map.
-	 *
-	 *     superagent.serialize['application/xml'] = function(obj){
-	 *       return 'generated xml here';
-	 *     };
-	 *
-	 */
-	
-	request.serialize = {
-	  'application/x-www-form-urlencoded': serialize,
-	  'application/json': JSON.stringify
-	};
-	
-	/**
-	 * Default parsers.
-	 *
-	 *     superagent.parse['application/xml'] = function(str){
-	 *       return { object parsed from str };
-	 *     };
-	 *
-	 */
-	
-	request.parse = {
-	  'application/x-www-form-urlencoded': parseString,
-	  'application/json': JSON.parse
-	};
-	
-	/**
-	 * Parse the given header `str` into
-	 * an object containing the mapped fields.
-	 *
-	 * @param {String} str
-	 * @return {Object}
-	 * @api private
-	 */
-	
-	function parseHeader(str) {
-	  var lines = str.split(/\r?\n/);
-	  var fields = {};
-	  var index;
-	  var line;
-	  var field;
-	  var val;
-	
-	  lines.pop(); // trailing CRLF
-	
-	  for (var i = 0, len = lines.length; i < len; ++i) {
-	    line = lines[i];
-	    index = line.indexOf(':');
-	    field = line.slice(0, index).toLowerCase();
-	    val = trim(line.slice(index + 1));
-	    fields[field] = val;
-	  }
-	
-	  return fields;
-	}
-	
-	/**
-	 * Return the mime type for the given `str`.
-	 *
-	 * @param {String} str
-	 * @return {String}
-	 * @api private
-	 */
-	
-	function type(str) {
-	  return str.split(/ *; */).shift();
-	};
-	
-	/**
-	 * Return header field parameters.
-	 *
-	 * @param {String} str
-	 * @return {Object}
-	 * @api private
-	 */
-	
-	function params(str) {
-	  return reduce(str.split(/ *; */), function (obj, str) {
-	    var parts = str.split(/ *= */),
-	        key = parts.shift(),
-	        val = parts.shift();
-	
-	    if (key && val) obj[key] = val;
-	    return obj;
-	  }, {});
-	};
-	
-	/**
-	 * Initialize a new `Response` with the given `xhr`.
-	 *
-	 *  - set flags (.ok, .error, etc)
-	 *  - parse header
-	 *
-	 * Examples:
-	 *
-	 *  Aliasing `superagent` as `request` is nice:
-	 *
-	 *      request = superagent;
-	 *
-	 *  We can use the promise-like API, or pass callbacks:
-	 *
-	 *      request.get('/').end(function(res){});
-	 *      request.get('/', function(res){});
-	 *
-	 *  Sending data can be chained:
-	 *
-	 *      request
-	 *        .post('/user')
-	 *        .send({ name: 'tj' })
-	 *        .end(function(res){});
-	 *
-	 *  Or passed to `.send()`:
-	 *
-	 *      request
-	 *        .post('/user')
-	 *        .send({ name: 'tj' }, function(res){});
-	 *
-	 *  Or passed to `.post()`:
-	 *
-	 *      request
-	 *        .post('/user', { name: 'tj' })
-	 *        .end(function(res){});
-	 *
-	 * Or further reduced to a single call for simple cases:
-	 *
-	 *      request
-	 *        .post('/user', { name: 'tj' }, function(res){});
-	 *
-	 * @param {XMLHTTPRequest} xhr
-	 * @param {Object} options
-	 * @api private
-	 */
-	
-	function Response(req, options) {
-	  options = options || {};
-	  this.req = req;
-	  this.xhr = this.req.xhr;
-	  // responseText is accessible only if responseType is '' or 'text' and on older browsers
-	  this.text = this.req.method != 'HEAD' && (this.xhr.responseType === '' || this.xhr.responseType === 'text') || typeof this.xhr.responseType === 'undefined' ? this.xhr.responseText : null;
-	  this.statusText = this.req.xhr.statusText;
-	  this.setStatusProperties(this.xhr.status);
-	  this.header = this.headers = parseHeader(this.xhr.getAllResponseHeaders());
-	  // getAllResponseHeaders sometimes falsely returns "" for CORS requests, but
-	  // getResponseHeader still works. so we get content-type even if getting
-	  // other headers fails.
-	  this.header['content-type'] = this.xhr.getResponseHeader('content-type');
-	  this.setHeaderProperties(this.header);
-	  this.body = this.req.method != 'HEAD' ? this.parseBody(this.text ? this.text : this.xhr.response) : null;
-	}
-	
-	/**
-	 * Get case-insensitive `field` value.
-	 *
-	 * @param {String} field
-	 * @return {String}
-	 * @api public
-	 */
-	
-	Response.prototype.get = function (field) {
-	  return this.header[field.toLowerCase()];
-	};
-	
-	/**
-	 * Set header related properties:
-	 *
-	 *   - `.type` the content type without params
-	 *
-	 * A response of "Content-Type: text/plain; charset=utf-8"
-	 * will provide you with a `.type` of "text/plain".
-	 *
-	 * @param {Object} header
-	 * @api private
-	 */
-	
-	Response.prototype.setHeaderProperties = function (header) {
-	  // content-type
-	  var ct = this.header['content-type'] || '';
-	  this.type = type(ct);
-	
-	  // params
-	  var obj = params(ct);
-	  for (var key in obj) this[key] = obj[key];
-	};
-	
-	/**
-	 * Parse the given body `str`.
-	 *
-	 * Used for auto-parsing of bodies. Parsers
-	 * are defined on the `superagent.parse` object.
-	 *
-	 * @param {String} str
-	 * @return {Mixed}
-	 * @api private
-	 */
-	
-	Response.prototype.parseBody = function (str) {
-	  var parse = request.parse[this.type];
-	  return parse && str && (str.length || str instanceof Object) ? parse(str) : null;
-	};
-	
-	/**
-	 * Set flags such as `.ok` based on `status`.
-	 *
-	 * For example a 2xx response will give you a `.ok` of __true__
-	 * whereas 5xx will be __false__ and `.error` will be __true__. The
-	 * `.clientError` and `.serverError` are also available to be more
-	 * specific, and `.statusType` is the class of error ranging from 1..5
-	 * sometimes useful for mapping respond colors etc.
-	 *
-	 * "sugar" properties are also defined for common cases. Currently providing:
-	 *
-	 *   - .noContent
-	 *   - .badRequest
-	 *   - .unauthorized
-	 *   - .notAcceptable
-	 *   - .notFound
-	 *
-	 * @param {Number} status
-	 * @api private
-	 */
-	
-	Response.prototype.setStatusProperties = function (status) {
-	  // handle IE9 bug: http://stackoverflow.com/questions/10046972/msie-returns-status-code-of-1223-for-ajax-request
-	  if (status === 1223) {
-	    status = 204;
-	  }
-	
-	  var type = status / 100 | 0;
-	
-	  // status / class
-	  this.status = status;
-	  this.statusType = type;
-	
-	  // basics
-	  this.info = 1 == type;
-	  this.ok = 2 == type;
-	  this.clientError = 4 == type;
-	  this.serverError = 5 == type;
-	  this.error = 4 == type || 5 == type ? this.toError() : false;
-	
-	  // sugar
-	  this.accepted = 202 == status;
-	  this.noContent = 204 == status;
-	  this.badRequest = 400 == status;
-	  this.unauthorized = 401 == status;
-	  this.notAcceptable = 406 == status;
-	  this.notFound = 404 == status;
-	  this.forbidden = 403 == status;
-	};
-	
-	/**
-	 * Return an `Error` representative of this response.
-	 *
-	 * @return {Error}
-	 * @api public
-	 */
-	
-	Response.prototype.toError = function () {
-	  var req = this.req;
-	  var method = req.method;
-	  var url = req.url;
-	
-	  var msg = 'cannot ' + method + ' ' + url + ' (' + this.status + ')';
-	  var err = new Error(msg);
-	  err.status = this.status;
-	  err.method = method;
-	  err.url = url;
-	
-	  return err;
-	};
-	
-	/**
-	 * Expose `Response`.
-	 */
-	
-	request.Response = Response;
-	
-	/**
-	 * Initialize a new `Request` with the given `method` and `url`.
-	 *
-	 * @param {String} method
-	 * @param {String} url
-	 * @api public
-	 */
-	
-	function Request(method, url) {
-	  var self = this;
-	  Emitter.call(this);
-	  this._query = this._query || [];
-	  this.method = method;
-	  this.url = url;
-	  this.header = {};
-	  this._header = {};
-	  this.on('end', function () {
-	    var err = null;
-	    var res = null;
-	
-	    try {
-	      res = new Response(self);
-	    } catch (e) {
-	      err = new Error('Parser is unable to parse the response');
-	      err.parse = true;
-	      err.original = e;
-	      return self.callback(err);
-	    }
-	
-	    self.emit('response', res);
-	
-	    if (err) {
-	      return self.callback(err, res);
-	    }
-	
-	    if (res.status >= 200 && res.status < 300) {
-	      return self.callback(err, res);
-	    }
-	
-	    var new_err = new Error(res.statusText || 'Unsuccessful HTTP response');
-	    new_err.original = err;
-	    new_err.response = res;
-	    new_err.status = res.status;
-	
-	    self.callback(err || new_err, res);
-	  });
-	}
-	
-	/**
-	 * Mixin `Emitter`.
-	 */
-	
-	Emitter(Request.prototype);
-	
-	/**
-	 * Allow for extension
-	 */
-	
-	Request.prototype.use = function (fn) {
-	  fn(this);
-	  return this;
-	};
-	
-	/**
-	 * Set timeout to `ms`.
-	 *
-	 * @param {Number} ms
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-	
-	Request.prototype.timeout = function (ms) {
-	  this._timeout = ms;
-	  return this;
-	};
-	
-	/**
-	 * Clear previous timeout.
-	 *
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-	
-	Request.prototype.clearTimeout = function () {
-	  this._timeout = 0;
-	  clearTimeout(this._timer);
-	  return this;
-	};
-	
-	/**
-	 * Abort the request, and clear potential timeout.
-	 *
-	 * @return {Request}
-	 * @api public
-	 */
-	
-	Request.prototype.abort = function () {
-	  if (this.aborted) return;
-	  this.aborted = true;
-	  this.xhr.abort();
-	  this.clearTimeout();
-	  this.emit('abort');
-	  return this;
-	};
-	
-	/**
-	 * Set header `field` to `val`, or multiple fields with one object.
-	 *
-	 * Examples:
-	 *
-	 *      req.get('/')
-	 *        .set('Accept', 'application/json')
-	 *        .set('X-API-Key', 'foobar')
-	 *        .end(callback);
-	 *
-	 *      req.get('/')
-	 *        .set({ Accept: 'application/json', 'X-API-Key': 'foobar' })
-	 *        .end(callback);
-	 *
-	 * @param {String|Object} field
-	 * @param {String} val
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-	
-	Request.prototype.set = function (field, val) {
-	  if (isObject(field)) {
-	    for (var key in field) {
-	      this.set(key, field[key]);
-	    }
-	    return this;
-	  }
-	  this._header[field.toLowerCase()] = val;
-	  this.header[field] = val;
-	  return this;
-	};
-	
-	/**
-	 * Remove header `field`.
-	 *
-	 * Example:
-	 *
-	 *      req.get('/')
-	 *        .unset('User-Agent')
-	 *        .end(callback);
-	 *
-	 * @param {String} field
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-	
-	Request.prototype.unset = function (field) {
-	  delete this._header[field.toLowerCase()];
-	  delete this.header[field];
-	  return this;
-	};
-	
-	/**
-	 * Get case-insensitive header `field` value.
-	 *
-	 * @param {String} field
-	 * @return {String}
-	 * @api private
-	 */
-	
-	Request.prototype.getHeader = function (field) {
-	  return this._header[field.toLowerCase()];
-	};
-	
-	/**
-	 * Set Content-Type to `type`, mapping values from `request.types`.
-	 *
-	 * Examples:
-	 *
-	 *      superagent.types.xml = 'application/xml';
-	 *
-	 *      request.post('/')
-	 *        .type('xml')
-	 *        .send(xmlstring)
-	 *        .end(callback);
-	 *
-	 *      request.post('/')
-	 *        .type('application/xml')
-	 *        .send(xmlstring)
-	 *        .end(callback);
-	 *
-	 * @param {String} type
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-	
-	Request.prototype.type = function (type) {
-	  this.set('Content-Type', request.types[type] || type);
-	  return this;
-	};
-	
-	/**
-	 * Set Accept to `type`, mapping values from `request.types`.
-	 *
-	 * Examples:
-	 *
-	 *      superagent.types.json = 'application/json';
-	 *
-	 *      request.get('/agent')
-	 *        .accept('json')
-	 *        .end(callback);
-	 *
-	 *      request.get('/agent')
-	 *        .accept('application/json')
-	 *        .end(callback);
-	 *
-	 * @param {String} accept
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-	
-	Request.prototype.accept = function (type) {
-	  this.set('Accept', request.types[type] || type);
-	  return this;
-	};
-	
-	/**
-	 * Set Authorization field value with `user` and `pass`.
-	 *
-	 * @param {String} user
-	 * @param {String} pass
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-	
-	Request.prototype.auth = function (user, pass) {
-	  var str = btoa(user + ':' + pass);
-	  this.set('Authorization', 'Basic ' + str);
-	  return this;
-	};
-	
-	/**
-	* Add query-string `val`.
-	*
-	* Examples:
-	*
-	*   request.get('/shoes')
-	*     .query('size=10')
-	*     .query({ color: 'blue' })
-	*
-	* @param {Object|String} val
-	* @return {Request} for chaining
-	* @api public
-	*/
-	
-	Request.prototype.query = function (val) {
-	  if ('string' != typeof val) val = serialize(val);
-	  if (val) this._query.push(val);
-	  return this;
-	};
-	
-	/**
-	 * Write the field `name` and `val` for "multipart/form-data"
-	 * request bodies.
-	 *
-	 * ``` js
-	 * request.post('/upload')
-	 *   .field('foo', 'bar')
-	 *   .end(callback);
-	 * ```
-	 *
-	 * @param {String} name
-	 * @param {String|Blob|File} val
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-	
-	Request.prototype.field = function (name, val) {
-	  if (!this._formData) this._formData = new root.FormData();
-	  this._formData.append(name, val);
-	  return this;
-	};
-	
-	/**
-	 * Queue the given `file` as an attachment to the specified `field`,
-	 * with optional `filename`.
-	 *
-	 * ``` js
-	 * request.post('/upload')
-	 *   .attach(new Blob(['<a id="a"><b id="b">hey!</b></a>'], { type: "text/html"}))
-	 *   .end(callback);
-	 * ```
-	 *
-	 * @param {String} field
-	 * @param {Blob|File} file
-	 * @param {String} filename
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-	
-	Request.prototype.attach = function (field, file, filename) {
-	  if (!this._formData) this._formData = new root.FormData();
-	  this._formData.append(field, file, filename);
-	  return this;
-	};
-	
-	/**
-	 * Send `data`, defaulting the `.type()` to "json" when
-	 * an object is given.
-	 *
-	 * Examples:
-	 *
-	 *       // querystring
-	 *       request.get('/search')
-	 *         .end(callback)
-	 *
-	 *       // multiple data "writes"
-	 *       request.get('/search')
-	 *         .send({ search: 'query' })
-	 *         .send({ range: '1..5' })
-	 *         .send({ order: 'desc' })
-	 *         .end(callback)
-	 *
-	 *       // manual json
-	 *       request.post('/user')
-	 *         .type('json')
-	 *         .send('{"name":"tj"})
-	 *         .end(callback)
-	 *
-	 *       // auto json
-	 *       request.post('/user')
-	 *         .send({ name: 'tj' })
-	 *         .end(callback)
-	 *
-	 *       // manual x-www-form-urlencoded
-	 *       request.post('/user')
-	 *         .type('form')
-	 *         .send('name=tj')
-	 *         .end(callback)
-	 *
-	 *       // auto x-www-form-urlencoded
-	 *       request.post('/user')
-	 *         .type('form')
-	 *         .send({ name: 'tj' })
-	 *         .end(callback)
-	 *
-	 *       // defaults to x-www-form-urlencoded
-	  *      request.post('/user')
-	  *        .send('name=tobi')
-	  *        .send('species=ferret')
-	  *        .end(callback)
-	 *
-	 * @param {String|Object} data
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-	
-	Request.prototype.send = function (data) {
-	  var obj = isObject(data);
-	  var type = this.getHeader('Content-Type');
-	
-	  // merge
-	  if (obj && isObject(this._data)) {
-	    for (var key in data) {
-	      this._data[key] = data[key];
-	    }
-	  } else if ('string' == typeof data) {
-	    if (!type) this.type('form');
-	    type = this.getHeader('Content-Type');
-	    if ('application/x-www-form-urlencoded' == type) {
-	      this._data = this._data ? this._data + '&' + data : data;
-	    } else {
-	      this._data = (this._data || '') + data;
-	    }
-	  } else {
-	    this._data = data;
-	  }
-	
-	  if (!obj || isHost(data)) return this;
-	  if (!type) this.type('json');
-	  return this;
-	};
-	
-	/**
-	 * Invoke the callback with `err` and `res`
-	 * and handle arity check.
-	 *
-	 * @param {Error} err
-	 * @param {Response} res
-	 * @api private
-	 */
-	
-	Request.prototype.callback = function (err, res) {
-	  var fn = this._callback;
-	  this.clearTimeout();
-	  fn(err, res);
-	};
-	
-	/**
-	 * Invoke callback with x-domain error.
-	 *
-	 * @api private
-	 */
-	
-	Request.prototype.crossDomainError = function () {
-	  var err = new Error('Origin is not allowed by Access-Control-Allow-Origin');
-	  err.crossDomain = true;
-	  this.callback(err);
-	};
-	
-	/**
-	 * Invoke callback with timeout error.
-	 *
-	 * @api private
-	 */
-	
-	Request.prototype.timeoutError = function () {
-	  var timeout = this._timeout;
-	  var err = new Error('timeout of ' + timeout + 'ms exceeded');
-	  err.timeout = timeout;
-	  this.callback(err);
-	};
-	
-	/**
-	 * Enable transmission of cookies with x-domain requests.
-	 *
-	 * Note that for this to work the origin must not be
-	 * using "Access-Control-Allow-Origin" with a wildcard,
-	 * and also must set "Access-Control-Allow-Credentials"
-	 * to "true".
-	 *
-	 * @api public
-	 */
-	
-	Request.prototype.withCredentials = function () {
-	  this._withCredentials = true;
-	  return this;
-	};
-	
-	/**
-	 * Initiate request, invoking callback `fn(res)`
-	 * with an instanceof `Response`.
-	 *
-	 * @param {Function} fn
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-	
-	Request.prototype.end = function (fn) {
-	  var self = this;
-	  var xhr = this.xhr = request.getXHR();
-	  var query = this._query.join('&');
-	  var timeout = this._timeout;
-	  var data = this._formData || this._data;
-	
-	  // store callback
-	  this._callback = fn || noop;
-	
-	  // state change
-	  xhr.onreadystatechange = function () {
-	    if (4 != xhr.readyState) return;
-	
-	    // In IE9, reads to any property (e.g. status) off of an aborted XHR will
-	    // result in the error "Could not complete the operation due to error c00c023f"
-	    var status;
-	    try {
-	      status = xhr.status;
-	    } catch (e) {
-	      status = 0;
-	    }
-	
-	    if (0 == status) {
-	      if (self.timedout) return self.timeoutError();
-	      if (self.aborted) return;
-	      return self.crossDomainError();
-	    }
-	    self.emit('end');
-	  };
-	
-	  // progress
-	  var handleProgress = function handleProgress(e) {
-	    if (e.total > 0) {
-	      e.percent = e.loaded / e.total * 100;
-	    }
-	    self.emit('progress', e);
-	  };
-	  if (this.hasListeners('progress')) {
-	    xhr.onprogress = handleProgress;
-	  }
-	  try {
-	    if (xhr.upload && this.hasListeners('progress')) {
-	      xhr.upload.onprogress = handleProgress;
-	    }
-	  } catch (e) {}
-	  // Accessing xhr.upload fails in IE from a web worker, so just pretend it doesn't exist.
-	  // Reported here:
-	  // https://connect.microsoft.com/IE/feedback/details/837245/xmlhttprequest-upload-throws-invalid-argument-when-used-from-web-worker-context
-	
-	  // timeout
-	  if (timeout && !this._timer) {
-	    this._timer = setTimeout(function () {
-	      self.timedout = true;
-	      self.abort();
-	    }, timeout);
-	  }
-	
-	  // querystring
-	  if (query) {
-	    query = request.serializeObject(query);
-	    this.url += ~this.url.indexOf('?') ? '&' + query : '?' + query;
-	  }
-	
-	  // initiate request
-	  xhr.open(this.method, this.url, true);
-	
-	  // CORS
-	  if (this._withCredentials) xhr.withCredentials = true;
-	
-	  // body
-	  if ('GET' != this.method && 'HEAD' != this.method && 'string' != typeof data && !isHost(data)) {
-	    // serialize stuff
-	    var serialize = request.serialize[this.getHeader('Content-Type')];
-	    if (serialize) data = serialize(data);
-	  }
-	
-	  // set header fields
-	  for (var field in this.header) {
-	    if (null == this.header[field]) continue;
-	    xhr.setRequestHeader(field, this.header[field]);
-	  }
-	
-	  // send stuff
-	  this.emit('request', this);
-	  xhr.send(data);
-	  return this;
-	};
-	
-	/**
-	 * Expose `Request`.
-	 */
-	
-	request.Request = Request;
-	
-	/**
-	 * Issue a request:
-	 *
-	 * Examples:
-	 *
-	 *    request('GET', '/users').end(callback)
-	 *    request('/users').end(callback)
-	 *    request('/users', callback)
-	 *
-	 * @param {String} method
-	 * @param {String|Function} url or callback
-	 * @return {Request}
-	 * @api public
-	 */
-	
-	function request(method, url) {
-	  // callback
-	  if ('function' == typeof url) {
-	    return new Request('GET', method).end(url);
-	  }
-	
-	  // url first
-	  if (1 == arguments.length) {
-	    return new Request('GET', method);
-	  }
-	
-	  return new Request(method, url);
-	}
-	
-	/**
-	 * GET `url` with optional callback `fn(res)`.
-	 *
-	 * @param {String} url
-	 * @param {Mixed|Function} data or fn
-	 * @param {Function} fn
-	 * @return {Request}
-	 * @api public
-	 */
-	
-	request.get = function (url, data, fn) {
-	  var req = request('GET', url);
-	  if ('function' == typeof data) fn = data, data = null;
-	  if (data) req.query(data);
-	  if (fn) req.end(fn);
-	  return req;
-	};
-	
-	/**
-	 * HEAD `url` with optional callback `fn(res)`.
-	 *
-	 * @param {String} url
-	 * @param {Mixed|Function} data or fn
-	 * @param {Function} fn
-	 * @return {Request}
-	 * @api public
-	 */
-	
-	request.head = function (url, data, fn) {
-	  var req = request('HEAD', url);
-	  if ('function' == typeof data) fn = data, data = null;
-	  if (data) req.send(data);
-	  if (fn) req.end(fn);
-	  return req;
-	};
-	
-	/**
-	 * DELETE `url` with optional callback `fn(res)`.
-	 *
-	 * @param {String} url
-	 * @param {Function} fn
-	 * @return {Request}
-	 * @api public
-	 */
-	
-	request.del = function (url, fn) {
-	  var req = request('DELETE', url);
-	  if (fn) req.end(fn);
-	  return req;
-	};
-	
-	/**
-	 * PATCH `url` with optional `data` and callback `fn(res)`.
-	 *
-	 * @param {String} url
-	 * @param {Mixed} data
-	 * @param {Function} fn
-	 * @return {Request}
-	 * @api public
-	 */
-	
-	request.patch = function (url, data, fn) {
-	  var req = request('PATCH', url);
-	  if ('function' == typeof data) fn = data, data = null;
-	  if (data) req.send(data);
-	  if (fn) req.end(fn);
-	  return req;
-	};
-	
-	/**
-	 * POST `url` with optional `data` and callback `fn(res)`.
-	 *
-	 * @param {String} url
-	 * @param {Mixed} data
-	 * @param {Function} fn
-	 * @return {Request}
-	 * @api public
-	 */
-	
-	request.post = function (url, data, fn) {
-	  var req = request('POST', url);
-	  if ('function' == typeof data) fn = data, data = null;
-	  if (data) req.send(data);
-	  if (fn) req.end(fn);
-	  return req;
-	};
-	
-	/**
-	 * PUT `url` with optional `data` and callback `fn(res)`.
-	 *
-	 * @param {String} url
-	 * @param {Mixed|Function} data or fn
-	 * @param {Function} fn
-	 * @return {Request}
-	 * @api public
-	 */
-	
-	request.put = function (url, data, fn) {
-	  var req = request('PUT', url);
-	  if ('function' == typeof data) fn = data, data = null;
-	  if (data) req.send(data);
-	  if (fn) req.end(fn);
-	  return req;
-	};
-	
-	/**
-	 * Expose `request`.
-	 */
-	
-	module.exports = request;
 
 /***/ },
 /* 228 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	
-	/**
-	 * Expose `Emitter`.
-	 */
-	
 	"use strict";
 	
-	module.exports = Emitter;
+	!(function (e, t) {
+	   true ? module.exports = t() : "function" == typeof define && define.amd ? define([], t) : "object" == typeof exports ? exports.UploadCore = t() : e.UploadCore = t();
+	})(undefined, function () {
+	  return (function (e) {
+	    function t(r) {
+	      if (n[r]) return n[r].exports;var i = n[r] = { exports: {}, id: r, loaded: !1 };return (e[r].call(i.exports, i, i.exports, t), i.loaded = !0, i.exports);
+	    }var n = {};return (t.m = e, t.c = n, t.p = "", t(0));
+	  })([function (e, t, n) {
+	    "use strict";function r(e) {
+	      return e && e.__esModule ? e : { "default": e };
+	    }Object.defineProperty(t, "__esModule", { value: !0 });var i = n(1),
+	        o = r(i),
+	        u = n(4),
+	        s = r(u),
+	        a = n(5),
+	        l = r(a);t["default"] = o["default"], t.UploadCore = o["default"], t.Events = s["default"], t.Status = l["default"];
+	  }, function (e, t, n) {
+	    "use strict";function r(e) {
+	      return e && e.__esModule ? e : { "default": e };
+	    }function i(e, t) {
+	      if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function");
+	    }function o(e, t) {
+	      if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);e.prototype = Object.create(t && t.prototype, { constructor: { value: e, enumerable: !1, writable: !0, configurable: !0 } }), t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t);
+	    }Object.defineProperty(t, "__esModule", { value: !0 });var u = (function () {
+	      function e(e, t) {
+	        for (var n = 0; n < t.length; n++) {
+	          var r = t[n];r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r);
+	        }
+	      }return function (t, n, r) {
+	        return (n && e(t.prototype, n), r && e(t, r), t);
+	      };
+	    })(),
+	        s = function s(e, t, n) {
+	      for (var r = !0; r;) {
+	        var i = e,
+	            o = t,
+	            u = n;s = l = a = void 0, r = !1, null === i && (i = Function.prototype);var s = Object.getOwnPropertyDescriptor(i, o);if (void 0 !== s) {
+	          if ("value" in s) return s.value;var a = s.get;return void 0 === a ? void 0 : a.call(u);
+	        }var l = Object.getPrototypeOf(i);if (null === l) return void 0;e = l, t = o, n = u, r = !0;
+	      }
+	    },
+	        a = n(2),
+	        l = r(a),
+	        c = n(4),
+	        f = r(c),
+	        h = n(5),
+	        p = r(h),
+	        d = n(6),
+	        v = n(3),
+	        y = n(7),
+	        m = r(y),
+	        g = n(8),
+	        b = r(g),
+	        k = n(13),
+	        E = r(k),
+	        w = n(14),
+	        _ = r(w),
+	        O = ["name", "url", "params", "action", "data", "headers", "withCredentials", "timeout", "chunkEnable", "chunkSize", "chunkRetries", "chunkProcessThreads"],
+	        P = (function (e) {
+	      function t() {
+	        var e = this,
+	            n = arguments.length <= 0 || void 0 === arguments[0] ? {} : arguments[0];i(this, t), s(Object.getPrototypeOf(t.prototype), "constructor", this).call(this), this.autoPending = n.autoPending || n.auto, this.capcity = n.capcity || n.queueCapcity || 0, this.multiple = null == n.multiple ? !0 : n.multiple, this.accept = v.normalizeAccept(n.accept), this.sizeLimit = v.parseSize(n.sizeLimit || n.fileSizeLimit || 0), this.pending = new S(n.processThreads), this.stat = new C(), this.constraints = new R(), this.filters = new L(), this.multiple || (this.capcity = 1), this.capcity > 0 && this.addConstraint(function () {
+	          return e.stat.getTotal() >= e.capcity;
+	        }), this.accept && this.accept.length > 0 && this.addFilter(function (t) {
+	          return e.accept.some(function (e) {
+	            return e.extensions && e.extensions.indexOf(t.ext) > -1;
+	          }) ? void 0 : new d.FileExtensionError(t, 'extension "' + t.ext + '" is not allowed');
+	        }), this.sizeLimit > 0 && this.addFilter(function (t) {
+	          return t.size > e.sizeLimit ? new d.FileSizeError(t, "filesize:" + v.formatSize(t.size) + " is greater than limit:" + v.formatSize(e.sizeLimit)) : void 0;
+	        }), n.preventDuplicate && this.addFilter(function (t) {
+	          return e.stat.getFiles().some(function (e) {
+	            return e.name === t.name && e.size === t.size;
+	          }) ? new d.DuplicateError(t, 'file "' + t.name + '" already in queue') : void 0;
+	        }), Array.isArray(n.filters) && n.fitlers.forEach(function (t) {
+	          return e.addFilter(t);
+	        });var r = n.request || {};O.forEach(function (e) {
+	          n.hasOwnProperty(e) && (r[e] = n[e]);
+	        }), this.requestOptions = r;
+	      }return (o(t, e), u(t, [{ key: "createFileRequest", value: function value(e) {
+	          return new m["default"](e, this.requestOptions);
+	        } }, { key: "isLimit", value: function value() {
+	          return this.constraints.some();
+	        } }, { key: "addConstraint", value: function value(e) {
+	          return this.constraints.add(e);
+	        } }, { key: "addFilter", value: function value(e) {
+	          return this.filters.add(e);
+	        } }, { key: "add", value: function value(e) {
+	          var t = this;if (this.isLimit()) return (this.emit(f["default"].QUEUE_ERROR, new d.QueueLimitError()), -1);var n = this.filters.filter(e);return (n || this.stat.add(e) || (n = new d.DuplicateError(e, 'file "' + e.name + '" already in queue')), n ? (this.emit(f["default"].QUEUE_FILE_FILTERED, e, n), this.emit(f["default"].QUEUE_ERROR, n), 0) : (e.setStatus(p["default"].QUEUED), e.on(f["default"].FILE_STATUS_CHANGE, function (n) {
+	            n === p["default"].CANCELLED ? t.stat.remove(e) : n === p["default"].PENDING && setTimeout(function () {
+	              t.pending.add(e) && 1 === t.pending.size() && t.emit(f["default"].QUEUE_UPLOAD_START);
+	            }, 1), t.emit(f["default"].QUEUE_STAT_CHANGE, t.stat), t.stat.getFiles(p["default"].PROCESS).length < 1 && t.emit(f["default"].QUEUE_UPLOAD_END);
+	          }), e.setCore(this), this.emit(f["default"].QUEUE_FILE_ADDED, e), this.emit(f["default"].QUEUE_STAT_CHANGE, this.stat), this.autoPending && e.pending(), 1));
+	        } }, { key: "isMultiple", value: function value() {
+	          return this.multiple;
+	        } }, { key: "isFull", value: function value() {
+	          return this.capcity > 0 && this.getTotal() >= this.capcity;
+	        } }, { key: "isEmpty", value: function value() {
+	          return this.getTotal() < 1;
+	        } }, { key: "getAccept", value: function value() {
+	          return this.accept;
+	        } }, { key: "getStat", value: function value() {
+	          return this.stat;
+	        } }, { key: "getTotal", value: function value() {
+	          return this.getStat().getTotal();
+	        } }, { key: "getFiles", value: function value(e) {
+	          return this.getStat().getFiles(e);
+	        } }, { key: "stat", value: function value(e) {
+	          return this.getStat().stat(e);
+	        } }, { key: "getPickerCollector", value: function value() {
+	          return (this.picker || (this.picker = new _["default"](this)), this.picker);
+	        } }, { key: "getDndCollector", value: function value() {
+	          return (this.dnd || (this.dnd = new b["default"](this)), this.dnd);
+	        } }, { key: "getPasteCollector", value: function value() {
+	          return (this.paster || (this.paster = new E["default"](this)), this.paster);
+	        } }], [{ key: "setSWF", value: function value(e) {
+	          _["default"].setSWF(e);
+	        } }]), t);
+	    })(l["default"]);t["default"] = P;var j = (function () {
+	      function e() {
+	        i(this, e), this._set = [];
+	      }return (u(e, [{ key: "size", value: function value() {
+	          return this._set.length;
+	        } }, { key: "shift", value: function value() {
+	          return this._set.shift();
+	        } }, { key: "pop", value: function value() {
+	          return this._set.pop();
+	        } }, { key: "toArray", value: function value() {
+	          return this._set.slice(0);
+	        } }, { key: "add", value: function value(e) {
+	          return this.has(e) ? !1 : (this._set.push(e), !0);
+	        } }, { key: "has", value: function value(e) {
+	          return this._set.indexOf(e) > -1;
+	        } }, { key: "remove", value: function value(e) {
+	          var t = this._set.indexOf(e);return t > -1 ? (this._set.splice(t, 1), !0) : !1;
+	        } }, { key: "clear", value: function value() {
+	          this._set = [];
+	        } }]), e);
+	    })(),
+	        C = (function () {
+	      function e() {
+	        i(this, e), this.files = new j();
+	      }return (u(e, [{ key: "add", value: function value(e) {
+	          return this.files.add(e);
+	        } }, { key: "remove", value: function value(e) {
+	          this.files.remove(e);
+	        } }, { key: "getTotal", value: function value() {
+	          return this.files.size();
+	        } }, { key: "getFiles", value: function value(e) {
+	          var t = this.files.toArray();return e ? t.filter(function (t) {
+	            return !!(t.getStatus() & e);
+	          }) : t;
+	        } }, { key: "stat", value: function t(e) {
+	          var t = {},
+	              n = this.getFiles(e);return (n.forEach(function (e) {
+	            var n = e.getStatus();t[n] = n in t ? t[n] + 1 : 1;
+	          }), t.sum = n.length, t);
+	        } }]), e);
+	    })(),
+	        R = (function () {
+	      function e() {
+	        i(this, e), this.constraints = new j();
+	      }return (u(e, [{ key: "add", value: function value(e) {
+	          return (this.constraints.add(e), this);
+	        } }, { key: "remove", value: function value(e) {
+	          return (this.constraints.remove(e), this);
+	        } }, { key: "some", value: function value() {
+	          var e = this;return this.constraints.toArray().some(function (t) {
+	            return t.call(e);
+	          });
+	        } }]), e);
+	    })(),
+	        L = (function () {
+	      function e() {
+	        i(this, e), this.filters = new j();
+	      }return (u(e, [{ key: "add", value: function value(e) {
+	          return (this.filters.add(e), this);
+	        } }, { key: "remove", value: function value(e) {
+	          return (this.filters.remove(e), this);
+	        } }, { key: "filter", value: function value(e) {
+	          var t = null;return (this.filters.toArray().every(function (n) {
+	            var r = void 0;try {
+	              r = n(e);
+	            } catch (i) {
+	              r = i;
+	            }return "string" == typeof r ? (t = new d.FilterError(e, r), !1) : r instanceof Error ? (t = r instanceof d.FilterError ? r : new d.FilterError(e, r.toString()), !1) : !0;
+	          }), t);
+	        } }]), e);
+	    })(),
+	        S = (function () {
+	      function e(t) {
+	        i(this, e), this.threads = t || 2, this.heading = new j(), this.pending = new j();
+	      }return (u(e, [{ key: "add", value: function value(e) {
+	          var t = this;return this.pending.add(e) ? (e.session().always(function () {
+	            return t.pending.remove(e);
+	          }), this.load(), !0) : !1;
+	        } }, { key: "size", value: function value() {
+	          return this.pending.size() + this.heading.size();
+	        } }, { key: "process", value: function value(e) {
+	          var t = this;this.heading.add(e) && e.session().always(function () {
+	            t.heading.remove(e), t.load();
+	          });
+	        } }, { key: "load", value: function value() {
+	          for (var e; this.heading.size() < this.threads && (e = this.pending.shift());) e.prepare() && this.process(e);
+	        } }]), e);
+	    })();e.exports = t["default"];
+	  }, function (e, t, n) {
+	    "use strict";function r(e, t) {
+	      if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function");
+	    }function i(e, t, n) {
+	      var r = t,
+	          i = null,
+	          o = void 0,
+	          s = u.Deferred(),
+	          a = s.promise();a.abort = function () {
+	        o = !0;
+	      };var l = function l(e) {
+	        o || (e && (i = e instanceof Error ? e : new Error(e)), s.reject(i || new Error("Unknown")));
+	      },
+	          c = function c() {
+	        o || (null != i ? l() : s.resolve(r));
+	      },
+	          f = function f(e) {
+	        null == e || null != r && e.constructor !== r.constructor || (r = e);
+	      },
+	          h = function p(t) {
+	        if (!o) {
+	          if ((t instanceof Error && (i = t), null != i)) return l();f(t);var u = e.shift();if (!u) return c();var s = void 0;try {
+	            s = u.call(n, r);
+	          } catch (a) {
+	            return l(a);
+	          }s && s.then ? s.then(p, l) : p(s);
+	        }
+	      };return (setTimeout(h, 1), a);
+	    }Object.defineProperty(t, "__esModule", { value: !0 });var o = (function () {
+	      function e(e, t) {
+	        for (var n = 0; n < t.length; n++) {
+	          var r = t[n];r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r);
+	        }
+	      }return function (t, n, r) {
+	        return (n && e(t.prototype, n), r && e(t, r), t);
+	      };
+	    })(),
+	        u = n(3),
+	        s = (function () {
+	      function e() {
+	        r(this, e);
+	      }return (o(e, [{ key: "on", value: function value(e, t) {
+	          return (e = e.toLowerCase(), this._events || (this._events = {}), this._events[e] || (this._events[e] = []), this._events[e].push(t), this);
+	        } }, { key: "once", value: function value(e, t) {
+	          function n() {
+	            r.off(e, n), t.apply(this, arguments);
+	          }e = e.toLowerCase();var r = this;return (n.listener = t, this.on(e, n), this);
+	        } }, { key: "off", value: function value(e, t) {
+	          e = e.toLowerCase();var n = void 0;if (!this._events || !(n = this._events[e])) return this;for (var r = n.length; r-- > 0;) if (n[r] === t || n[r].listener === t) {
+	            n.splice(r, 1);break;
+	          }return (0 === n.length && delete this._events[e], this);
+	        } }, { key: "removeAllListeners", value: function value(e) {
+	          return (e ? delete this._events[e.toLowerCase()] : this._events = [], this);
+	        } }, { key: "setPropagationTarget", value: function value(t) {
+	          t instanceof e && (this.propagationTarget = t);
+	        } }, { key: "emit", value: function value(e) {
+	          for (var t = arguments.length, n = Array(t > 1 ? t - 1 : 0), r = 1; t > r; r++) n[r - 1] = arguments[r];return (this.applyEmit(e, n), this);
+	        } }, { key: "applyEmit", value: function value(e, t) {
+	          var n = this;e = e.toLowerCase();var r = void 0;if ((this._events && (r = this._events[e]) && r.slice(0).forEach(function (e) {
+	            return e.apply(n, t);
+	          }), this.propagationTarget)) {
+	            var i = t.slice(0);i.unshift(this), this.propagationTarget.applyEmit(e, i);
+	          }return this;
+	        } }, { key: "invoke", value: function value(e, t) {
+	          e = e.toLowerCase();var n = void 0;return (this._events && (n = this._events[e]) || (n = []), i(n.slice(0), t, this));
+	        } }]), e);
+	    })();t["default"] = s, e.exports = t["default"];
+	  }, function (e, t) {
+	    "use strict";function n(e) {
+	      e = parseFloat(e);var t = ["", "K", "M", "G", "T", "P", "E", "Z", "Y"],
+	          n = 1024,
+	          r = e ? Math.floor(Math.log(e) / Math.log(n)) : 0;r = Math.min(r, t.length - 1);var i = Math.pow(10, 2 > r ? 0 : r > 2 ? 2 : 1);return (e /= Math.pow(n, r), e = Math.round(e * i) / i, e + t[r] + "B");
+	    }function r(e) {
+	      if ("string" != typeof e) return e;var t = { t: 1099511627776, g: 1073741824, m: 1048576, k: 1024 };e = /^([0-9\.]+)([tgmk]?)b?$/i.exec(e);var n = e[2];return (e = +e[1], t.hasOwnProperty(n) && (e *= t[n]), e);
+	    }function i(e) {
+	      return "string" != typeof e ? "" : e.toLowerCase().split(/ *[ ,;|+] */).map(function (e) {
+	        var t = /^\*?\.?(\w+)$/.exec(e);return t ? t[1] : null;
+	      }).filter(function (e) {
+	        return null !== e;
+	      });
+	    }function o(e) {
+	      return e ? (Array.isArray(e) || (e = [e]), e.map(function (e) {
+	        if ("string" == typeof e && (e = e.toLowerCase()) && p.hasOwnProperty(e)) return p[e];var t = i(e.extensions || e);return t.length ? { title: e.title || "", extensions: t, mimeTypes: e.mimeTypes || "" } : null;
+	      }).filter(function (e) {
+	        return null !== e;
+	      })) : null;
+	    }function u(e) {
+	      var t = {};return ((e.match(/\S+/g) || []).forEach(function (e) {
+	        t[e] = !0;
+	      }), t);
+	    }function s(e, t) {
+	      for (var n in t) e[n] = t[n];return e;
+	    }function a(e) {
+	      return "function" == typeof e;
+	    }function l(e) {
+	      function t() {
+	        for (o = e.once, i = n = !0; c.length; f = -1) for (r = c.shift(); ++f < l.length;) l[f].apply(r[0], r[1]) === !1 && e.stopOnFalse && (f = l.length, r = !1);e.memory || (r = !1), n = !1, o && (l = r ? [] : "");
+	      }e = "string" == typeof e ? u(e) : s({}, e);var n = void 0,
+	          r = void 0,
+	          i = void 0,
+	          o = void 0,
+	          l = [],
+	          c = [],
+	          f = -1,
+	          h = void 0;return h = { add: function add() {
+	          var i = arguments;return (l && !(function () {
+	            var o = function u(t) {
+	              t.forEach(function (t) {
+	                a(t) ? e.unique && h.has(t) || l.push(t) : Array.isArray(t) && u(t);
+	              });
+	            };r && !n && (f = l.length - 1, c.push(r)), o(d(i)), r && !n && t();
+	          })(), this);
+	        }, remove: function remove() {
+	          return (d(arguments).forEach(function (e) {
+	            for (var t = l.length; --t >= 0;) l[t] === e && (l.splice(t, 1), f >= t && f--);
+	          }), this);
+	        }, has: function has(e) {
+	          return e ? l.indexOf(e) > -1 : l.length > 0;
+	        }, empty: function empty() {
+	          return (l && (l = []), this);
+	        }, disable: function disable() {
+	          return (o = c = [], l = r = "", this);
+	        }, disabled: function disabled() {
+	          return !l;
+	        }, lock: function lock() {
+	          return (o = c = [], r || n || (l = r = ""), this);
+	        }, locked: function locked() {
+	          return !!o;
+	        }, fireWith: function fireWith(e, r) {
+	          return (o || (r = r || [], r = [e, r.slice ? r.slice() : r], c.push(r), n || t()), this);
+	        }, fire: function fire() {
+	          return (h.fireWith(this, arguments), this);
+	        }, fired: function fired() {
+	          return !!i;
+	        } };
+	    }function c(e) {
+	      return e;
+	    }function f(e) {
+	      throw e;
+	    }function h(e) {
+	      var t = [["notify", "progress", l("memory"), l("memory"), 2], ["resolve", "done", l("once memory"), l("once memory"), 0, "resolved"], ["reject", "fail", l("once memory"), l("once memory"), 1, "rejected"]],
+	          n = "pending",
+	          r = {},
+	          i = { state: function state() {
+	          return n;
+	        }, always: function always() {
+	          var e = d(arguments);return (r.done(e).fail(e), this);
+	        }, "catch": function _catch(e) {
+	          return i.then(null, e);
+	        }, pipe: function pipe() {
+	          var e = arguments;return h(function (n) {
+	            t.forEach(function (t) {
+	              var o = "function" == typeof e[t[4]] && e[t[4]];r[t[1]](function () {
+	                var e = o && o.apply(this, arguments);e && a(e.promise) ? e.promise().progress(n.notify).done(n.resolve).fail(n.reject) : n[t[0] + "With"](this === i ? n.promise() : this, o ? [e] : arguments);
+	              });
+	            }), e = null;
+	          }).promise();
+	        }, then: function then(e, n, r) {
+	          function o(e, t, n, r) {
+	            return function () {
+	              var s = this === i ? void 0 : this,
+	                  l = arguments,
+	                  h = function h() {
+	                var i = void 0,
+	                    h = void 0;if (!(u > e)) {
+	                  if ((i = n.apply(s, l), i === t.promise())) throw new TypeError("Thenable self-resolution");h = i && ("object" == typeof i || "function" == typeof i) && i.then, a(h) ? r ? h.call(i, o(u, t, c, r), o(u, t, f, r)) : (u++, h.call(i, o(u, t, c, r), o(u, t, f, r), o(u, t, c, t.notify))) : (n !== c && (s = void 0, l = [i]), (r || t.resolveWith)(s || t.promise(), l));
+	                }
+	              },
+	                  p = r ? h : function () {
+	                try {
+	                  h();
+	                } catch (r) {
+	                  e + 1 >= u && (n !== f && (s = void 0, l = [r]), t.rejectWith(s || t.promise(), l));
+	                }
+	              };e ? p() : window.setTimeout(p, 0);
+	            };
+	          }var u = 0;return h(function (i) {
+	            t[0][3].add(o(0, i, a(r) ? r : c, i.notifyWith)), t[1][3].add(o(0, i, a(e) ? e : c)), t[2][3].add(o(0, i, a(n) ? n : f));
+	          }).promise();
+	        }, promise: function promise(e) {
+	          return null != e ? s(e, i) : i;
+	        } };return (t.forEach(function (e, o) {
+	        var u = e[2],
+	            s = e[5];i[e[1]] = u.add, s && u.add(function () {
+	          n = s;
+	        }, t[3 - o][2].disable, t[0][2].lock), u.add(e[3].fire), r[e[0]] = function () {
+	          return (r[e[0] + "With"](this === r ? i : this, arguments), this);
+	        }, r[e[0] + "With"] = u.fireWith;
+	      }), i.promise(r), e && e.call(r, r), r);
+	    }Object.defineProperty(t, "__esModule", { value: !0 }), t.formatSize = n, t.parseSize = r, t.normalizeAccept = o, t.extend = s, t.Callbacks = l, t.Deferred = h;var p = { images: { title: "Images", extensions: ["jpg", "jpeg", "gif", "png", "bmp", "svg", "tiff", "tif", "ico", "jpe", "svgz", "pct", "psp", "ai", "psd", "raw", "webp"] }, audios: { title: "Audios", extensions: ["aac", "aif", "flac", "iff", "m4a", "m4b", "mid", "midi", "mp3", "mpa", "mpc", "oga", "ogg", "ra", "ram", "snd", "wav", "wma"] }, videos: { title: "Videos", extensions: ["avi", "divx", "flv", "m4v", "mkv", "mov", "mp4", "mpeg", "mpg", "ogm", "ogv", "ogx", "rm", "rmvb", "smil", "webm", "wmv", "xvid"] } },
+	        d = Array.from || function (e) {
+	      return [].slice.call(e);
+	    };
+	  }, function (e, t) {
+	    "use strict";Object.defineProperty(t, "__esModule", { value: !0 }), t["default"] = { QUEUE_UPLOAD_START: "queueuploadstart", QUEUE_UPLOAD_END: "queueuploadend", QUEUE_FILE_ADDED: "queuefileadded", QUEUE_FILE_FILTERED: "queuefilefiltered", QUEUE_ERROR: "queueerror", QUEUE_STAT_CHANGE: "statchange", FILE_UPLOAD_START: "fileuploadstart", FILE_UPLOAD_PREPARING: "fileuploadpreparing", FILE_UPLOAD_PREPARED: "fileuploadprepared", CHUNK_UPLOAD_PREPARING: "chunkuploadpreparing", CHUNK_UPLOAD_COMPLETING: "chunkuploadcompleting", FILE_UPLOAD_PROGRESS: "fileuploadprogress", FILE_UPLOAD_END: "fileuploadend", FILE_UPLOAD_COMPLETING: "fileuploadcompleting", FILE_UPLOAD_SUCCESS: "fileuploadsuccess", FILE_UPLOAD_ERROR: "fileuploaderror", FILE_UPLOAD_COMPLETED: "fileuploadcompleted", FILE_CANCEL: "filecancel", FILE_STATUS_CHANGE: "filestatuschange" }, e.exports = t["default"];
+	  }, function (e, t) {
+	    "use strict";Object.defineProperty(t, "__esModule", { value: !0 }), t["default"] = { ALL: 255, PROCESS: 31, INITED: 1, QUEUED: 2, PENDING: 4, PROGRESS: 8, END: 16, SUCCESS: 32, ERROR: 64, CANCELLED: 128 };var n = { 1: "inited", 2: "queued", 4: "pending", 8: "progress", 16: "end", 32: "success", 64: "error", 128: "cancelled" };t.StatusName = n;
+	  }, function (e, t) {
+	    "use strict";function n(e, t) {
+	      if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function");
+	    }function r(e, t) {
+	      if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);e.prototype = Object.create(t && t.prototype, { constructor: { value: e, enumerable: !1, writable: !0, configurable: !0 } }), t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t);
+	    }Object.defineProperty(t, "__esModule", { value: !0 });var i = function i(e, t, n) {
+	      for (var r = !0; r;) {
+	        var i = e,
+	            o = t,
+	            u = n;s = l = a = void 0, r = !1, null === i && (i = Function.prototype);var s = Object.getOwnPropertyDescriptor(i, o);if (void 0 !== s) {
+	          if ("value" in s) return s.value;var a = s.get;return void 0 === a ? void 0 : a.call(u);
+	        }var l = Object.getPrototypeOf(i);if (null === l) return void 0;e = l, t = o, n = u, r = !0;
+	      }
+	    },
+	        o = (function (e) {
+	      function t(e) {
+	        n(this, t), i(Object.getPrototypeOf(t.prototype), "constructor", this).call(this, e), this.message = e;
+	      }return (r(t, e), t);
+	    })(Error),
+	        u = (function (e) {
+	      function t(e) {
+	        n(this, t), i(Object.getPrototypeOf(t.prototype), "constructor", this).call(this, e), this.name = "AbortError";
+	      }return (r(t, e), t);
+	    })(o);t.AbortError = u;var s = (function (e) {
+	      function t(e) {
+	        n(this, t), i(Object.getPrototypeOf(t.prototype), "constructor", this).call(this, e), this.name = "TimeoutError";
+	      }return (r(t, e), t);
+	    })(o);t.TimeoutError = s;var a = (function (e) {
+	      function t(e, r) {
+	        n(this, t), i(Object.getPrototypeOf(t.prototype), "constructor", this).call(this, r), this.name = "NetworkError", this.status = e;
+	      }return (r(t, e), t);
+	    })(o);t.NetworkError = a;var l = (function (e) {
+	      function t() {
+	        n(this, t), i(Object.getPrototypeOf(t.prototype), "constructor", this).call(this, "queue limit"), this.name = "QueueLimitError";
+	      }return (r(t, e), t);
+	    })(o);t.QueueLimitError = l;var c = (function (e) {
+	      function t(e, r) {
+	        n(this, t), i(Object.getPrototypeOf(t.prototype), "constructor", this).call(this, r), this.name = "FilterError", this.file = e;
+	      }return (r(t, e), t);
+	    })(o);t.FilterError = c;var f = (function (e) {
+	      function t(e, r) {
+	        n(this, t), i(Object.getPrototypeOf(t.prototype), "constructor", this).call(this, e, r), this.name = "DuplicateError";
+	      }return (r(t, e), t);
+	    })(c);t.DuplicateError = f;var h = (function (e) {
+	      function t(e, r) {
+	        n(this, t), i(Object.getPrototypeOf(t.prototype), "constructor", this).call(this, e, r), this.name = "FileExtensionError";
+	      }return (r(t, e), t);
+	    })(c);t.FileExtensionError = h;var p = (function (e) {
+	      function t(e, r) {
+	        n(this, t), i(Object.getPrototypeOf(t.prototype), "constructor", this).call(this, e, r), this.name = "FileSizeError";
+	      }return (r(t, e), t);
+	    })(c);t.FileSizeError = p;
+	  }, function (e, t, n) {
+	    "use strict";function r(e, t) {
+	      if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function");
+	    }Object.defineProperty(t, "__esModule", { value: !0 });var i = (function () {
+	      function e(e, t) {
+	        for (var n = 0; n < t.length; n++) {
+	          var r = t[n];r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r);
+	        }
+	      }return function (t, n, r) {
+	        return (n && e(t.prototype, n), r && e(t, r), t);
+	      };
+	    })(),
+	        o = n(3),
+	        u = (function () {
+	      function e(t, n) {
+	        r(this, e), this.rawResponse = t, this.chunkRequest = n;
+	      }return (i(e, [{ key: "getChunkRequest", value: function value() {
+	          return this.chunkRequest;
+	        } }, { key: "getRawResponse", value: function value() {
+	          return this.rawResponse;
+	        } }, { key: "getResponse", value: function value() {
+	          return this.response || this.rawResponse;
+	        } }, { key: "getJson", value: function value() {
+	          var e = this.getResponse();return null == e ? null : "function" == typeof e.getJson ? e.getJson() : "string" == typeof e ? "" === e ? null : JSON.parse(e) : e;
+	        } }, { key: "setResponse", value: function value(e) {
+	          return (this.response = e, this);
+	        } }]), e);
+	    })(),
+	        s = (function () {
+	      function e(t, n, i) {
+	        r(this, e), this.index = t, this.blob = n, this.fileRequest = i;
+	      }return (i(e, [{ key: "getName", value: function value() {
+	          return this.fileRequest.getName();
+	        } }, { key: "getFile", value: function value() {
+	          return this.fileRequest.getFile();
+	        } }, { key: "getBlob", value: function value() {
+	          return this.blob;
+	        } }, { key: "getIndex", value: function value() {
+	          return this.index;
+	        } }, { key: "isMultiChunk", value: function value() {
+	          return this.getFile().source !== this.blob;
+	        } }, { key: "getParams", value: function value() {
+	          return (this.params || (this.params = this.fileRequest.getParams().clone()), this.params);
+	        } }, { key: "getParam", value: function value(e) {
+	          return this.getParams().getParam(e);
+	        } }, { key: "setParam", value: function value(e, t) {
+	          return (this.getParams().setParam(e, t), this);
+	        } }, { key: "getFileRequest", value: function value() {
+	          return this.fileRequest;
+	        } }, { key: "getUrl", value: function value() {
+	          return this.url || this.fileRequest.getUrl();
+	        } }, { key: "setUrl", value: function value(e) {
+	          return (this.url = e, this);
+	        } }, { key: "getHeaders", value: function value() {
+	          return (this.headers || (this.headers = this.fileRequest.getHeaders().slice(0)), this.headers);
+	        } }, { key: "setHeader", value: function value(e, t) {
+	          var n = this.getHeaders();return (n.push({ name: e, value: t }), this);
+	        } }, { key: "isWithCredentials", value: function value() {
+	          return this.fileRequest.isWithCredentials();
+	        } }, { key: "getTimeout", value: function value() {
+	          return this.fileRequest.getTimeout();
+	        } }, { key: "createChunkResponse", value: function value(e) {
+	          return new u(e, this);
+	        } }]), e);
+	    })(),
+	        a = (function () {
+	      function e(t, n) {
+	        r(this, e), this.rawResponse = t, this.fileRequest = n;
+	      }return (i(e, [{ key: "isFromMultiChunkResponse", value: function value() {
+	          return this.rawResponse instanceof u ? this.rawResponse.getChunkRequest().isMultiChunk() : !1;
+	        } }, { key: "getFileRequest", value: function value() {
+	          return this.fileRequest;
+	        } }, { key: "getRawResponse", value: function value() {
+	          return this.rawResponse;
+	        } }, { key: "getResponse", value: function value() {
+	          return null != this.response ? this.response : this.rawResponse instanceof u ? this.rawResponse.getResponse() : this.rawResponse;
+	        } }, { key: "getJson", value: function value() {
+	          var e = this.getResponse();return null == e ? null : "function" == typeof e.getJson ? e.getJson() : "string" == typeof e ? "" === e ? null : JSON.parse(e) : e;
+	        } }, { key: "setResponse", value: function value(e) {
+	          return (this.response = e, this);
+	        } }]), e);
+	    })(),
+	        l = (function () {
+	      function e(t) {
+	        if ((r(this, e), Array.isArray(t))) this.params = t.slice(0);else if ("object" == typeof t) {
+	          this.params = [];for (var n in t) t.hasOwnProperty(n) && this.params.push({ name: n, value: t[n] });
+	        } else this.params = [];
+	      }return (i(e, [{ key: "setParam", value: function value(e, t) {
+	          this.removeParam(e), this.addParam(e, t);
+	        } }, { key: "addParam", value: function value(e, t) {
+	          this.params.push({ name: e, value: t });
+	        } }, { key: "removeParam", value: function value(e) {
+	          this.params = this.params.filter(function (t) {
+	            return t.name !== e;
+	          });
+	        } }, { key: "getParam", value: function value(e, t) {
+	          var n = this.params.filter(function (t) {
+	            return t.name === e;
+	          }).map(function (e) {
+	            return e.value;
+	          });return t ? n.shift() : n;
+	        } }, { key: "clone", value: function value() {
+	          return new e(this.params);
+	        } }, { key: "toArray", value: function value() {
+	          return this.params;
+	        } }, { key: "toString", value: function value() {
+	          var e = this.params.map(function (e) {
+	            return encodeURIComponent(e.name) + "=" + (null == e.value ? "" : encodeURIComponent(e.value));
+	          });return e.join("&");
+	        } }]), e);
+	    })(),
+	        c = 262144,
+	        f = (function () {
+	      function e(t) {
+	        var n = arguments.length <= 1 || void 0 === arguments[1] ? {} : arguments[1];r(this, e), this.file = t, this.name = n.name || "file", this.url = n.url || n.action, this.params = new l(n.params || n.data), this.headers = n.headers || [], this.withCredentials = n.withCredentials, this.timeout = n.timeout || 0, this.chunkSize = n.chunkSize || 0, this.chunkRetries = n.chunkRetries || 0, this.chunkEnable = n.chunkEnable || !1, this.chunkProcessThreads = n.chunkProcessThreads || 2;
+	      }return (i(e, [{ key: "getFile", value: function value() {
+	          return this.file;
+	        } }, { key: "getUrl", value: function value() {
+	          return this.url || "";
+	        } }, { key: "getName", value: function value() {
+	          return this.name;
+	        } }, { key: "setName", value: function value(e) {
+	          return (this.name = e, this);
+	        } }, { key: "setUrl", value: function value(e) {
+	          return (this.url = e, this);
+	        } }, { key: "getParams", value: function value() {
+	          return this.params;
+	        } }, { key: "getParam", value: function value(e) {
+	          return this.getParams().getParam(e);
+	        } }, { key: "setParam", value: function value(e, t) {
+	          return (this.params.setParam(e, t), this);
+	        } }, { key: "getHeaders", value: function value() {
+	          return this.headers;
+	        } }, { key: "setHeader", value: function value(e, t) {
+	          this.headers.push({ name: e, value: t });
+	        } }, { key: "isWithCredentials", value: function value() {
+	          return this.withCredentials;
+	        } }, { key: "setWithCredentials", value: function value(e) {
+	          return (this.withCredentials = e, this);
+	        } }, { key: "getTimeout", value: function value() {
+	          return this.timeout;
+	        } }, { key: "setTimeout", value: function value(e) {
+	          return (this.timeout = e, this);
+	        } }, { key: "getChunkSize", value: function value() {
+	          return o.parseSize(this.chunkSize);
+	        } }, { key: "setChunkSize", value: function value(e) {
+	          return (this.chunkSize = e, this);
+	        } }, { key: "getChunkRetries", value: function value() {
+	          return this.chunkRetries;
+	        } }, { key: "setChunkRetries", value: function value(e) {
+	          return (this.chunkRetries = e, 0);
+	        } }, { key: "isChunkEnable", value: function value() {
+	          var e = this.getChunkSize();return this.chunkEnable && e > c && this.file.getRuntime().canSlice() && this.file.size > e;
+	        } }, { key: "setChunkEnable", value: function value(e) {
+	          return (this.chunkEnable = e, this);
+	        } }, { key: "getChunkProcessThreads", value: function value() {
+	          return this.chunkProcessThreads;
+	        } }, { key: "setChunkProcessThreads", value: function value(e) {
+	          return (this.chunkProcessThreads = e, this);
+	        } }, { key: "createChunkRequest", value: function value(e, t) {
+	          return new s(e, t, this);
+	        } }, { key: "createFileResponse", value: function value(e) {
+	          return new a(e, this);
+	        } }]), e);
+	    })();t["default"] = f, e.exports = t["default"];
+	  }, function (e, t, n) {
+	    "use strict";function r(e) {
+	      return e && e.__esModule ? e : { "default": e };
+	    }function i(e, t) {
+	      if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function");
+	    }function o(e, t) {
+	      if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);e.prototype = Object.create(t && t.prototype, { constructor: { value: e, enumerable: !1, writable: !0, configurable: !0 } }), t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t);
+	    }function u(e) {
+	      return function (t, n) {
+	        function r(t) {
+	          return --a < 0 || !e(t, n) ? (l = !0, !1) : !0;
+	        }function i(e) {
+	          l || (e.isFile ? e.file(function (e) {
+	            l || r(e);
+	          }) : e.isDirectory && e.createReader().readEntries(function (e) {
+	            if (!l) for (var t = 0, n = e.length; n > t && !l; t++) i(e[t]);
+	          }));
+	        }for (var o = t.items, u = t.files, s = void 0, a = y, l = !1, c = 0, f = u.length; f > c && !l; c++) {
+	          s = o && o[c];var h = s && s.webkitGetAsEntry && s.webkitGetAsEntry();if (h && h.isDirectory) i(h);else if (!r(u[c])) break;
+	        }
+	      };
+	    }function s() {
+	      if ("DataTransfer" in window && "FileList" in window && document.addEventListener) {
+	        var e = p["default"].getInstance(),
+	            t = 0,
+	            n = 0,
+	            r = void 0,
+	            i = u(function (t, n) {
+	          if (!n || n.length < 1) return !1;t = new v["default"](e, t);var r = n.length;return n.some(function (e) {
+	            var n = e.recieve(t);return n > 0 ? !0 : (0 > n && (r -= 1), !1);
+	          }) || r > 0;
+	        }),
+	            o = function o(e) {
+	          t = 1, g.forEach(function (t) {
+	            return t.start(e);
+	          });
+	        },
+	            s = function s(e) {
+	          var t = g.filter(function (t) {
+	            return t.response(e);
+	          }).length > 0,
+	              n = e.dataTransfer;n && (n.dropEffect = t ? "copy" : "none"), e.preventDefault();
+	        },
+	            a = function a(e) {
+	          t = 0, n = 0, g.forEach(function (t) {
+	            return t.end(e);
+	          });
+	        },
+	            l = function l(e) {
+	          clearTimeout(r);var n = "dragleave" === e.type;n || t || o(e), s(e), n && (r = setTimeout(function () {
+	            return a(e);
+	          }, 100));
+	        },
+	            c = function c(e) {
+	          e.preventDefault(), clearTimeout(r), a(e);var t = g.filter(function (t) {
+	            return t.contains(e.target);
+	          });if (!(t.length < 1)) {
+	            var n = e.dataTransfer;try {
+	              if (n.getData("text/html")) return;
+	            } catch (o) {}i(n, t);
+	          }
+	        };document.addEventListener("dragenter", l, !1), document.addEventListener("dragover", l, !1), document.addEventListener("dragleave", l, !1), document.addEventListener("drop", c, !1);
+	      }
+	    }Object.defineProperty(t, "__esModule", { value: !0 });var a = (function () {
+	      function e(e, t) {
+	        for (var n = 0; n < t.length; n++) {
+	          var r = t[n];r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r);
+	        }
+	      }return function (t, n, r) {
+	        return (n && e(t.prototype, n), r && e(t, r), t);
+	      };
+	    })(),
+	        l = function l(e, t, n) {
+	      for (var r = !0; r;) {
+	        var i = e,
+	            o = t,
+	            u = n;s = l = a = void 0, r = !1, null === i && (i = Function.prototype);var s = Object.getOwnPropertyDescriptor(i, o);if (void 0 !== s) {
+	          if ("value" in s) return s.value;var a = s.get;return void 0 === a ? void 0 : a.call(u);
+	        }var l = Object.getPrototypeOf(i);if (null === l) return void 0;e = l, t = o, n = u, r = !0;
+	      }
+	    },
+	        c = n(2),
+	        f = r(c),
+	        h = n(9),
+	        p = r(h),
+	        d = n(12),
+	        v = r(d),
+	        y = 100,
+	        m = (function (e) {
+	      function t(e) {
+	        i(this, t), l(Object.getPrototypeOf(t.prototype), "constructor", this).call(this), this.areaElement = e;
+	      }return (o(t, e), a(t, [{ key: "contains", value: function value(e) {
+	          return this.areaElement.contains(e);
+	        } }, { key: "start", value: function value(e, t) {
+	          this.emit("start", e, t);
+	        } }, { key: "response", value: function value(e, t) {
+	          return (t = t && this.contains(e.target), this.emit("response", e, t), t);
+	        } }, { key: "end", value: function value(e) {
+	          this.emit("end", e);
+	        } }]), t);
+	    })(f["default"]),
+	        g = [],
+	        b = (function () {
+	      function e(t) {
+	        i(this, e), g.length < 1 && s(), g.push(this), this.core = t, this.areas = [];
+	      }return (a(e, [{ key: "addArea", value: function value(e) {
+	          var t = this;return (e = new m(e), this.areas.push(e), e.destroy = function () {
+	            e.removeAllListeners();var n = t.areas.indexOf(e);n > -1 && t.areas.splice(n, 1);
+	          }, e);
+	        } }, { key: "contains", value: function value(e) {
+	          return this.areas.some(function (t) {
+	            return t.contains(e);
+	          });
+	        } }, { key: "start", value: function value(e) {
+	          this.areas.forEach(function (t) {
+	            return t.start(e);
+	          });
+	        } }, { key: "response", value: function value(e) {
+	          return this.areas.map(function (t) {
+	            return t.response(e);
+	          }).some(function (e) {
+	            return e !== !1;
+	          });
+	        } }, { key: "recieve", value: function value(e) {
+	          var t = this.core.add(e);return t > 0 && !this.core.isMultiple() ? -1 : t;
+	        } }, { key: "end", value: function value(e) {
+	          this.areas.forEach(function (t) {
+	            return t.end(e);
+	          });
+	        } }]), e);
+	    })();t["default"] = b, e.exports = t["default"];
+	  }, function (e, t, n) {
+	    "use strict";function r(e) {
+	      return e && e.__esModule ? e : { "default": e };
+	    }function i(e, t) {
+	      if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function");
+	    }function o(e, t) {
+	      if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);e.prototype = Object.create(t && t.prototype, { constructor: { value: e, enumerable: !1, writable: !0, configurable: !0 } }), t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t);
+	    }Object.defineProperty(t, "__esModule", { value: !0 });var u = (function () {
+	      function e(e, t) {
+	        for (var n = 0; n < t.length; n++) {
+	          var r = t[n];r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r);
+	        }
+	      }return function (t, n, r) {
+	        return (n && e(t.prototype, n), r && e(t, r), t);
+	      };
+	    })(),
+	        s = function s(e, t, n) {
+	      for (var r = !0; r;) {
+	        var i = e,
+	            o = t,
+	            u = n;s = l = a = void 0, r = !1, null === i && (i = Function.prototype);var s = Object.getOwnPropertyDescriptor(i, o);if (void 0 !== s) {
+	          if ("value" in s) return s.value;var a = s.get;return void 0 === a ? void 0 : a.call(u);
+	        }var l = Object.getPrototypeOf(i);if (null === l) return void 0;e = l, t = o, n = u, r = !0;
+	      }
+	    },
+	        a = n(10),
+	        l = r(a),
+	        c = n(3),
+	        f = n(11),
+	        h = r(f),
+	        p = void 0,
+	        d = (function (e) {
+	      function t() {
+	        i(this, t), s(Object.getPrototypeOf(t.prototype), "constructor", this).apply(this, arguments);
+	      }return (o(t, e), u(t, [{ key: "getAsDataUrl", value: function value(e, t) {
+	          var n = c.Deferred(),
+	              r = new FileReader(),
+	              i = void 0;r.onloadend = function () {
+	            r.readyState == FileReader.DONE ? n.resolve(r.result) : n.reject(), clearTimeout(i), r.onloadend = null;
+	          }, r.readAsDataURL(e);var o = function o() {
+	            r && r.abort(), r = null;
+	          };t && (i = setTimeout(o, t));var u = n.promise();return (u.abort = o, u);
+	        } }, { key: "getTransport", value: function value() {
+	          return (this.transport || (this.transport = new h["default"](this)), this.transport);
+	        } }, { key: "canSlice", value: function value() {
+	          return !!(Blob.prototype.slice || Blob.prototype.mozSlice || Blob.prototype.webkitSlice);
+	        } }, { key: "slice", value: function value(e, t, n) {
+	          var r = e.slice || e.mozSlice || e.webkitSlice;return r.call(e, t, n);
+	        } }, { key: "md5", value: function value(e) {
+	          var t = c.Deferred();if (!window.SparkMD5) return (t.reject(), t.promise());var n = 2097152,
+	              r = Math.ceil(e.size / n),
+	              i = 0,
+	              o = new SparkMD5.ArrayBuffer(),
+	              u = e.mozSlice || e.webkitSlice || e.slice,
+	              s = new FileReader(),
+	              a = (function (_a) {
+	            function a() {
+	              return _a.apply(this, arguments);
+	            }
 	
-	/**
-	 * Initialize a new `Emitter`.
-	 *
-	 * @api public
-	 */
+	            a.toString = function () {
+	              return _a.toString();
+	            };
 	
-	function Emitter(obj) {
-	  if (obj) return mixin(obj);
-	};
+	            return a;
+	          })(function () {
+	            if (s) {
+	              var l = void 0,
+	                  c = void 0;l = i * n, c = Math.min(l + n, e.size), s.onload = function () {
+	                o && o.append(s.result);
+	              }, s.onloadend = function () {
+	                s && (s.readyState == FileReader.DONE ? ++i < r ? setTimeout(a, 1) : setTimeout(function () {
+	                  o && t.resolve(o.end()), a = e = o = null;
+	                }, 50) : t.reject(), s.onloadend = s.onload = null);
+	              }, s.readAsArrayBuffer(u.call(e, l, c));
+	            }
+	          });a();var l = t.promise();return (l.abort = function () {
+	            s && s.abort(), o = null, s = null;
+	          }, l);
+	        } }], [{ key: "getInstance", value: function value() {
+	          return (p || (p = new t()), p);
+	        } }]), t);
+	    })(l["default"]);t["default"] = d, e.exports = t["default"];
+	  }, function (e, t, n) {
+	    "use strict";function r(e) {
+	      return e && e.__esModule ? e : { "default": e };
+	    }function i(e, t) {
+	      if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function");
+	    }function o(e, t) {
+	      if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);e.prototype = Object.create(t && t.prototype, { constructor: { value: e, enumerable: !1, writable: !0, configurable: !0 } }), t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t);
+	    }Object.defineProperty(t, "__esModule", { value: !0 });var u = (function () {
+	      function e(e, t) {
+	        for (var n = 0; n < t.length; n++) {
+	          var r = t[n];r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r);
+	        }
+	      }return function (t, n, r) {
+	        return (n && e(t.prototype, n), r && e(t, r), t);
+	      };
+	    })(),
+	        s = function s(e, t, n) {
+	      for (var r = !0; r;) {
+	        var i = e,
+	            o = t,
+	            u = n;s = l = a = void 0, r = !1, null === i && (i = Function.prototype);var s = Object.getOwnPropertyDescriptor(i, o);if (void 0 !== s) {
+	          if ("value" in s) return s.value;var a = s.get;return void 0 === a ? void 0 : a.call(u);
+	        }var l = Object.getPrototypeOf(i);if (null === l) return void 0;e = l, t = o, n = u, r = !0;
+	      }
+	    },
+	        a = n(2),
+	        l = r(a),
+	        c = n(4),
+	        f = r(c),
+	        h = n(3),
+	        p = n(6),
+	        d = (function (e) {
+	      function t() {
+	        i(this, t), s(Object.getPrototypeOf(t.prototype), "constructor", this).apply(this, arguments);
+	      }return (o(t, e), u(t, [{ key: "md5", value: function value(e) {
+	          var t = h.Deferred();return (t.reject(), t.promise());
+	        } }, { key: "getAsDataUrl", value: function value(e, t) {
+	          var n = h.Deferred();return (n.reject(), n.promise());
+	        } }, { key: "getTransport", value: function value() {
+	          return null;
+	        } }, { key: "getUploading", value: function value() {
+	          return (this.uploading || (this.uploading = new v(this)), this.uploading);
+	        } }, { key: "canSlice", value: function value() {
+	          return !1;
+	        } }, { key: "slice", value: function value(e) {
+	          throw new Error("this runtime current not support slice");
+	        } }, { key: "cancel", value: function value(e) {} }]), t);
+	    })(l["default"]);t["default"] = d;var v = (function () {
+	      function e(t) {
+	        i(this, e), this.runtime = t;
+	      }return (u(e, [{ key: "generate", value: function value(e) {
+	          var t = this,
+	              n = h.Deferred(),
+	              r = e.getFile(),
+	              i = this.runtime,
+	              o = r.getSource(),
+	              u = r.size,
+	              s = e.getChunkSize(),
+	              a = e.isChunkEnable(),
+	              l = Math.max(e.getChunkProcessThreads(), 1),
+	              c = 0,
+	              f = 0,
+	              p = [],
+	              d = function d() {
+	            return p.reduce(function (e, t) {
+	              return e + ("pending" === t.state() ? 1 : 0);
+	            }, 0);
+	          },
+	              v = function v() {
+	            for (var n = void 0, r = void 0, a = void 0; u > f && d() < l;) c = f, f = Math.min(f + s, u), a = i.slice(o, c, f), r = e.createChunkRequest(p.length, a), n = t.slot(r, e.getChunkRetries()), n.progress(y).done(m).fail(b), p.push(n);
+	          },
+	              y = function y() {
+	            var e = u - f,
+	                t = 0;p.forEach(function (n) {
+	              e += n.total, t += n.loaded;
+	            }), n.notify({ total: e, loaded: t });
+	          },
+	              m = function m(e) {
+	            a && v(), f >= u && p.every(function (e) {
+	              return "resolved" === e.state();
+	            }) && n.resolve(e);
+	          },
+	              g = function g() {
+	            p.forEach(function (e) {
+	              return e.abort();
+	            });
+	          },
+	              b = function b(e) {
+	            n.reject(e), g();
+	          };if (a) v();else {
+	            f = u;var k = this.slot(e.createChunkRequest(0, o), 0);k.progress(y).done(m).fail(b), p.push(k);
+	          }var E = n.promise();return (E.abort = g, E);
+	        } }, { key: "slot", value: function t(e, n) {
+	          var r = h.Deferred(),
+	              i = this.runtime,
+	              o = e.getFile().getCore(),
+	              t = r.promise(),
+	              u = function u(e) {
+	            e.total && (t.total = e.total), e.loaded && (t.loaded = e.loaded), r.notify(e);
+	          },
+	              s = function s() {
+	            var n, s, l;t.abort = function () {
+	              n && n.abort(), s && s.abort(), l && l.abort();
+	            }, t.total = e.getBlob().size, t.loaded = 0, n = o.invoke(f["default"].CHUNK_UPLOAD_PREPARING, e), n.then(function (e) {
+	              return (s = i.getTransport().generate(e), s.progress(u), s);
+	            }).then(function (t) {
+	              return l = o.invoke(f["default"].CHUNK_UPLOAD_COMPLETING, e.createChunkResponse(t));
+	            }).done(r.resolve).fail(a);
+	          },
+	              a = function a(e) {
+	            e instanceof p.NetworkError && n-- > 0 ? setTimeout(s, 500) : r.reject(e), t.abort();
+	          };return (s(), t);
+	        } }]), e);
+	    })();e.exports = t["default"];
+	  }, function (e, t, n) {
+	    "use strict";function r(e, t) {
+	      if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function");
+	    }Object.defineProperty(t, "__esModule", { value: !0 });var i = (function () {
+	      function e(e, t) {
+	        for (var n = 0; n < t.length; n++) {
+	          var r = t[n];r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r);
+	        }
+	      }return function (t, n, r) {
+	        return (n && e(t.prototype, n), r && e(t, r), t);
+	      };
+	    })(),
+	        o = n(3),
+	        u = n(6),
+	        s = (function () {
+	      function e() {
+	        r(this, e);
+	      }return (i(e, [{ key: "generate", value: function value(e) {
+	          var t = o.Deferred(),
+	              n = new XMLHttpRequest(),
+	              r = void 0,
+	              i = function i() {
+	            n.onload = n.onerror = null, n.upload && (n.upload.onprogress = null), r && clearTimeout(r);
+	          },
+	              s = function s() {
+	            i();try {
+	              n.abort();
+	            } catch (e) {}
+	          },
+	              a = function a(e) {
+	            return (i(), n.status || "error" !== e.type ? 0 === n.status || 304 === n.status || n.status >= 200 && n.status < 300 ? t.resolve(n.responseText) : t.reject(new u.NetworkError(n.status, n.statusText)) : t.reject(new u.AbortError(e.message)));
+	          };n.upload && (n.upload.onprogress = function (e) {
+	            return t.notify(e);
+	          }), n.onerror = a, n.onload = a;var l = e.getTimeout();l > 0 && (r = setTimeout(function () {
+	            s(), t.reject(new u.TimeoutError("timeout:" + l));
+	          }, l));try {
+	            !(function () {
+	              n.open("POST", e.getUrl(), !0), e.isWithCredentials() && (n.withCredentials = !0), e.getHeaders().forEach(function (e) {
+	                return n.setRequestHeader(e.name, e.value);
+	              });var t = new FormData(),
+	                  r = e.getBlob();e.getParams().toArray().forEach(function (e) {
+	                return t.append(e.name, e.value);
+	              }), t.append(e.getName(), r, r.name || "blob"), n.send(t);
+	            })();
+	          } catch (c) {
+	            s(), t.reject(new u.AbortError(c.message));
+	          }var f = t.promise();return (f.abort = s, f);
+	        } }]), e);
+	    })();t["default"] = s, e.exports = t["default"];
+	  }, function (e, t, n) {
+	    "use strict";function r(e) {
+	      return e && e.__esModule ? e : { "default": e };
+	    }function i(e, t) {
+	      if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);e.prototype = Object.create(t && t.prototype, { constructor: { value: e, enumerable: !1, writable: !0, configurable: !0 } }), t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t);
+	    }function o(e, t) {
+	      if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function");
+	    }function u() {
+	      return "FILE-" + (g++).toString(16).toUpperCase();
+	    }function s(e) {
+	      var t = e.name && b.exec(e.name);return t ? t[1] : (t = e.type && k.exec(e.type), t ? t[1] : "");
+	    }function a(e) {
+	      return ["jpg", "jpeg", "png", "gif", "bmp", "webp"].indexOf(e.toLowerCase()) > -1 ? "image/" + ("jpg" === e ? "jpeg" : e) : null;
+	    }Object.defineProperty(t, "__esModule", { value: !0 });var l = function l(e, t, n) {
+	      for (var r = !0; r;) {
+	        var i = e,
+	            o = t,
+	            u = n;s = l = a = void 0, r = !1, null === i && (i = Function.prototype);var s = Object.getOwnPropertyDescriptor(i, o);if (void 0 !== s) {
+	          if ("value" in s) return s.value;var a = s.get;return void 0 === a ? void 0 : a.call(u);
+	        }var l = Object.getPrototypeOf(i);if (null === l) return void 0;e = l, t = o, n = u, r = !0;
+	      }
+	    },
+	        c = (function () {
+	      function e(e, t) {
+	        for (var n = 0; n < t.length; n++) {
+	          var r = t[n];r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r);
+	        }
+	      }return function (t, n, r) {
+	        return (n && e(t.prototype, n), r && e(t, r), t);
+	      };
+	    })(),
+	        f = n(2),
+	        h = r(f),
+	        p = n(4),
+	        d = r(p),
+	        v = n(3),
+	        y = n(5),
+	        m = r(y),
+	        g = 0,
+	        b = /\.([^.]+)$/,
+	        k = /^image\/(jpg|jpeg|png|gif|bmp|webp)$/i,
+	        E = (function () {
+	      function e(t, n) {
+	        o(this, e), this.change(t, n);
+	      }return (c(e, [{ key: "change", value: function value(e, t) {
+	          this.total = e, this.loaded = t || 0, this.percentage = this.loaded === this.total ? 100 : Math.ceil(this.loaded / this.total * 100);
+	        } }, { key: "done", value: function value() {
+	          this.change(this.total, this.total);
+	        } }]), e);
+	    })();t["default"] = E;var w = (function (e) {
+	      function t(e, n, r) {
+	        o(this, t), l(Object.getPrototypeOf(t.prototype), "constructor", this).call(this), this.id = u(), this.name = n.name || r || this.id;var i = s(n).toLowerCase();i && !b.test(this.name) && (this.name += "." + i), this.ext = i, this.type = n.type || a(this.ext) || "application/octet-stream", this.lastModified = n.lastModified || +new Date(), this.size = n.size || 0, this.runtime = e, this.source = n, this.status = m["default"].INITED, this.progress = new E(this.size, 0);
+	      }return (i(t, e), c(t, [{ key: "getCore", value: function value() {
+	          return this.core;
+	        } }, { key: "setCore", value: function value(e) {
+	          this.core = e, this.setPropagationTarget(e);
+	        } }, { key: "getRuntime", value: function value() {
+	          return this.runtime;
+	        } }, { key: "isImage", value: function value() {
+	          return k.test(this.type);
+	        } }, { key: "setStatus", value: function value(e) {
+	          var t = this.status;t !== m["default"].CANCELLED && e !== t && (this.status = e, this.emit(d["default"].FILE_STATUS_CHANGE, e, t));
+	        } }, { key: "getStatus", value: function value() {
+	          return this.status;
+	        } }, { key: "getStatusName", value: function value() {
+	          return this.status in y.StatusName ? y.StatusName[this.status] : "unknow";
+	        } }, { key: "getSource", value: function value() {
+	          return this.source;
+	        } }, { key: "getAsDataUrl", value: function value(e) {
+	          return (this._dataUrlPromise || (this._dataUrlPromise = this.runtime.getAsDataUrl(this.source, e)), this._dataUrlPromise);
+	        } }, { key: "md5", value: function value() {
+	          return (this._md5Promise || (this._md5Promise = this.runtime.md5(this.source)), this._md5Promise);
+	        } }, { key: "session", value: function n() {
+	          var e = this;if (this._sessionPromise) return this._sessionPromise;var n = v.Deferred();return (n.progress(function (t) {
+	            e.setStatus(m["default"].PROGRESS), e.emit(d["default"].FILE_UPLOAD_PROGRESS, t);
+	          }).done(function (t) {
+	            e.response = t, e._session = null, e._sessionPromise = null, e._flows = [], e.setStatus(m["default"].SUCCESS), e.emit(d["default"].FILE_UPLOAD_SUCCESS, t);
+	          }).fail(function (t) {
+	            e._session = null, e._sessionPromise = null;for (var n = void 0; n = e._flows.shift();) n.abort();t instanceof Error && (e.setStatus(m["default"].ERROR), e.emit(d["default"].FILE_UPLOAD_ERROR, t));
+	          }).always(function () {
+	            e.emit(d["default"].FILE_UPLOAD_COMPLETED, e.getStatus());
+	          }), this._flows = [], this._session = n, this._sessionPromise = n.promise(), this._sessionPromise);
+	        } }, { key: "prepare", value: function r() {
+	          var e = this;if (this.status !== m["default"].PENDING || !this.core) return !1;this.session(), this.setStatus(m["default"].PROGRESS), this.emit(d["default"].FILE_UPLOAD_START), this.request = this.core.createFileRequest(this);var r = this.core.invoke(d["default"].FILE_UPLOAD_PREPARING, this.request);return (this._flows.push(r), r.then(function (t) {
+	            e.emit(d["default"].FILE_UPLOAD_PREPARED, t);var n = e.runtime.getUploading().generate(t);return (e._flows.push(n), n.progress(function (t) {
+	              e.progress.change(t.total, t.loaded), e._session.notify(e.progress);
+	            }), n);
+	          }).then(function (t) {
+	            return e.complete(t);
+	          }, this._session.reject), !0);
+	        } }, { key: "complete", value: function f(e) {
+	          if (this.status === m["default"].PROGRESS) {
+	            for (var t = void 0; t = this._flows.shift();) t.abort();this.progress.done(), this._session.notify(this.progress), e = this.request.createFileResponse(e), this.setStatus(m["default"].END), this.emit(d["default"].FILE_UPLOAD_END);var f = this.core.invoke(d["default"].FILE_UPLOAD_COMPLETING, e);this._flows.push(f), f.then(this._session.resolve, this._session.reject);
+	          }
+	        } }, { key: "pending", value: function value() {
+	          (this.status === m["default"].ERROR || this.status === m["default"].QUEUED) && (this.progress.change(this.size, 0), this.setStatus(m["default"].PENDING));
+	        } }, { key: "abort", value: function value() {
+	          this._session && this._session.reject(), this._session = null, this._sessionPromise = null;
+	        } }, { key: "cancel", value: function value() {
+	          this.setStatus(m["default"].CANCELLED), this.emit(d["default"].FILE_CANCEL), this.abort(), this.runtime.cancel(this.source), this._dataUrlPromise && this._dataUrlPromise.abort(), this._md5Promise && this._md5Promise.abort && this._md5Promise.abort(), this.removeAllListeners();
+	        } }, { key: "destroy", value: function value() {
+	          this.cancel();
+	        } }]), t);
+	    })(h["default"]);t["default"] = w, e.exports = t["default"];
+	  }, function (e, t, n) {
+	    "use strict";function r(e) {
+	      return e && e.__esModule ? e : { "default": e };
+	    }function i(e, t) {
+	      if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function");
+	    }Object.defineProperty(t, "__esModule", { value: !0 });var o = (function () {
+	      function e(e, t) {
+	        for (var n = 0; n < t.length; n++) {
+	          var r = t[n];r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r);
+	        }
+	      }return function (t, n, r) {
+	        return (n && e(t.prototype, n), r && e(t, r), t);
+	      };
+	    })(),
+	        u = n(2),
+	        s = r(u),
+	        a = n(9),
+	        l = r(a),
+	        c = n(12),
+	        f = r(c),
+	        h = (function () {
+	      function e(t) {
+	        i(this, e), this.core = t, this.runtime = l["default"].getInstance();
+	      }return (o(e, [{ key: "addArea", value: function value(e) {
+	          var t = this.core,
+	              n = this.runtime,
+	              r = new s["default"](),
+	              i = function i(e) {
+	            var i = e.clipboardData || window.clipboardData,
+	                o = i.items,
+	                u = i.files;if (u || o) {
+	              var s = void 0,
+	                  a = void 0,
+	                  l = void 0,
+	                  c = void 0,
+	                  h = void 0,
+	                  p = void 0;if (u && u.length) for (s = u.length > 0, a = 0, l = u.length; l > a && (c = new f["default"](n, u[a]), s = 1, p = t.add(c), !(0 > p || p > 0 && !t.isMultiple())); a++);else if (o && o.length) {
+	                var d = i.getData("text/plain");for (a = 0, l = o.length; l > a && !t.isLimit() && (h = o[a], !("file" === h.kind && (c = h.getAsFile()) && (c = new f["default"](n, c, d), d = null, s = 1, p = t.add(c), 0 > p || p > 0 && !t.isMultiple()))); a++);
+	              }s && (e.preventDefault(), e.stopPropagation(), r.emit("paste", i));
+	            }
+	          };return ("DataTransfer" in window && "FileList" in window && e.addEventListener && e.addEventListener("paste", i, !1), r.destroy = function () {
+	            r.removeAllListeners(), e.removeEventListener && e.removeEventListener("paste", i, !1);
+	          }, r);
+	        } }]), e);
+	    })();t["default"] = h, e.exports = t["default"];
+	  }, function (e, t, n) {
+	    "use strict";function r(e) {
+	      return e && e.__esModule ? e : { "default": e };
+	    }function i(e, t) {
+	      if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);e.prototype = Object.create(t && t.prototype, { constructor: { value: e, enumerable: !1, writable: !0, configurable: !0 } }), t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t);
+	    }function o(e, t) {
+	      if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function");
+	    }Object.defineProperty(t, "__esModule", { value: !0 });var u = function u(e, t, n) {
+	      for (var r = !0; r;) {
+	        var i = e,
+	            o = t,
+	            u = n;s = l = a = void 0, r = !1, null === i && (i = Function.prototype);var s = Object.getOwnPropertyDescriptor(i, o);if (void 0 !== s) {
+	          if ("value" in s) return s.value;var a = s.get;return void 0 === a ? void 0 : a.call(u);
+	        }var l = Object.getPrototypeOf(i);if (null === l) return void 0;e = l, t = o, n = u, r = !0;
+	      }
+	    },
+	        s = (function () {
+	      function e(e, t) {
+	        for (var n = 0; n < t.length; n++) {
+	          var r = t[n];r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r);
+	        }
+	      }return function (t, n, r) {
+	        return (n && e(t.prototype, n), r && e(t, r), t);
+	      };
+	    })(),
+	        a = n(2),
+	        l = r(a),
+	        c = n(9),
+	        f = r(c),
+	        h = n(15),
+	        p = r(h),
+	        d = n(12),
+	        v = r(d),
+	        y = n(3),
+	        m = "",
+	        g = (function () {
+	      var e = document.createElement("div");return function (t) {
+	        return (e.innerHTML = t, t = e.firstChild, e.removeChild(t), t);
+	      };
+	    })(),
+	        b = (function () {
+	      function e(t, n) {
+	        var r = this;o(this, e);var i = g('<label style="position:fixed;left:-100px;top:-100px;width:50px;height:50px;display:block;cursor:pointer;overflow:hidden;z-index:99999;opacity:0;filter:alpha(opacity=0)"></label>'),
+	            u = new p["default"](i, m, function () {
+	          return { accept: t.getAccept(), multiple: t.isMultiple() };
+	        });u.on("select", function (e) {
+	          n(e.files, u), r.current && r.current.emit("files", e.files, u);
+	        }), u.on("rollOut", function () {
+	          return r.hideOverlay();
+	        }), document.body.appendChild(i), this.overlay = i;
+	      }return (s(e, [{ key: "hideOverlay", value: function value() {
+	          y.extend(this.overlay.style, { left: "-100px", top: "-100px", width: "50px", height: "50px" }), this.current && (this.current.emit("rollOut"), this.current = null);
+	        } }, { key: "add", value: function value(e) {
+	          var t = this,
+	              n = this.overlay,
+	              r = new l["default"](),
+	              i = function i() {
+	            var i = e.getBoundingClientRect();y.extend(n.style, { left: i.left + "px", top: i.top + "px", width: i.right - i.left + "px", height: i.bottom - i.top + "px" }), r.emit("rollOver"), t.current && t.current !== r && t.current.emit("rollOut"), t.current = r;
+	          };return (e.addEventListener ? e.addEventListener("mouseover", i, !1) : e.attachEvent && e.attachEvent("onmouseover", i), r.destroy = function () {
+	            t.current === r && t.hideOverlay(), r.removeAllListeners(), e.removeEventListener ? e.removeEventListener("mouseover", i, !1) : e.detachEvent && e.detachEvent("onmouseover", i);
+	          }, r);
+	        } }]), e);
+	    })(),
+	        k = (function (e) {
+	      function t(e, n, r) {
+	        var i = this;o(this, t), u(Object.getPrototypeOf(t.prototype), "constructor", this).call(this), this.trigger = e, this.core = n, this.label = g('<label style="position:absolute;top:0;left:0;width:100%;height:100%;display:inline-block;cursor:pointer;background:#fff;overflow:hidden;opacity:0"></label>'), this.onChange = function (e) {
+	          r(e.target.files), i.destroyInput(), i.createInput();
+	        }, e.appendChild(this.label), this.createInput();
+	      }return (i(t, e), s(t, [{ key: "createInput", value: function value() {
+	          var e = g('<input type="file" style="position:absolute;clip:rect(1px 1px 1px 1px);" />'),
+	              t = this.core.getAccept();t && t.length > 0 && (t = t.map(function (e) {
+	            return e.mimeTypes || "." + e.extensions.join(",.");
+	          }), e.setAttribute("accept", t.join(","))), this.core.isMultiple() && e.setAttribute("multiple", "multiple"), e.addEventListener("change", this.onChange, !1), this.label.appendChild(e), this.input = e;
+	        } }, { key: "destroyInput", value: function value() {
+	          this.input && (this.input.removeEventListener("change", this.onChange, !1), this.label.removeChild(this.input), this.input = null);
+	        } }, { key: "destroy", value: function value() {
+	          this.destroyInput(), this.removeAllListeners(), this.trigger.removeChild(this.label);
+	        } }]), t);
+	    })(l["default"]),
+	        E = (function () {
+	      function e(t, n) {
+	        o(this, e);var r = f["default"].getInstance();this.core = t, this.onFiles = function (e) {
+	          n(e, r);
+	        };
+	      }return (s(e, [{ key: "add", value: function value(e) {
+	          return new k(e, this.core, this.onFiles);
+	        } }]), e);
+	    })(),
+	        w = (function () {
+	      function e(t) {
+	        o(this, e);var n = (function (_n) {
+	          function n(_x, _x2) {
+	            return _n.apply(this, arguments);
+	          }
 	
-	/**
-	 * Mixin the emitter properties.
-	 *
-	 * @param {Object} obj
-	 * @return {Object}
-	 * @api private
-	 */
+	          n.toString = function () {
+	            return _n.toString();
+	          };
 	
-	function mixin(obj) {
-	  for (var key in Emitter.prototype) {
-	    obj[key] = Emitter.prototype[key];
-	  }
-	  return obj;
-	}
-	
-	/**
-	 * Listen on the given `event` with `fn`.
-	 *
-	 * @param {String} event
-	 * @param {Function} fn
-	 * @return {Emitter}
-	 * @api public
-	 */
-	
-	Emitter.prototype.on = Emitter.prototype.addEventListener = function (event, fn) {
-	  this._callbacks = this._callbacks || {};
-	  (this._callbacks[event] = this._callbacks[event] || []).push(fn);
-	  return this;
-	};
-	
-	/**
-	 * Adds an `event` listener that will be invoked a single
-	 * time then automatically removed.
-	 *
-	 * @param {String} event
-	 * @param {Function} fn
-	 * @return {Emitter}
-	 * @api public
-	 */
-	
-	Emitter.prototype.once = function (event, fn) {
-	  var self = this;
-	  this._callbacks = this._callbacks || {};
-	
-	  function on() {
-	    self.off(event, on);
-	    fn.apply(this, arguments);
-	  }
-	
-	  on.fn = fn;
-	  this.on(event, on);
-	  return this;
-	};
-	
-	/**
-	 * Remove the given callback for `event` or all
-	 * registered callbacks.
-	 *
-	 * @param {String} event
-	 * @param {Function} fn
-	 * @return {Emitter}
-	 * @api public
-	 */
-	
-	Emitter.prototype.off = Emitter.prototype.removeListener = Emitter.prototype.removeAllListeners = Emitter.prototype.removeEventListener = function (event, fn) {
-	  this._callbacks = this._callbacks || {};
-	
-	  // all
-	  if (0 == arguments.length) {
-	    this._callbacks = {};
-	    return this;
-	  }
-	
-	  // specific event
-	  var callbacks = this._callbacks[event];
-	  if (!callbacks) return this;
-	
-	  // remove all handlers
-	  if (1 == arguments.length) {
-	    delete this._callbacks[event];
-	    return this;
-	  }
-	
-	  // remove specific handler
-	  var cb;
-	  for (var i = 0; i < callbacks.length; i++) {
-	    cb = callbacks[i];
-	    if (cb === fn || cb.fn === fn) {
-	      callbacks.splice(i, 1);
-	      break;
-	    }
-	  }
-	  return this;
-	};
-	
-	/**
-	 * Emit `event` with the given args.
-	 *
-	 * @param {String} event
-	 * @param {Mixed} ...
-	 * @return {Emitter}
-	 */
-	
-	Emitter.prototype.emit = function (event) {
-	  this._callbacks = this._callbacks || {};
-	  var args = [].slice.call(arguments, 1),
-	      callbacks = this._callbacks[event];
-	
-	  if (callbacks) {
-	    callbacks = callbacks.slice(0);
-	    for (var i = 0, len = callbacks.length; i < len; ++i) {
-	      callbacks[i].apply(this, args);
-	    }
-	  }
-	
-	  return this;
-	};
-	
-	/**
-	 * Return array of callbacks for `event`.
-	 *
-	 * @param {String} event
-	 * @return {Array}
-	 * @api public
-	 */
-	
-	Emitter.prototype.listeners = function (event) {
-	  this._callbacks = this._callbacks || {};
-	  return this._callbacks[event] || [];
-	};
-	
-	/**
-	 * Check if this emitter has `event` handlers.
-	 *
-	 * @param {String} event
-	 * @return {Boolean}
-	 * @api public
-	 */
-	
-	Emitter.prototype.hasListeners = function (event) {
-	  return !!this.listeners(event).length;
-	};
+	          return n;
+	        })(function (e, n) {
+	          for (var r = 0, i = e.length; i > r && !(t.add(new v["default"](n, e[r])) < 0); r++);
+	        });"DataTransfer" in window && "FileList" in window ? this.triggerCollection = new E(t, n) : this.triggerCollection = new b(t, n);
+	      }return (s(e, null, [{ key: "setSWF", value: function value(e) {
+	          m = e;
+	        } }]), s(e, [{ key: "addArea", value: function value(e) {
+	          return this.triggerCollection.add(e);
+	        } }]), e);
+	    })();t["default"] = w, e.exports = t["default"];
+	  }, function (e, t, n) {
+	    "use strict";function r(e) {
+	      return e && e.__esModule ? e : { "default": e };
+	    }function i(e, t) {
+	      if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function");
+	    }function o(e, t) {
+	      if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);e.prototype = Object.create(t && t.prototype, { constructor: { value: e, enumerable: !1, writable: !0, configurable: !0 } }), t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t);
+	    }function u() {
+	      var e = void 0;try {
+	        e = navigator.plugins["Shockwave Flash"], e = e.description;
+	      } catch (t) {
+	        try {
+	          e = new ActiveXObject("ShockwaveFlash.ShockwaveFlash").GetVariable("$version");
+	        } catch (n) {
+	          e = "0.0";
+	        }
+	      }return (e = e.match(/\d+/g), parseFloat(e[0] + "." + e[1]));
+	    }function s(e, t, n) {
+	      try {
+	        e.CallFunction('<invoke name="' + t + '" returntype="javascript">' + __flash__argumentsToXML(n || [], 0) + "</invoke>");
+	      } catch (r) {
+	        throw "Call to " + t + " failed";
+	      }
+	    }function a(e, t) {
+	      if (u() < 11.4) throw "flash player is not available";var n = document.createElement("div"),
+	          r = e + (e.indexOf("?") > 0 ? "&" : "?") + "callInterface=" + encodeURIComponent(t),
+	          i = ['id="' + t + '-Picker"', 'type="application/x-shockwave-flash"', 'data="' + r + '"', 'width="100%" height="100%"', 'style="position:absolute;left:0;top:0;display:block;z-index:1;outline:0"'];return (window.ActiveXObject && i.push('classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"'), n.innerHTML = "<object " + i.join(" ") + '><param name="movie" value="' + r + '" /><param name="wmode" value="transparent" /><param name="allowscriptaccess" value="always" /></object>', n.firstChild);
+	    }function l(e) {
+	      for (var t = !0; t;) {
+	        var n = e;r = void 0, t = !1;var r = n + (y++).toString(16);if (!(r in window)) return r;e = n, t = !0;
+	      }
+	    }Object.defineProperty(t, "__esModule", { value: !0 });var c = (function () {
+	      function e(e, t) {
+	        for (var n = 0; n < t.length; n++) {
+	          var r = t[n];r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r);
+	        }
+	      }return function (t, n, r) {
+	        return (n && e(t.prototype, n), r && e(t, r), t);
+	      };
+	    })(),
+	        f = function f(e, t, n) {
+	      for (var r = !0; r;) {
+	        var i = e,
+	            o = t,
+	            u = n;s = l = a = void 0, r = !1, null === i && (i = Function.prototype);var s = Object.getOwnPropertyDescriptor(i, o);if (void 0 !== s) {
+	          if ("value" in s) return s.value;var a = s.get;return void 0 === a ? void 0 : a.call(u);
+	        }var l = Object.getPrototypeOf(i);if (null === l) return void 0;e = l, t = o, n = u, r = !0;
+	      }
+	    },
+	        h = n(10),
+	        p = r(h),
+	        d = n(16),
+	        v = r(d),
+	        y = +new Date(),
+	        m = (function (e) {
+	      function t(e, n, r) {
+	        function o() {
+	          var t = e.offsetWidth,
+	              r = e.offsetHeight,
+	              i = void 0;return t && r && (i = a(n, u)) ? void e.appendChild(s.flash = i) : void setTimeout(o, 1e3);
+	        }i(this, t), f(Object.getPrototypeOf(t.prototype), "constructor", this).call(this);var u = l("FlashRuntime");this.callInterface = u, window[u] = this, this.options = r;var s = this;o();
+	      }return (o(t, e), c(t, [{ key: "getOptions", value: function value() {
+	          var e = this.options;return ("function" == typeof e && (e = e()), e);
+	        } }, { key: "getTransport", value: function value(e, t, n) {
+	          return new v["default"](this, e, t, n);
+	        } }, { key: "send", value: function value(e, t, n, r) {
+	          s(this.flash, "exec", ["send", e, t.id, n, r]);
+	        } }, { key: "abort", value: function value(e) {
+	          try {
+	            s(this.flash, "exec", ["abort", e.id]);
+	          } catch (t) {}
+	        } }, { key: "cancel", value: function value(e) {
+	          s(this.flash, "exec", ["cancel", e.id]);
+	        } }, { key: "ping", value: function value() {
+	          s(this.flash, "exec", ["pang"]);
+	        } }, { key: "destroy", value: function value() {
+	          delete window[this.callInterface];
+	        } }]), t);
+	    })(p["default"]);t["default"] = m, e.exports = t["default"];
+	  }, function (e, t, n) {
+	    "use strict";function r(e, t) {
+	      if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function");
+	    }Object.defineProperty(t, "__esModule", { value: !0 });var i = (function () {
+	      function e(e, t) {
+	        for (var n = 0; n < t.length; n++) {
+	          var r = t[n];r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r);
+	        }
+	      }return function (t, n, r) {
+	        return (n && e(t.prototype, n), r && e(t, r), t);
+	      };
+	    })(),
+	        o = n(3),
+	        u = n(6),
+	        s = (function () {
+	      function e(t) {
+	        r(this, e), this.flashRuntime = t;
+	      }return (i(e, [{ key: "generate", value: function value(e) {
+	          var t = o.Deferred(),
+	              n = this.flashRuntime,
+	              r = e.getBlob(),
+	              i = void 0,
+	              s = function s() {
+	            n.off("uploadprogress", l), n.off("uploadcomplete", c), n.off("uploaderror", f), i && clearTimeout(i);
+	          },
+	              a = function a() {
+	            s(), n.abort(r.id);
+	          },
+	              l = function l(e) {
+	            e.id === r.id && t.notify(e);
+	          },
+	              c = function c(e) {
+	            return e.id === r.id ? (s(), 304 === e.status || e.status >= 200 && e.status < 300 ? (n.cancel(r), t.resolve(e.response)) : t.reject(new u.NetworkError(e.status, e.response))) : void 0;
+	          },
+	              f = function f(e) {
+	            e.id === r.id && (s(), t.reject(new u.AbortError(e.message)));
+	          };n.on("uploadprogress", l), n.on("uploadcomplete", c), n.on("uploaderror", f);var h = e.getTimeout();h > 0 && (i = setTimeout(function () {
+	            a(), t.reject(new u.TimeoutError("timeout:" + h));
+	          }, h));try {
+	            n.send(e.getName(), r, e.getUrl(), e.getParams().toString());
+	          } catch (p) {
+	            a(), t.reject(new u.AbortError(p.message));
+	          }var d = t.promise();return (d.abort = a, d);
+	        } }]), e);
+	    })();t["default"] = s, e.exports = t["default"];
+	  }]);
+	});
+	//# sourceMappingURL=uploadcore.js.map
 
 /***/ },
 /* 229 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	
-	/**
-	 * Reduce `arr` with `fn`.
-	 *
-	 * @param {Array} arr
-	 * @param {Function} fn
-	 * @param {Mixed} initial
-	 *
-	 * TODO: combatible error handling?
-	 */
-	
 	"use strict";
 	
-	module.exports = function (arr, fn, initial) {
-	  var idx = 0;
-	  var len = arr.length;
-	  var curr = arguments.length == 3 ? initial : arr[idx++];
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	
-	  while (idx < len) {
-	    curr = fn.call(null, curr, arr[idx], ++idx, arr);
-	  }
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
-	  return curr;
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var _react = __webpack_require__(9);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var TRANSFORM_PROPERTY = (function () {
+	    var style = document.createElement("div").style;
+	    var properties = ["transform", "WebkitTransform", "MozTransform", "msTransform"];
+	    for (var i = 0, l = properties.length; i < l; i++) {
+	        if (properties[i] in style) {
+	            return properties[i];
+	        }
+	    }
+	    return false;
+	})();
+	
+	var Progress = (function (_React$Component) {
+	    _inherits(Progress, _React$Component);
+	
+	    function Progress(props) {
+	        _classCallCheck(this, Progress);
+	
+	        _get(Object.getPrototypeOf(Progress.prototype), "constructor", this).call(this, props);
+	    }
+	
+	    _createClass(Progress, [{
+	        key: "render",
+	        value: function render() {
+	            var percentage = this.props.percentage || 0;
+	            if (TRANSFORM_PROPERTY && this.props.mode !== 'bar') {
+	                var items = [0, 1];
+	                var ret = items.map(function (i) {
+	                    return Math.floor(Math.min(Math.max(0, (percentage - i * 50) * 3.6), 180));
+	                }).map(function (rotate) {
+	                    return _defineProperty({}, TRANSFORM_PROPERTY, 'rotate(' + rotate + 'deg)');
+	                });
+	
+	                return _react2["default"].createElement(
+	                    "div",
+	                    { className: "kuma-upload-progresspin" },
+	                    _react2["default"].createElement(
+	                        "div",
+	                        { className: "spin spin2-1" },
+	                        _react2["default"].createElement("div", { className: "inner", style: ret[0] })
+	                    ),
+	                    _react2["default"].createElement(
+	                        "div",
+	                        { className: "spin spin2-2" },
+	                        _react2["default"].createElement("div", { className: "inner", style: ret[1] })
+	                    )
+	                );
+	            } else {
+	                return _react2["default"].createElement("div", { className: "kuma-upload-progressbar", style: { width: percentage + '%' } });
+	            }
+	        }
+	    }]);
+	
+	    return Progress;
+	})(_react2["default"].Component);
+	
+	exports["default"] = Progress;
+	
+	Progress.isSupport = TRANSFORM_PROPERTY !== false;
+	
+	Progress.propTypes = {
+	    percentage: _react2["default"].PropTypes.number
 	};
+	Progress.defaultProps = {
+	    percentage: 0
+	};
+	module.exports = exports["default"];
 
 /***/ },
 /* 230 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var uuid = __webpack_require__(231);
-	
-	module.exports = function () {
-	  return uuid.v4();
-	};
-
-/***/ },
-/* 231 */
-/***/ function(module, exports, __webpack_require__) {
-
-	//     uuid.js
-	//
-	//     Copyright (c) 2010-2012 Robert Kieffer
-	//     MIT License - http://opensource.org/licenses/mit-license.php
-	
-	// Unique ID creation requires a high quality random # generator.  We feature
-	// detect to determine the best RNG source, normalizing to a function that
-	// returns 128-bits of randomness, since that's what's usually required
-	'use strict';
-	
-	var _rng = __webpack_require__(232);
-	
-	// Maps for number <-> hex string conversion
-	var _byteToHex = [];
-	var _hexToByte = {};
-	for (var i = 0; i < 256; i++) {
-	  _byteToHex[i] = (i + 0x100).toString(16).substr(1);
-	  _hexToByte[_byteToHex[i]] = i;
-	}
-	
-	// **`parse()` - Parse a UUID into it's component bytes**
-	function parse(s, buf, offset) {
-	  var i = buf && offset || 0,
-	      ii = 0;
-	
-	  buf = buf || [];
-	  s.toLowerCase().replace(/[0-9a-f]{2}/g, function (oct) {
-	    if (ii < 16) {
-	      // Don't overflow!
-	      buf[i + ii++] = _hexToByte[oct];
-	    }
-	  });
-	
-	  // Zero out remaining bytes if string was short
-	  while (ii < 16) {
-	    buf[i + ii++] = 0;
-	  }
-	
-	  return buf;
-	}
-	
-	// **`unparse()` - Convert UUID byte array (ala parse()) into a string**
-	function unparse(buf, offset) {
-	  var i = offset || 0,
-	      bth = _byteToHex;
-	  return bth[buf[i++]] + bth[buf[i++]] + bth[buf[i++]] + bth[buf[i++]] + '-' + bth[buf[i++]] + bth[buf[i++]] + '-' + bth[buf[i++]] + bth[buf[i++]] + '-' + bth[buf[i++]] + bth[buf[i++]] + '-' + bth[buf[i++]] + bth[buf[i++]] + bth[buf[i++]] + bth[buf[i++]] + bth[buf[i++]] + bth[buf[i++]];
-	}
-	
-	// **`v1()` - Generate time-based UUID**
-	//
-	// Inspired by https://github.com/LiosK/UUID.js
-	// and http://docs.python.org/library/uuid.html
-	
-	// random #'s we need to init node and clockseq
-	var _seedBytes = _rng();
-	
-	// Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
-	var _nodeId = [_seedBytes[0] | 0x01, _seedBytes[1], _seedBytes[2], _seedBytes[3], _seedBytes[4], _seedBytes[5]];
-	
-	// Per 4.2.2, randomize (14 bit) clockseq
-	var _clockseq = (_seedBytes[6] << 8 | _seedBytes[7]) & 0x3fff;
-	
-	// Previous uuid creation time
-	var _lastMSecs = 0,
-	    _lastNSecs = 0;
-	
-	// See https://github.com/broofa/node-uuid for API details
-	function v1(options, buf, offset) {
-	  var i = buf && offset || 0;
-	  var b = buf || [];
-	
-	  options = options || {};
-	
-	  var clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq;
-	
-	  // UUID timestamps are 100 nano-second units since the Gregorian epoch,
-	  // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
-	  // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
-	  // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
-	  var msecs = options.msecs !== undefined ? options.msecs : new Date().getTime();
-	
-	  // Per 4.2.1.2, use count of uuid's generated during the current clock
-	  // cycle to simulate higher resolution clock
-	  var nsecs = options.nsecs !== undefined ? options.nsecs : _lastNSecs + 1;
-	
-	  // Time since last uuid creation (in msecs)
-	  var dt = msecs - _lastMSecs + (nsecs - _lastNSecs) / 10000;
-	
-	  // Per 4.2.1.2, Bump clockseq on clock regression
-	  if (dt < 0 && options.clockseq === undefined) {
-	    clockseq = clockseq + 1 & 0x3fff;
-	  }
-	
-	  // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
-	  // time interval
-	  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === undefined) {
-	    nsecs = 0;
-	  }
-	
-	  // Per 4.2.1.2 Throw error if too many uuids are requested
-	  if (nsecs >= 10000) {
-	    throw new Error('uuid.v1(): Can\'t create more than 10M uuids/sec');
-	  }
-	
-	  _lastMSecs = msecs;
-	  _lastNSecs = nsecs;
-	  _clockseq = clockseq;
-	
-	  // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
-	  msecs += 12219292800000;
-	
-	  // `time_low`
-	  var tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
-	  b[i++] = tl >>> 24 & 0xff;
-	  b[i++] = tl >>> 16 & 0xff;
-	  b[i++] = tl >>> 8 & 0xff;
-	  b[i++] = tl & 0xff;
-	
-	  // `time_mid`
-	  var tmh = msecs / 0x100000000 * 10000 & 0xfffffff;
-	  b[i++] = tmh >>> 8 & 0xff;
-	  b[i++] = tmh & 0xff;
-	
-	  // `time_high_and_version`
-	  b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
-	  b[i++] = tmh >>> 16 & 0xff;
-	
-	  // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
-	  b[i++] = clockseq >>> 8 | 0x80;
-	
-	  // `clock_seq_low`
-	  b[i++] = clockseq & 0xff;
-	
-	  // `node`
-	  var node = options.node || _nodeId;
-	  for (var n = 0; n < 6; n++) {
-	    b[i + n] = node[n];
-	  }
-	
-	  return buf ? buf : unparse(b);
-	}
-	
-	// **`v4()` - Generate random UUID**
-	
-	// See https://github.com/broofa/node-uuid for API details
-	function v4(options, buf, offset) {
-	  // Deprecated - 'format' argument, as supported in v1.2
-	  var i = buf && offset || 0;
-	
-	  if (typeof options == 'string') {
-	    buf = options == 'binary' ? new Array(16) : null;
-	    options = null;
-	  }
-	  options = options || {};
-	
-	  var rnds = options.random || (options.rng || _rng)();
-	
-	  // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
-	  rnds[6] = rnds[6] & 0x0f | 0x40;
-	  rnds[8] = rnds[8] & 0x3f | 0x80;
-	
-	  // Copy bytes to buffer, if provided
-	  if (buf) {
-	    for (var ii = 0; ii < 16; ii++) {
-	      buf[i + ii] = rnds[ii];
-	    }
-	  }
-	
-	  return buf || unparse(rnds);
-	}
-	
-	// Export public API
-	var uuid = v4;
-	uuid.v1 = v1;
-	uuid.v4 = v4;
-	uuid.parse = parse;
-	uuid.unparse = unparse;
-	
-	module.exports = uuid;
-
-/***/ },
-/* 232 */
-/***/ function(module, exports) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {"use strict";
-	
-	var rng;
-	
-	if (global.crypto && crypto.getRandomValues) {
-	  // WHATWG crypto-based RNG - http://wiki.whatwg.org/wiki/Crypto
-	  // Moderately fast, high quality
-	  var _rnds8 = new Uint8Array(16);
-	  rng = function whatwgRNG() {
-	    crypto.getRandomValues(_rnds8);
-	    return _rnds8;
-	  };
-	}
-	
-	if (!rng) {
-	  // Math.random()-based (RNG)
-	  //
-	  // If all else fails, use Math.random().  It's fast, but is of unspecified
-	  // quality.
-	  var _rnds = new Array(16);
-	  rng = function () {
-	    for (var i = 0, r; i < 16; i++) {
-	      if ((i & 0x03) === 0) r = Math.random() * 0x100000000;
-	      _rnds[i] = r >>> ((i & 0x03) << 3) & 0xff;
-	    }
-	
-	    return _rnds;
-	  };
-	}
-	
-	module.exports = rng;
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 233 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(9);
-	var uid = __webpack_require__(230);
-	
-	var formStyle = {
-	  position: 'absolute',
-	  overflow: 'hidden',
-	  top: 0
-	};
-	var boxStyle = {
-	  position: 'relative'
-	};
-	var inputStyle = {
-	  position: 'absolute',
-	  filter: 'alpha(opacity=0)',
-	  outline: 0,
-	  right: 0,
-	  top: 0,
-	  fontSize: 100
-	};
-	
-	var IframeUploader = React.createClass({
-	  displayName: 'IframeUploader',
-	
-	  getInitialState: function getInitialState() {
-	    return {
-	      width: 20, height: 12, uid: 1
-	    };
-	  },
-	
-	  componentDidMount: function componentDidMount() {
-	    var _this = this;
-	
-	    var el = React.findDOMNode(this);
-	    // Fix render bug in IE
-	    setTimeout(function () {
-	      _this.setState({
-	        width: el.offsetWidth,
-	        height: el.offsetHeight
-	      });
-	    }, 0);
-	  },
-	
-	  _getName: function _getName() {
-	    return 'iframe_uploader_' + this.state.uid;
-	  },
-	
-	  _onload: function _onload(e) {
-	    // ie8里面render方法会执行onLoad，应该是bug
-	    if (!this.startUpload || !this.file) {
-	      return;
-	    }
-	
-	    var iframe = e.target;
-	    var props = this.props;
-	    var response;
-	    try {
-	      response = iframe.contentDocument.body.innerHTML;
-	      props.onSuccess(response, this.file);
-	    } catch (err) {
-	      response = 'cross-domain';
-	      props.onError(err, null, this.file);
-	    }
-	
-	    this.startUpload = false;
-	    this.file = null;
-	
-	    this.setState({
-	      uid: this.state.uid + 1
-	    });
-	  },
-	
-	  _getIframe: function _getIframe() {
-	    var name = this._getName();
-	    var hidden = { display: 'none' };
-	    return React.createElement('iframe', {
-	      key: name,
-	      onLoad: this._onload,
-	      style: hidden,
-	      name: name });
-	  },
-	
-	  _onChange: function _onChange(e) {
-	    this.startUpload = true;
-	    this.file = e.target.files && e.target.files[0] || e.target;
-	    // ie8/9 don't support FileList Object
-	    // http://stackoverflow.com/questions/12830058/ie8-input-type-file-get-files
-	    this.file.name = this.file.name || e.target.value;
-	    this.file.uid = uid();
-	    this.props.onStart(this.file);
-	    React.findDOMNode(this.refs.form).submit();
-	  },
-	
-	  render: function render() {
-	    var props = this.props;
-	    var state = this.state;
-	    inputStyle.height = state.height;
-	    inputStyle.fontSize = Math.max(64, state.height * 5);
-	    formStyle.width = state.width;
-	    formStyle.height = state.height;
-	
-	    var iframeName = this._getName();
-	    var iframe = this._getIframe();
-	
-	    return React.createElement('span', { style: boxStyle }, React.createElement('form', { action: props.action,
-	      target: iframeName,
-	      encType: 'multipart/form-data',
-	      ref: 'form',
-	      method: 'post', style: formStyle }, React.createElement('input', { type: 'file',
-	      style: inputStyle,
-	      accept: props.accept,
-	      onChange: this._onChange
-	    })), iframe, props.children);
-	  }
-	});
-	
-	module.exports = IframeUploader;
-
-/***/ },
-/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28935,8 +30039,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var classnames = __webpack_require__(164);
-	var assign = __webpack_require__(160);
+	var classnames = __webpack_require__(4);
+	var assign = __webpack_require__(84);
 	
 	var OtherFormField = (function (_React$Component) {
 	    _inherits(OtherFormField, _React$Component);
@@ -28983,7 +30087,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = OtherFormField;
 
 /***/ },
-/* 235 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28998,14 +30102,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var classnames = __webpack_require__(164);
-	
-	var _require = __webpack_require__(2);
-	
-	var Button = _require.Button;
-	var ButtonGroup = _require.ButtonGroup;
-	
-	var assign = __webpack_require__(160);
+	var classnames = __webpack_require__(4);
+	var Button = __webpack_require__(232);
+	var assign = __webpack_require__(84);
 	
 	var ButtonGroupFormField = (function (_React$Component) {
 	    _inherits(ButtonGroupFormField, _React$Component);
@@ -29030,6 +30129,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    props.onClick = function () {
 	                        var data = me.props.getValues();
 	                        child.props.onClick(data);
+	                    };
+	                }
+	                if (child.props.type == "reset") {
+	                    props.onClick = function () {
+	                        console.log("reset");
+	                        me.props.resetValues();
 	                    };
 	                }
 	                return React.cloneElement(child, props);
@@ -29072,88 +30177,478 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ButtonGroupFormField;
 
 /***/ },
-/* 236 */
-/***/ function(module, exports) {
+/* 232 */
+/***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Created by xy on 15/4/16.
+	 * Button Component for uxcore
+	 * @author 
+	 *
+	 * Copyright 2014-2015, Uxcore Team, Alinw.
+	 * All rights reserved.
 	 */
 	
 	'use strict';
 	
-	var Validator = {};
+	module.exports = __webpack_require__(233);
+
+/***/ },
+/* 233 */
+/***/ function(module, exports) {
+
+	'use strict';
 	
-	var PATTERN = {
-	    EMAIL: /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/,
-	    URL: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
-	    HEX: /^#?([a-f0-9]{6}|[a-f0-9]{3})$/i,
-	    NUM: /^((-?\d+\.\d+)|(-?\d+)|(-?\.\d+))$/,
-	    IDCARD: /(^\d{15}$)|(^\d{17}([0-9]|X)$)/i,
-	    CNMOBILE: /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var sizeMap = {
+		small: 's',
+		medium: 'm',
+		large: 'l'
+	},
+	    colorMap = {
+		blue: 'blue',
+		orange: 'orange',
+		white: 'white',
+		disabled: 'disable'
 	};
 	
-	Validator.isNotEmpty = function (value) {
-	    return !!value && value.length !== 0;
+	var Button = (function (_React$Component) {
+		_inherits(Button, _React$Component);
+	
+		function Button(props) {
+			_classCallCheck(this, Button);
+	
+			_get(Object.getPrototypeOf(Button.prototype), 'constructor', this).call(this, props);
+		}
+	
+		_createClass(Button, [{
+			key: 'render',
+			value: function render() {
+				var props = this.props;
+				var colorType = props.disabled ? 'disabled' : props.color;
+				var className = 'kuma-button kuma-button-' + sizeMap[props.size] + colorMap[colorType] + ' ' + props.additionClass;
+				var propEvents = {};
+				Object.keys(props).forEach(function (key) {
+					if (key.indexOf('on') == 0) {
+						propEvents[key] = props[key];
+					}
+				});
+				return React.createElement(
+					'button',
+					_extends({ className: className, disabled: props.disabled }, propEvents),
+					this.props.children
+				);
+			}
+		}]);
+	
+		return Button;
+	})(React.Component);
+	
+	Button.displayName = 'Button';
+	Button.propTypes = {
+		size: React.PropTypes.oneOf(['large', 'medium', 'small']),
+		color: React.PropTypes.oneOf(['blue', 'orange', 'white']),
+		disabled: React.PropTypes.oneOf(['disabled', true, false]),
+		additionClass: React.PropTypes.string
+	};
+	Button.defaultProps = {
+		size: 'medium',
+		color: 'blue',
+		disabled: false,
+		additionClass: ''
 	};
 	
-	Validator.isNum = function (value) {
-	    return PATTERN.NUM.test(value);
-	};
+	module.exports = Button;
+
+/***/ },
+/* 234 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
 	
-	Validator.isInt = function (value) {
-	    return Validator.isNum(value) && parseInt(value) === value;
-	};
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
-	Validator.isDecimal = function (value) {
-	    return Validator.isNum(value) && !Validator.isInt(value);
-	};
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
-	Validator.isArray = function (value) {
-	    return Array.isArray(value);
-	};
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	Validator.isRegExp = function (value) {
-	    if (value instanceof RegExp) {
-	        return true;
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var FormField = __webpack_require__(167);
+	var Constants = __webpack_require__(166);
+	var Tinymce = __webpack_require__(235);
+	var assign = __webpack_require__(84);
+	
+	var EditorFormField = (function (_FormField) {
+	    _inherits(EditorFormField, _FormField);
+	
+	    function EditorFormField(props) {
+	        _classCallCheck(this, EditorFormField);
+	
+	        _get(Object.getPrototypeOf(EditorFormField.prototype), "constructor", this).call(this, props);
 	    }
-	    try {
-	        return !!new RegExp(value);
-	    } catch (e) {
-	        return false;
+	
+	    _createClass(EditorFormField, [{
+	        key: "handleChange",
+	        value: function handleChange(e, editor) {
+	            var me = this;
+	            me.handleDataChange(editor.getContent());
+	        }
+	    }, {
+	        key: "handleKeyup",
+	        value: function handleKeyup(e, editor) {
+	            var me = this;
+	            me.handleDataChange(editor.getContent());
+	        }
+	    }, {
+	        key: "renderField",
+	        value: function renderField() {
+	            var me = this;
+	            if (me.state.fromReset) {
+	                me.refs.tinymce.resetValue(me.props.jsxcontent);
+	            }
+	            return React.createElement(Tinymce, { ref: "tinymce",
+	                config: me.props.jsxconfig,
+	                content: me.props.jsxcontent,
+	                onChange: me.handleChange.bind(me),
+	                onKeyup: me.handleKeyup.bind(me) });
+	        }
+	    }]);
+	
+	    return EditorFormField;
+	})(FormField);
+	
+	EditorFormField.propTypes = assign({}, FormField.propTypes);
+	EditorFormField.defaultProps = assign({}, FormField.defaultProps, {
+	    jsxconfig: {},
+	    jsxcontent: ""
+	});
+	EditorFormField.displayName = "EditorFormField";
+	
+	module.exports = EditorFormField;
+
+/***/ },
+/* 235 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Tinymce Component for uxcore
+	 * @author eternalsky
+	 *
+	 * Copyright 2014-2015, Uxcore Team, Alinw.
+	 * All rights reserved.
+	 */
+	
+	'use strict';
+	
+	module.exports = __webpack_require__(236);
+
+/***/ },
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Tinymce Component for uxcore
+	 * Inspired by react-tinymce: https://github.com/mzabriskie/react-tinymce
+	 * @author eternalsky
+	 *
+	 * Copyright 2014-2015, Uxcore Team, Alinw.
+	 * All rights reserved.
+	 */
+	
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var util = __webpack_require__(237);
+	var EditorConfig = __webpack_require__(238);
+	var assign = __webpack_require__(84);
+	// Include all of the Native DOM and custom events from:
+	// https://github.com/tinymce/tinymce/blob/master/tools/docs/tinymce.Editor.js#L5-L12
+	var EVENTS = ['focusin', 'focusout', 'click', 'dblclick', 'mousedown', 'mouseup', 'mousemove', 'mouseover', 'beforepaste', 'paste', 'cut', 'copy', 'selectionchange', 'mouseout', 'mouseenter', 'mouseleave', 'keydown', 'keypress', 'keyup', 'contextmenu', 'dragend', 'dragover', 'draggesture', 'dragdrop', 'drop', 'drag', 'BeforeRenderUI', 'SetAttrib', 'PreInit', 'PostRender', 'init', 'deactivate', 'activate', 'NodeChange', 'BeforeExecCommand', 'ExecCommand', 'show', 'hide', 'ProgressState', 'LoadContent', 'SaveContent', 'BeforeSetContent', 'SetContent', 'BeforeGetContent', 'GetContent', 'VisualAid', 'remove', 'submit', 'reset', 'BeforeAddUndo', 'AddUndo', 'change', 'undo', 'redo', 'ClearUndos', 'ObjectSelected', 'ObjectResizeStart', 'ObjectResized', 'PreProcess', 'PostProcess', 'focus', 'blur'];
+	
+	// Note: because the capitalization of the events is weird, we're going to get
+	// some inconsistently-named handlers, for example compare:
+	// 'onMouseleave' and 'onNodeChange'
+	var HANDLER_NAMES = EVENTS.map(function (event) {
+	    return 'on' + util.uc_first(event);
+	});
+	
+	var Tinymce = (function (_React$Component) {
+	    _inherits(Tinymce, _React$Component);
+	
+	    function Tinymce(props) {
+	        _classCallCheck(this, Tinymce);
+	
+	        _get(Object.getPrototypeOf(Tinymce.prototype), 'constructor', this).call(this, props);
 	    }
+	
+	    _createClass(Tinymce, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            if (typeof tinymce !== 'object') {
+	                console.warn("TinyMCE is not found in global, init failed");
+	            }
+	            this.id = this.id || util.uuid();
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this._init(this.props.config);
+	        }
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	            this._remove();
+	        }
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            if (!util.isEqual(nextProps.config, this.props.config)) {
+	                this._init(nextProps.config, nextProps.content);
+	            }
+	        }
+	    }, {
+	        key: 'shouldComponentUpdate',
+	        value: function shouldComponentUpdate(nextProps) {
+	            return !util.isEqual(this.props.content, nextProps.content) || !util.isEqual(this.props.config, nextProps.config);
+	        }
+	    }, {
+	        key: 'resetValue',
+	        value: function resetValue(value) {
+	            tinymce.get(this.id).setContent(value);
+	        }
+	    }, {
+	        key: '_init',
+	        value: function _init(config, content) {
+	            var me = this;
+	            if (me._isInit) {
+	                me._remove();
+	            }
+	            // hide the textarea until init finished
+	            React.findDOMNode(me).style.visibility = 'hidden';
+	            config.selector = '#' + me.id;
+	            config = assign({}, EditorConfig, config);
+	            if (!config.language) {
+	                config.language = 'zh_CN';
+	            }
+	            config.setup = function (editor) {
+	                EVENTS.forEach(function (event, index) {
+	                    var handler = me.props[HANDLER_NAMES[index]];
+	                    if (typeof handler !== 'function') return;
+	                    editor.on(event, function (e) {
+	                        // native DOM events don't have access to the editor so we pass it here
+	                        handler(e, editor);
+	                    });
+	                });
+	                // need to set content here because the textarea will still have the
+	                // old `this.props.content`
+	                if (content) {
+	                    editor.on('init', function () {
+	                        editor.setContent(content);
+	                    });
+	                }
+	            };
+	            tinymce.init(config);
+	            React.findDOMNode(me).style.visibility = "";
+	            me._isInit = true;
+	        }
+	    }, {
+	        key: '_remove',
+	        value: function _remove() {
+	            tinymce.EditorManager.execCommand("mceRemoveEditor", true, this.id);
+	            this._isInit = false;
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return React.createElement('textarea', { id: this.id, defaultValue: this.props.content });
+	        }
+	    }]);
+	
+	    return Tinymce;
+	})(React.Component);
+	
+	Tinymce.defaultProps = {
+	    config: {},
+	    content: ''
 	};
 	
-	Validator.isObject = function (value) {
-	    return typeof value === 'object' && !Validator.isArray(value);
+	// http://facebook.github.io/react/docs/reusable-components.html
+	Tinymce.propTypes = {
+	    config: React.PropTypes.object,
+	    content: React.PropTypes.string
 	};
 	
-	Validator.isFunc = function (value) {
-	    return typeof value === 'function';
-	};
+	//add handler propTypes
+	HANDLER_NAMES.forEach(function (name) {
+	    Tinymce.propTypes[name] = React.PropTypes.func;
+	});
 	
-	Validator.isEmail = function (value) {
-	    return typeof value === 'string' && PATTERN.EMAIL.test(value);
-	};
+	Tinymce.displayName = "Tinymce";
 	
-	Validator.isUrl = function (value) {
-	    return typeof value === 'string' && PATTERN.URL.test(value);
-	};
-	
-	Validator.isHex = function (value) {
-	    return typeof value === 'string' && PATTERN.HEX.test(value);
-	};
-	
-	Validator.isIdCard = function (value) {
-	    return typeof value === 'string' && PATTERN.IDCARD.test(value);
-	};
-	
-	Validator.isCNMobile = function (value) {
-	    return typeof value === 'string' && PATTERN.CNMOBILE.test(value);
-	};
-	module.exports = Validator;
+	module.exports = Tinymce;
 
 /***/ },
 /* 237 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var count = 0;
+	
+	module.exports = {
+	    uc_first: function uc_first(str) {
+	        return str[0].toUpperCase() + str.substring(1);
+	    },
+	    uuid: function uuid() {
+	        return 'uxcore-tinymce-' + count++;
+	    },
+	    isEqual: function isEqual(a, b) {
+	        return JSON.stringify(a) == JSON.stringify(b);
+	    }
+	};
+
+/***/ },
+/* 238 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+		value: true
+	});
+	var plugins = ['lists', 'hr', 'emoticons', 'textcolor', 'insertdatetime', 'link', 'table', 'paste', 'preview', 'wordcount', 'image', 'upload'];
+	
+	exports['default'] = {
+		theme: 'modern',
+		height: 400,
+		resize: true, // 是否可以鼠标拖动编辑器改变大小
+		border_width: 1, // 编辑器的边框宽度
+		convert_urls: false, // 当你insertContent的时候，取消一些节点src的转换
+		visual: false, // table的虚框是否显示，由于大文本设置虚框很耗性能，所以取消掉
+		keep_values: false, // 必须设置false用来提高性能
+		forced_root_block: 'div', // 当空文本的时候，tinymce会设置一个根节点，默认是P，我们要改成div比较合理
+		show_system_default_font: true, // 是否开启系统字体的探测。
+		link_title: true, // link plugins enable title edit
+		plugins: plugins,
+		cssFiles: ['styles/skin.css', 'styles/skin-ext.css'],
+		toolbar1: 'preview undo redo | fontselect fontsizeselect | bold italic underline strikethrough removeformat | forecolor backcolor | link | emoticons upload',
+		toolbar2: 'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table hr inserttime',
+		uploadConfig: {
+			"inputName": "imageUploadInput",
+			"actionUrl": "http://test.alibaba-inc.com/work/xservice/http/uploadimage.json",
+			"errorCallback": function errorCallback() {
+				console.log('errorCallback', arguments);
+			},
+			"progressCallback": function progressCallback() {
+				console.log('progressCallback', arguments);
+			}
+		}
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 239 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var FormField = __webpack_require__(167);
+	var Constants = __webpack_require__(166);
+	var classnames = __webpack_require__(4);
+	var Grid = __webpack_require__(240);
+	
+	/**
+	 * extend FormField, rewrite renderField method
+	 **/
+	
+	var GridFormField = (function (_FormField) {
+	    _inherits(GridFormField, _FormField);
+	
+	    function GridFormField(props) {
+	        _classCallCheck(this, GridFormField);
+	
+	        _get(Object.getPrototypeOf(GridFormField.prototype), 'constructor', this).call(this, props);
+	    }
+	
+	    _createClass(GridFormField, [{
+	        key: 'getValue',
+	        value: function getValue() {
+	            return this.refs.grid.getData();
+	        }
+	    }, {
+	        key: 'addSpecificClass',
+	        value: function addSpecificClass() {
+	            var me = this;
+	            if (me.props.jsxprefixCls == "kuma-form-field") {
+	                return me.props.jsxprefixCls + " kuma-input-form-field";
+	            } else {
+	                return me.props.jsxprefixCls;
+	            }
+	        }
+	    }, {
+	        key: 'onBlur',
+	        value: function onBlur() {
+	            this.handleDataChange(this.getValue());
+	        }
+	    }, {
+	        key: 'renderField',
+	        value: function renderField() {
+	            var me = this;
+	            var arr = [],
+	                renderGridProp = {
+	                mode: this.props.mode,
+	                jsxdata: this.state.value
+	            };
+	            $.extend(renderGridProp, this.props);
+	            if (me.props.mode == Constants.MODE.EDIT) {
+	                arr.push(React.createElement(
+	                    'div',
+	                    { onBlur: this.onBlur.bind(this) },
+	                    React.createElement(Grid, _extends({}, renderGridProp, { ref: 'grid' }))
+	                ));
+	            } else if (me.props.mode == Constants.MODE.VIEW) {
+	                arr.push(React.createElement(Grid, renderGridProp));
+	            }
+	            return arr;
+	        }
+	    }]);
+	
+	    return GridFormField;
+	})(FormField);
+	
+	GridFormField.propTypes = FormField.propTypes;
+	GridFormField.defaultProps = FormField.defaultProps;
+	GridFormField.displayName = "GridFormField";
+	module.exports = GridFormField;
+
+/***/ },
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -29166,10 +30661,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	module.exports = __webpack_require__(238);
+	module.exports = __webpack_require__(241);
 
 /***/ },
-/* 238 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -29186,31 +30681,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var _react = __webpack_require__(9);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _Header = __webpack_require__(239);
-	
-	var _Header2 = _interopRequireDefault(_Header);
-	
-	var _Tbody = __webpack_require__(241);
-	
-	var _Tbody2 = _interopRequireDefault(_Tbody);
-	
-	var _ActionBar = __webpack_require__(246);
-	
-	var _ActionBar2 = _interopRequireDefault(_ActionBar);
-	
-	var _uxcorePagination = __webpack_require__(250);
-	
-	var _uxcorePagination2 = _interopRequireDefault(_uxcorePagination);
+	var Header = __webpack_require__(242);
+	var Tbody = __webpack_require__(244);
+	var ActionBar = __webpack_require__(251);
+	var Pagination = __webpack_require__(255);
+	var assign = __webpack_require__(84);
+	var uid = 0;
 	
 	var Grid = (function (_React$Component) {
 	    _inherits(Grid, _React$Component);
@@ -29219,44 +30699,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _classCallCheck(this, Grid);
 	
 	        _get(Object.getPrototypeOf(Grid.prototype), "constructor", this).call(this, props);
-	
 	        this.state = {
-	            currentPage: 1,
 	            data: this.props.jsxdata,
-	            columns: this.props.jsxcolumns,
+	            columns: this.processColumn(),
+	            showMask: this.props.showMask,
 	            passedData: null,
 	            params: null,
-	            activeColumn: null
+	            pageSize: props.pageSize,
+	            currentPage: props.currentPage
 	        };
 	    }
 	
 	    _createClass(Grid, [{
-	        key: "componentDidMount",
-	        value: function componentDidMount() {}
+	        key: "componentWillMount",
+	        value: function componentWillMount() {
+	            this.fetchData();
+	        }
 	    }, {
-	        key: "componentDidUpdate",
-	        value: function componentDidUpdate() {}
+	        key: "componentDidMount",
+	        value: function componentDidMount() {
+	            var me = this;
+	            me.el = React.findDOMNode(me);
+	            // console.log("showMask:",this.props.showMask);
+	            $(me.el).find(".kuma-grid-body-wrapper").on("scroll", function (e) {
+	                var scrollLeft = this.scrollLeft;
+	                $(me.el).find(".kuma-grid-header-wrapper")[0].scrollLeft = scrollLeft;
+	            });
+	        }
 	    }, {
 	        key: "componentWillUnmount",
-	        value: function componentWillUnmount() {}
-	    }, {
-	        key: "notEmpty",
-	        value: function notEmpty(obj) {
-	            var hasOwnProperty = Object.prototype.hasOwnProperty;
-	            // null and undefined are "empty"
-	            if (obj == null) return true;
-	
-	            // Assume if it has a length property with a non-zero value
-	            // that that property is correct.
-	            if (obj.length > 0) return false;
-	            if (obj.length === 0) return true;
-	            // Otherwise, does it have any properties of its own?
-	            // Note that this doesn't handle
-	            // toString and valueOf enumeration bugs in IE < 9
-	            for (var key in obj) {
-	                if (hasOwnProperty.call(obj, key)) return false;
-	            }
-	            return true;
+	        value: function componentWillUnmount() {
+	            var me = this;
+	            $(me.el).find(".kuma-grid-body-wrapper").off("scroll");
 	        }
 	
 	        // pagination
@@ -29264,62 +30738,58 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // filter
 	
 	    }, {
-	        key: "getQueryStr",
-	        value: function getQueryStr() {
+	        key: "getQueryObj",
+	        value: function getQueryObj() {
 	
 	            var ctx = this,
-	                queryStr = [],
-	                _props = this.props;
+	                queryObj = {};
 	            //passedData right now use as subComp row data, if has passedData
 	            //that means subComp it is
 	
-	            if (_props.passedData) {
-	                (function () {
+	            if (ctx.props.passedData) {
 	
-	                    var queryObj = {},
-	                        queryKeys = _props.queryKeys;
-	                    if (!queryKeys) {
-	                        queryKeys = _props.passedData;
-	                    }
+	                var queryKeys = ctx.props.queryKeys;
 	
+	                if (!queryKeys) {
+	                    queryObj = ctx.props.passedData;
+	                } else {
 	                    queryKeys.forEach(function (key) {
-	                        if (ctx.notEmpty(_props.passedData[key])) {
-	                            queryObj[key] = _props.passedData[key];
+	                        if (ctx.props.passedData[key] !== undefined) {
+	                            queryObj[key] = ctx.props.passedData[key];
 	                        }
 	                    });
-	
-	                    queryStr = [$.param(queryObj)];
-	                })();
+	                }
 	            }
 	
-	            //params, like form-grid
-	            if (!!_props.fetchParams) {
-	                queryStr.push(_props.fetchParams);
+	            // pagination
+	            queryObj = assign({}, queryObj, {
+	                pageSize: ctx.state.pageSize,
+	                currentPage: ctx.state.currentPage
+	            });
+	
+	            // column order
+	            var activeColumn = this.props.activeColumn;
+	            if (!!activeColumn) {
+	                queryObj = assign({}, queryObj, {
+	                    orderColumn: activeColumn.dataKey,
+	                    orderType: activeColumn.orderType
+	                });
 	            }
 	
-	            //pagination
-	            queryStr.push($.param({ pageSize: _props.pageSize, currentPage: this.state.currentPage }));
-	
-	            //column order
-	            var _activeColumn = this.state.activeColumn;
-	            if (_activeColumn) {
-	                queryStr.push($.param({
-	                    orderColumn: _activeColumn.dataKey,
-	                    orderType: _activeColumn.orderType
-	                }));
+	            // search query
+	            var searchTxt = ctx.props.searchTxt;
+	            if (!!searchTxt) {
+	                queryObj = assign({}, queryObj, {
+	                    searchTxt: searchTxt
+	                });
 	            }
 	
-	            //search query
-	            var _queryTxt = this.state.searchTxt;
-	            if (_queryTxt) {
-	                queryStr.push($.param({
-	                    searchTxt: _queryTxt
-	                }));
+	            // fetchParams has the top priority
+	            if (!!ctx.props.fetchParams) {
+	                queryObj = assign({}, queryObj, ctx.props.fetchParams);
 	            }
 	
-	            queryStr.push($.param({ timeStamp: new Date().getTime() }));
-	
-	            return queryStr;
+	            return ctx.props.beforeFetch(queryObj);
 	        }
 	
 	        // pagination
@@ -29327,75 +30797,133 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // filter
 	    }, {
 	        key: "fetchData",
-	        value: function fetchData() {
+	        value: function fetchData(obj) {
 	
 	            var ctx = this;
 	
-	            $.ajax({
-	                url: this.props.fetchUrl + "?" + this.getQueryStr().join("&"),
-	                success: function success(result) {
-	                    var _data = result.content;
-	                    if (result.success) {
-	                        //ctx.props.jsxdata=_data;
-	                        ctx.props.showMask = false;
-	                        ctx.setState({
-	                            data: _data,
-	                            showMask: false
-	                        });
-	                    }
+	            // fetchUrl has the top priority.
+	            if (!!ctx.props.fetchUrl) {
+	                if (!ctx.state.showMask) {
+	                    ctx.setState({
+	                        showMask: true
+	                    });
 	                }
-	            });
+	                var ajaxOptions = {
+	                    url: ctx.props.fetchUrl,
+	                    data: ctx.getQueryObj(),
+	                    success: function success(result) {
+	                        var _data = result.content;
+	                        if (result.success) {
+	                            var updateObj = {
+	                                data: ctx.props.processData(_data),
+	                                showMask: false
+	                            };
+	                            ctx.setState(updateObj);
+	                        }
+	                    }
+	                };
+	
+	                if (/\.jsonp/.test(ctx.props.fetchUrl)) {
+	                    ajaxOptions.dataType = "jsonp";
+	                }
+	
+	                $.ajax(ajaxOptions);
+	            } else if (!!ctx.props.passedData) {
+	
+	                if (!ctx.props.queryKeys) {
+	                    ctx.setState({
+	                        data: ctx.props.processData(ctx.props.passedData)
+	                    });
+	                } else {
+	                    (function () {
+	                        var data = {};
+	                        ctx.props.queryKeys.forEach(function (key, index) {
+	                            if (ctx.props.passedData[key] !== undefined) {
+	                                data[key] = ctx.props.passedData[key];
+	                            }
+	                        });
+	                        ctx.setState({
+	                            data: ctx.props.processData(data)
+	                        });
+	                    })();
+	                }
+	            } else if (!!this.props.jsxdata) {
+	                ctx.setState({
+	                    data: this.props.jsxdata
+	                });
+	            } else {
+	                //default will create one row
+	                ctx.setState({
+	                    "data": {
+	                        datas: [{
+	                            jsxid: 0
+	                        }],
+	                        "currentPage": 1,
+	                        "totalCount": 0
+	                    }
+	                });
+	            }
 	        }
 	    }, {
-	        key: "processData",
-	        value: function processData() {
+	        key: "processColumn",
+	        value: function processColumn() {
 	
 	            var props = this.props,
 	                columns = props.jsxcolumns,
 	                hasCheckedColumn = undefined;
-	            if (!this.state.data) {
-	                //this.props.jsxdata=[];
-	                //this.props.mask=true;
-	                this.fetchData();
-	            }
-	            //this.state.data= this.props.jsxdata;
+	
+	            // filter the column which has a datakey 'jsxchecked'
+	
+	            columns = columns.filter(function (item) {
+	                return item.dataKey !== 'jsxchecked' && item.datakey !== 'jsxtreeIcon';
+	            });
+	
+	            // if hidden is not set, then it's false
+	
 	            columns = columns.map(function (item, index) {
-	                if (item.hidden == undefined) {
-	                    item.hidden = false;
-	                }
-	                if (item.dataKey == 'jsxchecked') {
-	                    hasCheckedColumn = true;
-	                }
+	                item.hidden = item.hidden || false;
 	                return item;
 	            });
 	
-	            //if has rowSelection, also attach checked column
-	            //{ dataKey: 'jsxchecked', width: 30,type:'checkbox'}
-	            if (props.rowSelection && !hasCheckedColumn) {
-	                if (props.subComp) {
-	                    this.props.jsxcolumns = [{ dataKey: 'jsxchecked', width: 60, type: 'checkbox', align: 'right' }].concat(columns);
-	                } else {
-	                    this.props.jsxcolumns = [{ dataKey: 'jsxchecked', width: 30, type: 'checkbox' }].concat(columns);
-	                }
+	            if (!!props.rowSelection) {
+	                columns = [{ dataKey: 'jsxchecked', width: 46, type: 'checkbox', align: 'right' }].concat(columns);
 	            }
+	
+	            // no rowSelection but parentHasCheckbox, render placeholder
+	            else if (!!props.parentHasCheckbox) {
+	                    columns = [{ dataKey: 'jsxwhite', width: 46, type: 'empty' }].concat(columns);
+	                }
+	
+	            if (!!props.subComp) {
+	                columns = [{ dataKey: 'jsxtreeIcon', width: 34, type: 'treeIcon' }].concat(columns);
+	            }
+	            // no subComp but has passedData, means sub mode, parent should has tree icon,
+	            // render tree icon placeholder
+	            else if (!!props.passedData) {
+	                    columns = [{ dataKey: 'jsxwhite', width: 34, type: 'empty' }].concat(columns);
+	                }
+	
+	            return columns;
 	        }
 	
-	        //hancle column picker
+	        //handle column picker
 	    }, {
 	        key: "handleCP",
 	        value: function handleCP(index) {
-	            var props = this.props,
-	                hidden = props.jsxcolumns[index].hidden;
+	            var _columns = [].concat(this.state.columns),
+	                hidden = _columns[index].hidden;
 	            if (hidden == undefined) hidden = true;
-	            props.jsxcolumns[index].hidden = !!hidden ? false : true;
+	            _columns[index].hidden = !!hidden ? false : true;
 	            this.setState({
-	                columns: props.jsxcolumns
+	                columns: _columns
 	            });
 	        }
 	    }, {
 	        key: "selectAll",
 	        value: function selectAll(checked) {
-	            var _data = this.state.data.datas.map(function (item, index) {
+	
+	            var _data = $.extend(true, {}, this.state.data);
+	            _data.datas.map(function (item, index) {
 	                item.jsxchecked = checked;
 	                item.country = item.country;
 	                return item;
@@ -29412,22 +30940,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }, {
 	        key: "onPageChange",
-	        value: function onPageChange(index) {
+	        value: function onPageChange(current) {
 	
-	            this.setState({
-	                currentPage: index
+	            var me = this;
+	            me.setState({
+	                currentPage: current
 	            }, function () {
-	                this.fetchData();
+	                me.fetchData();
+	            });
+	        }
+	    }, {
+	        key: "handleShowSizeChange",
+	        value: function handleShowSizeChange(current, pageSize) {
+	            var me = this;
+	            me.setState({
+	                currentPage: current,
+	                pageSize: pageSize
+	            }, function () {
+	                me.fetchData();
 	            });
 	        }
 	    }, {
 	        key: "renderPager",
 	        value: function renderPager() {
-	            if (this.props.showPager && this.state.data) {
-	                return _react2["default"].createElement(
+	            if (this.props.showPager && this.state.data && this.state.data.totalCount) {
+	                return React.createElement(
 	                    "div",
 	                    { className: "kuma-grid-pagination" },
-	                    _react2["default"].createElement(_uxcorePagination2["default"], { className: "mini", total: this.state.data.totalCount, onChange: this.onPageChange.bind(this), current: this.state.currentPage, pageSize: this.props.pageSize })
+	                    React.createElement(Pagination, { className: "mini",
+	                        showSizeChanger: true,
+	                        total: this.state.data.totalCount,
+	                        onShowSizeChange: this.handleShowSizeChange.bind(this),
+	                        onChange: this.onPageChange.bind(this),
+	                        current: this.state.currentPage,
+	                        pageSize: this.state.pageSize })
 	                );
 	            }
 	        }
@@ -29435,52 +30981,116 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: "handleOrderColumnCB",
 	        value: function handleOrderColumnCB(type, column) {
 	
-	            this.setState({
-	                activeColumn: column
-	            }, function () {
-	                this.fetchData();
-	            });
+	            this.props.activeColumn = column;
+	            this.fetchData();
 	        }
 	    }, {
 	        key: "actionBarCB",
 	        value: function actionBarCB(type, txt) {
 	            if (type == 'SEARCH') {
-	                this.setState({
-	                    searchTxt: txt
-	                }, function () {
-	                    this.fetchData();
-	                });
+	                // TODO: Don't set props
+	                this.props.searchTxt = txt;
+	                this.fetchData();
 	            } else {
 	                var _actionCofig = this.props.actionBar;
 	                _actionCofig[type] ? _actionCofig[type].apply() : "";
 	            }
 	        }
 	    }, {
+	        key: "getData",
+	        value: function getData() {
+	            return this.state.data;
+	        }
+	    }, {
+	        key: "addRow",
+	        value: function addRow() {
+	            this.insertData({
+	                jsxid: ++uid
+	            });
+	        }
+	    }, {
+	        key: "delRow",
+	        value: function delRow(rowData) {
+	            this.removeData(rowData);
+	        }
+	
+	        // some time, UI new some data, but not sync with db,
+	        // need cache on the client, then use save action, get
+	        // all grid data to sync with db
+	        //[{name:'',email:''}]
+	
+	    }, {
+	        key: "insertData",
+	        value: function insertData(objAux) {
+	            var _data = $.extend(true, {}, this.state.data);
+	            if (Object.prototype.toString.call(objAux) !== "[object Array]") {
+	                objAux = [objAux];
+	            }
+	            _data.datas = objAux.concat(_data.datas);
+	
+	            this.setState({
+	                data: _data
+	            });
+	        }
+	    }, {
+	        key: "removeData",
+	        value: function removeData(objAux) {
+	
+	            //at least one record
+	            if (this.state.data.datas.length == 1) {
+	                return;
+	            }
+	            var _data = $.extend(true, {}, this.state.data),
+	                _newArr = undefined;
+	
+	            if (Object.prototype.toString.call(objAux) !== "[object Array]") {
+	                objAux = [objAux];
+	            }
+	
+	            objAux.map(function (item) {
+	                _data.datas.forEach(function (element, index, array) {
+	                    if (element.jsxid == item.jsxid) {
+	                        _data.datas.splice(index, 1);
+	                    }
+	                });
+	            });
+	
+	            this.setState({
+	                data: _data
+	            });
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
-	            this.processData();
+	
 	            var props = this.props,
 	                _style = {
 	                width: props.width,
 	                height: props.height
 	            },
+	                actionBarHeight = props.actionBar ? props.actionBarHeight : 0,
+	                pagerHeight = this.props.showPager && this.state.data && this.state.data.totalCount ? 50 : 0,
+	                bodyHeight = props.height == "100%" ? props.height : props.height - props.headerHeight - actionBarHeight - pagerHeight,
 	                renderBodyProps = {
-	                columns: props.jsxcolumns,
+	                columns: this.state.columns,
 	                data: this.state.data ? this.state.data.datas : [],
-	                width: props.width == "100%" ? props.width : props.width - props.headerHeight,
-	                height: props.height == "100%" ? props.height : props.height - props.headerHeight - props.actionBarHeight - (props.showPager ? 50 : 0),
 	                onModifyRow: props.onModifyRow ? props.onModifyRow : function () {},
 	                rowSelection: props.rowSelection,
 	                subComp: props.subComp,
-	                mask: props.showMask,
+	                actions: {
+	                    'addRow': this.addRow.bind(this),
+	                    'delRow': this.delRow.bind(this)
+	                },
+	                mask: this.state.showMask,
+	                rowHeight: this.props.rowHeight,
+	                mode: this.props.mode,
 	                key: 'grid-body'
 	            },
 	                renderHeaderProps = {
-	                columns: props.jsxcolumns,
-	                activeColumn: this.state.activeColumn,
+	                columns: this.state.columns,
+	                activeColumn: this.props.activeColumn,
 	                checkAll: this.selectAll.bind(this),
 	                columnPicker: props.showColumnPicker,
-	                //fixed: props.fixed,
 	                handleCP: this.handleCP.bind(this),
 	                headerHeight: props.headerHeight,
 	                width: props.width,
@@ -29492,7 +31102,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var gridHeader = undefined,
 	                actionBar = undefined;
 	            if (props.showHeader) {
-	                gridHeader = _react2["default"].createElement(_Header2["default"], renderHeaderProps);
+	                gridHeader = React.createElement(Header, renderHeaderProps);
 	            }
 	
 	            if (props.actionBar) {
@@ -29501,50 +31111,78 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    actionBarCB: this.actionBarCB.bind(this),
 	                    key: 'grid-actionbar'
 	                };
-	                actionBar = _react2["default"].createElement(_ActionBar2["default"], renderActionProps);
+	                actionBar = React.createElement(ActionBar, renderActionProps);
 	            }
 	
-	            return _react2["default"].createElement(
+	            return React.createElement(
 	                "div",
 	                { className: props.jsxprefixCls, style: _style },
 	                actionBar,
-	                gridHeader,
-	                _react2["default"].createElement(_Tbody2["default"], renderBodyProps),
+	                React.createElement(
+	                    "div",
+	                    { className: "kuma-grid-content", style: {
+	                            width: props.width
+	                        } },
+	                    React.createElement(
+	                        "div",
+	                        { className: "kuma-grid-header-wrapper" },
+	                        gridHeader
+	                    ),
+	                    React.createElement(
+	                        "div",
+	                        { className: "kuma-grid-body-wrapper", style: {
+	                                height: bodyHeight
+	                            } },
+	                        React.createElement(Tbody, renderBodyProps)
+	                    )
+	                ),
 	                this.renderPager()
 	            );
 	        }
 	    }]);
 	
 	    return Grid;
-	})(_react2["default"].Component);
+	})(React.Component);
 	
 	;
 	
 	Grid.defaultProps = {
+	    jsxprefixCls: "kuma-grid",
 	    showHeader: true,
-	    width: "100%",
+	    width: 1000,
 	    height: "100%",
-	    headerHeight: 50,
+	    mode: "EDIT",
+	    headerHeight: 40,
 	    actionBarHeight: 40,
 	    showPager: true,
 	    showColumnPicker: true,
-	    showMask: true,
+	    showMask: false,
 	    pageSize: 10,
+	    rowHeight: 76,
 	    fetchParams: '',
-	    //like subComp, we have fetchUrl, but also need query key like id to
-	    //query data
-	    queryKeys: []
+	    currentPage: 1,
+	    queryKeys: [],
+	    searchTxt: '',
+	    processData: function processData(data) {
+	        return data;
+	    },
+	    beforeFetch: function beforeFetch(obj) {
+	        return obj;
+	    }
 	};
 	
 	// http://facebook.github.io/react/docs/reusable-components.html
-	Grid.propTypes = {};
+	Grid.propTypes = {
+	    processData: React.PropTypes.func,
+	    beforeFetch: React.PropTypes.func
+	};
 	
 	Grid.displayName = Grid;
 	
 	module.exports = Grid;
 
 /***/ },
-/* 239 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -29560,19 +31198,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var _react = __webpack_require__(9);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _cellCheckBox = __webpack_require__(240);
-	
-	var _cellCheckBox2 = _interopRequireDefault(_cellCheckBox);
+	var CheckBox = __webpack_require__(243);
+	var assign = __webpack_require__(84);
 	
 	var Header = (function (_React$Component) {
 	    _inherits(Header, _React$Component);
@@ -29598,7 +31229,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'componentWillUnmount',
 	        value: function componentWillUnmount() {
 	            $(document).off('click.uxcore-grid-header');
-	            //window.removeEventListener('click', this.handleGlobalClick.bind(this));
 	        }
 	    }, {
 	        key: 'prepareStyle',
@@ -29656,26 +31286,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	                display: this.state.display
 	            };
 	
-	            return _react2['default'].createElement(
+	            return React.createElement(
 	                'div',
 	                { className: 'kuma-column-picker-container' },
-	                _react2['default'].createElement('i', { className: 'kuma-icon kuma-icon-target-list kuma-column-picker', onClick: this.handleColumnPicker.bind(this) }),
-	                _react2['default'].createElement(
+	                React.createElement('i', { className: 'kuma-icon kuma-icon-target-list kuma-column-picker', onClick: this.handleColumnPicker.bind(this) }),
+	                React.createElement(
 	                    'ul',
 	                    { className: 'kuma-grid-colmnpicker', style: _style, ref: 'columnpicker' },
 	                    this.props.columns.map(function (item, index) {
-	                        if (item.dataKey == 'jsxchecked') return;
+	                        if (item.dataKey == 'jsxchecked' || item.dataKey == "jsxtreeIcon" || item.dataKey == "jsxwhite") return;
 	                        if (item.hidden) {
-	                            return _react2['default'].createElement(
+	                            return React.createElement(
 	                                'li',
-	                                { ref: '', onClick: me.handleColumns.bind(me, index) },
+	                                { ref: '', key: index, onClick: me.handleColumns.bind(me, index) },
 	                                item.title
 	                            );
 	                        } else {
-	                            return _react2['default'].createElement(
+	                            return React.createElement(
 	                                'li',
-	                                { ref: '', onClick: me.handleColumns.bind(me, index) },
-	                                _react2['default'].createElement('i', { className: 'kuma-icon kuma-icon-choose' }),
+	                                { ref: '', key: index, onClick: me.handleColumns.bind(me, index) },
+	                                React.createElement('i', { className: 'kuma-icon kuma-icon-choose' }),
 	                                item.title
 	                            );
 	                        }
@@ -29704,11 +31334,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        asc = "sort-up-active";
 	                    }
 	                }
-	                return _react2['default'].createElement(
+	                return React.createElement(
 	                    'span',
 	                    { className: 'kuma-grid-h-sort' },
-	                    _react2['default'].createElement('i', { className: asc, onClick: this.handleColumnOrder.bind(ctx, 'asc', column) }),
-	                    _react2['default'].createElement('i', { className: desc, onClick: this.handleColumnOrder.bind(ctx, 'desc', column) })
+	                    React.createElement('i', { className: asc, onClick: this.handleColumnOrder.bind(ctx, 'asc', column) }),
+	                    React.createElement('i', { className: desc, onClick: this.handleColumnOrder.bind(ctx, 'desc', column) })
 	                );
 	            }
 	        }
@@ -29726,11 +31356,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            var _style = {
 	                height: props.headerHeight ? props.headerHeight : 40,
-	                width: props.width,
 	                lineHeight: (props.headerHeight ? props.headerHeight : 40) + "px"
 	            };
 	
-	            return _react2['default'].createElement(
+	            return React.createElement(
 	                'div',
 	                { className: props.jsxprefixCls, style: _style },
 	                props.columns.map(function (item, index) {
@@ -29739,37 +31368,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	                    var _style = {
 	                        width: item.width ? item.width : 100,
-	                        textAlign: item.align ? item.align : "center"
+	                        textAlign: item.align ? item.align : "left"
 	                    },
 	                        _v = undefined;
+	
 	                    if (item.type == 'checkbox') {
-	                        _v = _react2['default'].createElement(_cellCheckBox2['default'], { ref: 'checkbox', onchange: ctx.handleCheckBoxChange.bind(ctx) });
+	                        assign(_style, {
+	                            paddingRight: 32,
+	                            paddingLeft: 12,
+	                            width: item.width ? item.width : 92
+	                        });
+	
+	                        _v = React.createElement(CheckBox, { ref: 'checkbox', onchange: ctx.handleCheckBoxChange.bind(ctx) });
 	                    } else {
 	                        _v = item.title;
 	                    }
-	                    if (index == props.columns.length - 1) {
-	                        return _react2['default'].createElement(
-	                            'div',
-	                            { className: 'kuma-grid-cell', style: _style },
-	                            _react2['default'].createElement(
-	                                'span',
-	                                null,
-	                                _v
-	                            ),
-	                            ctx.renderOrderIcon(item)
-	                        );
-	                    } else {
-	                        return _react2['default'].createElement(
-	                            'div',
-	                            { className: 'kuma-grid-cell', style: _style },
-	                            _react2['default'].createElement(
-	                                'span',
-	                                null,
-	                                _v
-	                            ),
-	                            ctx.renderOrderIcon(item)
-	                        );
-	                    }
+	
+	                    return React.createElement(
+	                        'div',
+	                        { key: index, className: 'kuma-grid-cell', style: _style },
+	                        React.createElement(
+	                            'span',
+	                            null,
+	                            _v
+	                        ),
+	                        ctx.renderOrderIcon(item)
+	                    );
 	                }),
 	                _picker
 	            );
@@ -29777,7 +31401,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }]);
 	
 	    return Header;
-	})(_react2['default'].Component);
+	})(React.Component);
 	
 	;
 	
@@ -29791,12 +31415,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 240 */
-/***/ function(module, exports, __webpack_require__) {
+/* 243 */
+/***/ function(module, exports) {
 
 	/**
 	 * A checkbox field
 	 */
+	
 	'use strict';
 	
 	Object.defineProperty(exports, '__esModule', {
@@ -29809,15 +31434,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var _react = __webpack_require__(9);
-	
-	var _react2 = _interopRequireDefault(_react);
 	
 	var CheckBox = (function (_React$Component) {
 	    _inherits(CheckBox, _React$Component);
@@ -29858,22 +31477,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var renderProps = {
-	                className: "kuma-checkbox",
-	                checked: this.props.jsxchecked,
-	                onChange: this.handleChange.bind(this)
-	            };
-	            return _react2['default'].createElement(
-	                'label',
-	                null,
-	                _react2['default'].createElement('input', _extends({ type: 'checkbox', ref: 'checkbox' }, renderProps)),
-	                _react2['default'].createElement('s', null)
-	            );
+	
+	            var props = this.props;
+	
+	            if (props.mode !== 'VIEW') {
+	                var renderProps = {
+	                    className: "kuma-checkbox",
+	                    checked: this.props.jsxchecked,
+	                    onChange: this.handleChange.bind(this)
+	                };
+	                return React.createElement(
+	                    'label',
+	                    null,
+	                    React.createElement('input', _extends({ type: 'checkbox', ref: 'checkbox' }, renderProps)),
+	                    React.createElement('s', null)
+	                );
+	            } else {
+	                return React.createElement('span', { key: 'text' });
+	            }
 	        }
 	    }]);
 	
 	    return CheckBox;
-	})(_react2['default'].Component);
+	})(React.Component);
 	
 	;
 	
@@ -29885,12 +31511,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 241 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Created by xy on 15/4/13.
 	 */
+	
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
@@ -29901,23 +31528,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var _react = __webpack_require__(9);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _Row = __webpack_require__(242);
-	
-	var _Row2 = _interopRequireDefault(_Row);
-	
-	var _Mask = __webpack_require__(245);
-	
-	var _Mask2 = _interopRequireDefault(_Mask);
+	var Row = __webpack_require__(245);
+	var Mask = __webpack_require__(250);
 	
 	var Tbody = (function (_React$Component) {
 	    _inherits(Tbody, _React$Component);
@@ -29942,20 +31558,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: "prepareStyle",
 	        value: function prepareStyle() {}
 	    }, {
+	        key: "renderEmptyData",
+	        value: function renderEmptyData() {
+	            if (this.props.data.length == 0) {
+	                var _style = {
+	                    lineHeight: this.props.height - 10 + "px"
+	                };
+	                return React.createElement(
+	                    "div",
+	                    { className: "kuma-gird-body-emptyword", style: _style },
+	                    "暂无数据."
+	                );
+	            }
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
 	
 	            var _props = this.props,
 	                _columns = _props.columns,
-	                _data = _props.data;
+	                _data = _props.data.length > 0 ? _props.data : [];
 	            var _style = {
-	                width: _props.width,
-	                height: _props.height,
-	                overflowY: 'scroll'
+	                // width: _props.width,
+	                // height: _props.height,
+	                // overflowY:'auto'
 	            };
-	            return _react2["default"].createElement(
+	
+	            return React.createElement(
 	                "div",
 	                { className: this.props.jsxprefixCls, style: _style },
+	                this.renderEmptyData(),
 	                _data.map(function (item, index) {
 	                    var renderProps = {
 	                        columns: _columns,
@@ -29964,17 +31596,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        onModifyRow: _props.onModifyRow,
 	                        rowSelection: _props.rowSelection,
 	                        subComp: _props.subComp,
-	                        key: 'row' + index
+	                        actions: _props.actions,
+	                        key: 'row' + index,
+	                        rowHeight: _props.rowHeight,
+	                        mode: _props.mode,
+	                        ts: new Date().getTime()
 	                    };
-	                    return _react2["default"].createElement(_Row2["default"], renderProps);
+	                    return React.createElement(Row, renderProps);
 	                }),
-	                _react2["default"].createElement(_Mask2["default"], { visible: _props.mask })
+	                React.createElement(Mask, { visible: _props.mask })
 	            );
 	        }
 	    }]);
 	
 	    return Tbody;
-	})(_react2["default"].Component);
+	})(React.Component);
 	
 	;
 	
@@ -29988,35 +31624,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 242 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Created by xy on 15/4/13.
 	 */
-	'use strict';
+	"use strict";
 	
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var _react = __webpack_require__(9);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _cellIndex = __webpack_require__(243);
-	
-	var _cellIndex2 = _interopRequireDefault(_cellIndex);
+	var Cell = __webpack_require__(246);
 	
 	var Row = (function (_React$Component) {
 	    _inherits(Row, _React$Component);
@@ -30024,43 +31652,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function Row(props) {
 	        _classCallCheck(this, Row);
 	
-	        _get(Object.getPrototypeOf(Row.prototype), 'constructor', this).call(this, props);
-	        this.state = {
-	            st_showSubComp: false //默认隐藏
-	        };
+	        _get(Object.getPrototypeOf(Row.prototype), "constructor", this).call(this, props);
+	        // console.log("++row++");
 	    }
 	
 	    _createClass(Row, [{
-	        key: 'componentDidMount',
+	        key: "componentDidMount",
 	        value: function componentDidMount() {}
 	    }, {
-	        key: 'componentDidUpdate',
+	        key: "componentDidUpdate",
 	        value: function componentDidUpdate() {}
 	    }, {
-	        key: 'componentWillUnmount',
+	        key: "componentWillUnmount",
 	        value: function componentWillUnmount() {}
 	    }, {
-	        key: 'handleClick',
+	        key: "handleClick",
 	        value: function handleClick() {}
 	    }, {
-	        key: 'showSubComp',
+	        key: "showSubComp",
 	        value: function showSubComp() {
-	            this.setState({
-	                st_showSubComp: !this.state.st_showSubComp
-	            });
+	            this.props.showSubComp = !this.props.showSubComp;
+	            this.forceUpdate();
 	        }
 	    }, {
-	        key: 'renderSubComp',
+	        key: "renderSubComp",
 	        value: function renderSubComp() {
+	
 	            var props = this.props;
-	            if (props.subComp && this.state.st_showSubComp) {
-	                //return false;
-	                var subComp = _react2['default'].cloneElement(props.subComp, {
-	                    passedData: this.props.data[this.props.rowIndex]
+	            if (props.subComp && this.props.showSubComp) {
+	                var subComp = React.cloneElement(props.subComp, {
+	                    passedData: this.props.data[this.props.rowIndex],
+	                    parentHasCheckbox: !!this.props.rowSelection
 	                });
-	                return _react2['default'].createElement(
-	                    'div',
-	                    { className: 'kuma-grid-subrow', ref: 'subRow' },
+	                return React.createElement(
+	                    "div",
+	                    { className: "kuma-grid-subrow", ref: "subRow" },
 	                    subComp
 	                );
 	            } else {
@@ -30068,17 +31694,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	    }, {
-	        key: 'render',
+	        key: "render",
 	        value: function render() {
+	
 	            var props = this.props,
 	                _columns = props.columns,
 	                _style = {},
 	                _data = props.data,
 	                ctx = this;
 	
-	            return _react2['default'].createElement(
-	                'div',
-	                { className: this.props.jsxprefixCls, onClick: this.handleClick.bind(this) },
+	            return React.createElement(
+	                "div",
+	                { className: this.props.jsxprefixCls, style: _style, onClick: this.handleClick.bind(this) },
 	                _columns.map(function (item, index) {
 	
 	                    if (item.hidden) return;
@@ -30091,14 +31718,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        hasSubComp: props.subComp ? true : false,
 	                        data: _data,
 	                        showSubCompCallback: ctx.showSubComp,
-	                        st_showSubComp: ctx.state.st_showSubComp,
+	                        st_showSubComp: ctx.props.showSubComp,
 	                        ctx: ctx,
 	                        onModifyRow: props.onModifyRow,
 	                        rowSelection: props.rowSelection,
+	                        actions: props.actions,
+	                        mode: props.mode,
 	                        key: "cell" + index
 	                    };
 	                    //if have vertical data structure, how to process it
-	                    return _react2['default'].createElement(_cellIndex2['default'], renderProps);
+	                    return React.createElement(Cell, renderProps);
 	                }),
 	                this.renderSubComp()
 	            );
@@ -30106,21 +31735,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }]);
 	
 	    return Row;
-	})(_react2['default'].Component);
+	})(React.Component);
 	
 	;
 	
-	Row.propTypes = {};
-	
-	Row.defaultProps = {
-	    jsxprefixCls: "kuma-grid-row"
+	Row.propTypes = {
+	    jsxprefixCls: React.PropTypes.string,
+	    showSubComp: React.PropTypes.bool
 	};
 	
-	exports['default'] = Row;
-	module.exports = exports['default'];
+	Row.defaultProps = {
+	    jsxprefixCls: "kuma-grid-row",
+	    showSubComp: false
+	};
+	
+	exports["default"] = Row;
+	module.exports = exports["default"];
 
 /***/ },
-/* 243 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -30136,23 +31769,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var _react = __webpack_require__(9);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _CheckBox = __webpack_require__(240);
-	
-	var _CheckBox2 = _interopRequireDefault(_CheckBox);
-	
-	var _TextField = __webpack_require__(244);
-	
-	var _TextField2 = _interopRequireDefault(_TextField);
+	var CheckBox = __webpack_require__(243);
+	var TextField = __webpack_require__(247);
+	var SelectField = __webpack_require__(248);
+	var util = __webpack_require__(249);
 	
 	var Cell = (function (_React$Component) {
 	    _inherits(Cell, _React$Component);
@@ -30182,9 +31806,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'handleClick',
 	        value: function handleClick(e) {
-	            this.setState({
-	                mode: "edit"
-	            });
+	            /* this.setState({
+	                 mode:"edit"
+	             })*/
 	        }
 	    }, {
 	        key: 'getSelectionRows',
@@ -30212,12 +31836,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _props.rowData[_props.column.dataKey] = e.target.value;
 	        }
 	    }, {
+	        key: 'handleChange',
+	        value: function handleChange(v) {
+	            var _props = this.props;
+	            _props.rowData[_props.column.dataKey] = v;
+	        }
+	    }, {
 	        key: 'onblur',
 	        value: function onblur(e) {
+	
+	            var _props = this.props;
+	            _props.rowData[_props.column.dataKey] = e.target.value;
+	
+	            return;
 	            var _props = this.props,
 	                record = _props.rowData,
 	                value = record[_props.column.dataKey];
-	
 	            var isValid = _props.onModifyRow.apply(null, [value, _props.column.dataKey, record]);
 	            if (isValid) {
 	                this.setState({
@@ -30233,20 +31867,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.props.showSubCompCallback.call(this.props.ctx);
 	        }
 	    }, {
-	        key: 'renderChildIcon',
-	        value: function renderChildIcon() {
+	        key: 'renderTreeIcon',
+	        value: function renderTreeIcon() {
 	            if (this.props.cellIndex == 0 && this.props.hasSubComp) {
 	                if (this.props.st_showSubComp) {
-	                    return _react2['default'].createElement(
+	                    return React.createElement(
 	                        'span',
 	                        { className: 'kuma-grid-tree-icon', onClick: this.showSubComp.bind(this) },
-	                        _react2['default'].createElement('i', { className: 'kuma-icon kuma-icon-tree-open' })
+	                        React.createElement('i', { className: 'kuma-icon kuma-icon-tree-open-2' })
 	                    );
 	                } else {
-	                    return _react2['default'].createElement(
+	                    return React.createElement(
 	                        'span',
 	                        { className: 'kuma-grid-tree-icon', onClick: this.showSubComp.bind(this) },
-	                        _react2['default'].createElement('i', { className: 'kuma-icon kuma-icon-tree-close' })
+	                        React.createElement('i', { className: 'kuma-icon kuma-icon-tree-close-2' })
 	                    );
 	                }
 	            }
@@ -30260,10 +31894,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if (el.data('type') == 'inlineEdit') {
 	                    this.showSubComp();
 	                    return;
+	                } else if (el.data('type') == 'addRow') {
+	                    this.props.actions['addRow'].apply();
+	                } else if (el.data('type') == 'delRow') {
+	                    this.props.actions['delRow'].apply(null, [rowData]);
 	                }
 	                items.map(function (item) {
 	                    if (item.type == el.data('type')) {
-	                        item.cb.apply(null, [rowData]);
+	                        item.cb ? item.cb.apply(null, [rowData]) : '';
 	                    }
 	                });
 	            }
@@ -30273,62 +31911,100 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function render() {
 	
 	            var props = this.props,
+	                ctx = this,
 	                _column = props.column,
 	                _width = _column.width,
 	                _style = {
 	                width: _width ? _width : 100,
-	                textAlign: props.align ? props.align : "center"
+	                textAlign: props.align ? props.align : "left"
 	            },
 	                _v = props.rowData,
 	                renderProps = undefined;
 	
 	            if (_column.render) {
 	                _v = _column.render.apply(null, [_v]);
-	            } else if (_column.type == 'action') {
-	                _v = _react2['default'].createElement(
+	            } else if (_column.type == 'action' && props.mode == 'EDIT') {
+	
+	                _v = React.createElement(
 	                    'div',
 	                    { className: 'action-container', onClick: this.doAction.bind(this, _v, _column.items) },
-	                    _column.items.map(function (child) {
-	                        return _react2['default'].createElement(
+	                    _column.items.map(function (child, index) {
+	                        return React.createElement(
 	                            'span',
-	                            { className: 'action', 'data-type': child.type },
+	                            { className: 'action', key: index, 'data-type': child.type },
 	                            child.title
 	                        );
 	                    })
 	                );
 	            } else if (_column.type == 'checkbox') {
+	
+	                _style.paddingRight = 32;
+	                _style.paddingLeft = 12;
+	
 	                var checked = undefined;
 	                if (_v.jsxchecked) {
 	                    checked = 'checked';
 	                } else {
 	                    checked = "";
 	                }
-	                _v = _react2['default'].createElement(_CheckBox2['default'], { align: props.align, jsxchecked: checked, ref: 'checkbox', onchange: this.handleCheckChange.bind(this) });
-	            } else if (_column.type == 'text' && this.state.mode == 'edit') {
+	                _v = React.createElement(CheckBox, { mode: props.mode, align: props.align, jsxchecked: checked, ref: 'checkbox', onchange: this.handleCheckChange.bind(this) });
+	            } else if (_column.type == 'treeIcon') {
+	                _v = ctx.renderTreeIcon();
+	            } else if (_column.type == 'text') {
 	                renderProps = {
 	                    value: _v[_column.dataKey],
+	                    mode: props.mode,
 	                    onchange: this.handleTxtChange.bind(this),
 	                    onblur: this.onblur.bind(this)
 	                };
-	                _v = _react2['default'].createElement(_TextField2['default'], renderProps);
+	                _v = React.createElement(TextField, renderProps);
+	            } else if (_column.type == 'select') {
+	                renderProps = {
+	                    value: _v[_column.dataKey],
+	                    mode: props.mode,
+	                    config: _column,
+	                    handleChange: this.handleChange.bind(this)
+	                };
+	                _v = React.createElement(SelectField, renderProps);
+	            } else if (_column.type == 'money' || _column.type == "card" || _column.type == "cnmobile") {
+	                _v = React.createElement(
+	                    'div',
+	                    { title: props.rowData[_column.dataKey] },
+	                    util.formatValue(props.rowData[_column.dataKey], _column.type, _column.delimiter)
+	                );
+	            } else if (_column.type == "person" && !!_column.plugin && _column.token) {
+	                try {
+	                    var Hovercard = _column.plugin;
+	                    _v = React.createElement(
+	                        Hovercard,
+	                        { emplId: props.rowData[_column.dataKey], placement: 'right', token: _column.token },
+	                        React.createElement(
+	                            'div',
+	                            null,
+	                            props.rowData[_column.dataKey]
+	                        )
+	                    );
+	                } catch (e) {
+	                    console.log(e);
+	                }
 	            } else {
-	                _v = _react2['default'].createElement(
-	                    'span',
-	                    null,
+	                _v = React.createElement(
+	                    'div',
+	                    { title: props.rowData[_column.dataKey] },
 	                    props.rowData[_column.dataKey]
 	                );
 	            }
-	            return _react2['default'].createElement(
+	
+	            return React.createElement(
 	                'div',
 	                { className: props.jsxprefixCls, style: _style, onClick: this.handleClick.bind(this) },
-	                this.renderChildIcon(),
 	                _v
 	            );
 	        }
 	    }]);
 	
 	    return Cell;
-	})(_react2['default'].Component);
+	})(React.Component);
 	
 	;
 	
@@ -30342,12 +32018,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 244 */
-/***/ function(module, exports, __webpack_require__) {
+/* 247 */
+/***/ function(module, exports) {
 
 	/**
 	 * A editable  plain text field
 	 */
+	
 	'use strict';
 	
 	Object.defineProperty(exports, '__esModule', {
@@ -30360,15 +32037,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var _react = __webpack_require__(9);
-	
-	var _react2 = _interopRequireDefault(_react);
 	
 	var TextField = (function (_React$Component) {
 	    _inherits(TextField, _React$Component);
@@ -30377,13 +32048,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _classCallCheck(this, TextField);
 	
 	        _get(Object.getPrototypeOf(TextField.prototype), 'constructor', this).call(this, props);
-	        this.state = {};
+	        this.state = {
+	            value: this.props.value
+	        };
 	    }
 	
 	    _createClass(TextField, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            this.focus();
+	            //this.focus();
 	        }
 	    }, {
 	        key: 'componentDidUpdate',
@@ -30397,22 +32070,47 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'componentWillUnmount',
 	        value: function componentWillUnmount() {}
 	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            this.setState({
+	                value: nextProps.value
+	            });
+	        }
+	    }, {
+	        key: 'handleChange',
+	        value: function handleChange(newValue) {
+	            this.setState({ value: newValue });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
+	
 	            var props = this.props,
+	                renderProps = undefined;
+	            if (props.mode !== 'VIEW') {
 	                renderProps = {
-	                className: "kuma-input",
-	                ref: 'txtfield',
-	                defaultValue: props.value,
-	                onBlur: props.onblur.bind(this),
-	                onChange: props.onchange.bind(this)
-	            };
-	            return _react2['default'].createElement('input', _extends({ type: 'text' }, renderProps));
+	                    className: "kuma-input",
+	                    ref: 'txtfield',
+	                    onBlur: props.onblur.bind(this)
+	                };
+	
+	                var valueLink = {
+	                    value: this.state.value,
+	                    requestChange: this.handleChange.bind(this)
+	                };
+	                return React.createElement('input', _extends({ type: 'text' }, renderProps, { valueLink: valueLink }));
+	            } else {
+	                return React.createElement(
+	                    'span',
+	                    { key: 'text' },
+	                    this.state.value
+	                );
+	            }
 	        }
 	    }]);
 	
 	    return TextField;
-	})(_react2['default'].Component);
+	})(React.Component);
 	
 	;
 	
@@ -30424,8 +32122,146 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 245 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Grid Component for uxcore
+	 * @author zhouquan.yezq
+	 *
+	 * Copyright 2014-2015, UXCore Team, Alinw.
+	 * All rights reserved.
+	 */
+	
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Select = __webpack_require__(175);
+	var Option = Select.Option;
+	
+	var SelectField = (function (_React$Component) {
+	    _inherits(SelectField, _React$Component);
+	
+	    function SelectField(props) {
+	        _classCallCheck(this, SelectField);
+	
+	        _get(Object.getPrototypeOf(SelectField.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            value: this.props.value
+	        };
+	    }
+	
+	    _createClass(SelectField, [{
+	        key: "componentDidMount",
+	        value: function componentDidMount() {}
+	    }, {
+	        key: "componentDidUpdate",
+	        value: function componentDidUpdate() {}
+	    }, {
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {}
+	    }, {
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
+	
+	            this.setState({
+	                value: nextProps.value
+	            });
+	        }
+	    }, {
+	        key: "handleChange",
+	        value: function handleChange(value) {
+	
+	            this.setState({
+	                value: value
+	            });
+	            this.props.handleChange.apply(null, [value]);
+	        }
+	    }, {
+	        key: "renderOptions",
+	        value: function renderOptions(config) {
+	            var _arr = [];
+	            for (var key in config.options) {
+	                _arr.push(React.createElement(
+	                    Option,
+	                    { value: key, key: key },
+	                    config.options[key]
+	                ));
+	            }
+	            return _arr;
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	
+	            var props = this.props,
+	                renderProps = undefined,
+	                config = props.config;
+	            if (props.mode !== 'VIEW') {
+	                return React.createElement(
+	                    Select,
+	                    { value: this.state.value, optionLabelProp: "children", showSearch: false, style: { width: config.width - 10 }, onChange: this.handleChange.bind(this) },
+	                    this.renderOptions(config).map(function (item) {
+	                        return item;
+	                    })
+	                );
+	            } else {
+	                return React.createElement(
+	                    "span",
+	                    { key: "text" },
+	                    this.state.value
+	                );
+	            }
+	        }
+	    }]);
+	
+	    return SelectField;
+	})(React.Component);
+	
+	;
+	
+	SelectField.propTypes = {};
+	
+	SelectField.defaultProps = {};
+	
+	exports["default"] = SelectField;
+	module.exports = exports["default"];
+
+/***/ },
+/* 249 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var util = {
+	    formatValue: function formatValue(value, type, delimiter) {
+	        delimiter = delimiter || " ";
+	        if (type == "money") {
+	            return value.replace(/(\d{3})(?!$)/g, "$1" + delimiter);
+	        } else if (type == "card") {
+	            return value.replace(/(\d{4})(?!$)/g, "$1" + delimiter);
+	        } else if (type == "cnmobile") {
+	            return value.replace(/^(\+?0?86)(?!$)/, "$1" + delimiter).replace(/(\d{4})(?!$)/g, "$1" + delimiter);
+	        }
+	    }
+	};
+	
+	module.exports = util;
+
+/***/ },
+/* 250 */
+/***/ function(module, exports) {
 
 	/**
 	 * @author: zhouquan.yezq
@@ -30441,15 +32277,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var _react = __webpack_require__(9);
-	
-	var _react2 = _interopRequireDefault(_react);
 	
 	var Mask = (function (_React$Component) {
 	    _inherits(Mask, _React$Component);
@@ -30479,17 +32309,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	                visible = props.visible,
 	                loadTips = props.tips ? props.tips : "Loading...";
 	            var _className = props.jsxprefixCls;
-	
+	            // console.log("visible:",visible);
 	            if (!visible) {
 	                _className = _className + " kuma-mask-hide";
 	            }
-	            return _react2["default"].createElement(
+	            return React.createElement(
 	                "div",
 	                { className: _className },
-	                _react2["default"].createElement(
+	                React.createElement(
 	                    "div",
 	                    { className: "kuma-mask-centerblk" },
-	                    _react2["default"].createElement(
+	                    React.createElement(
 	                        "span",
 	                        null,
 	                        loadTips
@@ -30500,7 +32330,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }]);
 	
 	    return Mask;
-	})(_react2["default"].Component);
+	})(React.Component);
 	
 	;
 	
@@ -30514,7 +32344,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 246 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -30525,29 +32355,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * All rights reserved.
 	 */
 	
-	'use strict';
+	"use strict";
 	
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var _react = __webpack_require__(9);
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _SearchBar = __webpack_require__(247);
-	
-	var _SearchBar2 = _interopRequireDefault(_SearchBar);
+	var SearchBar = __webpack_require__(252);
+	var classnames = __webpack_require__(4);
 	
 	var ActionBar = (function (_React$Component) {
 	    _inherits(ActionBar, _React$Component);
@@ -30555,30 +32382,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function ActionBar(props) {
 	        _classCallCheck(this, ActionBar);
 	
-	        _get(Object.getPrototypeOf(ActionBar.prototype), 'constructor', this).call(this, props);
+	        _get(Object.getPrototypeOf(ActionBar.prototype), "constructor", this).call(this, props);
 	    }
 	
 	    _createClass(ActionBar, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {}
-	    }, {
-	        key: 'componentDidUpdate',
-	        value: function componentDidUpdate() {}
-	    }, {
-	        key: 'componentWillUnmount',
-	        value: function componentWillUnmount() {}
-	    }, {
-	        key: 'prepareStyle',
-	        value: function prepareStyle() {}
-	    }, {
-	        key: 'doAction',
+	        key: "doAction",
 	        value: function doAction(type) {
 	            this.props.actionBarCB(type);
 	        }
 	
-	        //TODO reduce code
+	        //TODO throw away type & just support text & callback
 	    }, {
-	        key: 'renderActionBtn',
+	        key: "renderActionBtn",
 	        value: function renderActionBtn(type) {
 	
 	            var _props = this.props,
@@ -30589,44 +32404,51 @@ return /******/ (function(modules) { // webpackBootstrap
 	            };
 	
 	            if (type == 'new' && !!_config[type]) {
-	                return _react2['default'].createElement(
-	                    'a',
-	                    { href: 'javascript:;', className: 'kuma-button kuma-button-swhite', onClick: this.doAction.bind(this, 'new') },
-	                    '新增'
+	                return React.createElement(
+	                    "a",
+	                    { key: type, href: "javascript:;", className: "kuma-button kuma-button-swhite", onClick: this.doAction.bind(this, 'new') },
+	                    "新增"
 	                );
 	            }
 	            if (type == 'import' && !!_config[type]) {
-	                return _react2['default'].createElement(
-	                    'a',
-	                    { href: 'javascript:;', className: 'kuma-button kuma-button-swhite', onClick: this.doAction.bind(this, 'import') },
-	                    '导入'
+	                return React.createElement(
+	                    "a",
+	                    { key: type, href: "javascript:;", className: "kuma-button kuma-button-swhite", onClick: this.doAction.bind(this, 'import') },
+	                    "导入"
 	                );
 	            }
 	            if (type == 'export' && !!_config[type]) {
-	                return _react2['default'].createElement(
-	                    'a',
-	                    { href: 'javascript:;', className: 'kuma-button kuma-button-swhite', onClick: this.doAction.bind(this, 'export') },
-	                    '导出'
+	                return React.createElement(
+	                    "a",
+	                    { key: type, href: "javascript:;", className: "kuma-button kuma-button-swhite", onClick: this.doAction.bind(this, 'export') },
+	                    "导出"
 	                );
 	            }
-	
+	            if (type == 'delete' && !!_config[type]) {
+	                return React.createElement(
+	                    "a",
+	                    { key: type, href: "javascript:;", className: "kuma-button kuma-button-swhite", onClick: this.doAction.bind(this, 'delete') },
+	                    "批量删除"
+	                );
+	            }
 	            if (type == 'search' && !!_config[type]) {
-	                return _react2['default'].createElement(_SearchBar2['default'], renderSearchBarProps);
+	                return React.createElement(SearchBar, _extends({ key: type }, renderSearchBarProps));
 	            }
 	        }
 	
 	        // how to iterator json key use util method
 	    }, {
-	        key: 'render',
+	        key: "render",
 	        value: function render() {
-	            var me = this,
-	                _props = this.props,
-	                _className = _props.jsxprefixCls;
+	            var _classnames;
 	
-	            return _react2['default'].createElement(
-	                'div',
-	                { className: _className },
-	                ['new', 'import', 'export', 'search'].map(function (item) {
+	            var me = this,
+	                _props = this.props;
+	
+	            return React.createElement(
+	                "div",
+	                { className: classnames((_classnames = {}, _defineProperty(_classnames, _props.jsxprefixCls, _props.jsxprefixCls), _defineProperty(_classnames, "fn-clear", true), _classnames)) },
+	                ['new', 'delete', 'import', 'export', 'search'].map(function (item) {
 	                    return me.renderActionBtn(item);
 	                })
 	            );
@@ -30634,7 +32456,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }]);
 	
 	    return ActionBar;
-	})(_react2['default'].Component);
+	})(React.Component);
 	
 	;
 	
@@ -30644,11 +32466,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    jsxprefixCls: "kuma-grid-actionbar"
 	};
 	
-	exports['default'] = ActionBar;
-	module.exports = exports['default'];
+	exports["default"] = ActionBar;
+	module.exports = exports["default"];
 
 /***/ },
-/* 247 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -30659,29 +32481,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * All rights reserved.
 	 */
 	
-	'use strict';
+	"use strict";
 	
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var _react = __webpack_require__(9);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactMixin = __webpack_require__(248);
-	
-	var _reactMixin2 = _interopRequireDefault(_reactMixin);
+	var reactMixin = __webpack_require__(253);
 	
 	var SearchBar = (function (_React$Component) {
 	    _inherits(SearchBar, _React$Component);
@@ -30689,52 +32503,52 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function SearchBar(props) {
 	        _classCallCheck(this, SearchBar);
 	
-	        _get(Object.getPrototypeOf(SearchBar.prototype), 'constructor', this).call(this, props);
+	        _get(Object.getPrototypeOf(SearchBar.prototype), "constructor", this).call(this, props);
 	        this.state = {
 	            searchTxt: ""
 	        };
 	    }
 	
 	    _createClass(SearchBar, [{
-	        key: 'componentDidMount',
+	        key: "componentDidMount",
 	        value: function componentDidMount() {}
 	    }, {
-	        key: 'componentDidUpdate',
+	        key: "componentDidUpdate",
 	        value: function componentDidUpdate() {}
 	    }, {
-	        key: 'componentWillUnmount',
+	        key: "componentWillUnmount",
 	        value: function componentWillUnmount() {}
 	    }, {
-	        key: 'prepareStyle',
+	        key: "prepareStyle",
 	        value: function prepareStyle() {}
 	    }, {
-	        key: 'doSearch',
+	        key: "doSearch",
 	        value: function doSearch() {
 	            this.props.actionBarCB("SEARCH", this.state.searchTxt);
 	        }
 	    }, {
-	        key: 'onKeyDown',
+	        key: "onKeyDown",
 	        value: function onKeyDown(e) {
 	            if (e.keyCode == 13) {
 	                this.doSearch();
 	            }
 	        }
 	    }, {
-	        key: 'render',
+	        key: "render",
 	        value: function render() {
 	
 	            var _className = this.props.jsxprefixCls;
-	            return _react2['default'].createElement(
-	                'div',
+	            return React.createElement(
+	                "div",
 	                { className: _className },
-	                _react2['default'].createElement('input', { type: 'text', className: 'kuma-input', placeholder: '搜索表格内容', valueLink: this.linkState('searchTxt'), onKeyDown: this.onKeyDown.bind(this) }),
-	                _react2['default'].createElement('i', { className: 'kuma-icon kuma-icon-search', onClick: this.doSearch.bind(this) })
+	                React.createElement("input", { type: "text", className: "kuma-input", placeholder: "搜索表格内容", valueLink: this.linkState('searchTxt'), onKeyDown: this.onKeyDown.bind(this) }),
+	                React.createElement("i", { className: "kuma-icon kuma-icon-search", onClick: this.doSearch.bind(this) })
 	            );
 	        }
 	    }]);
 	
 	    return SearchBar;
-	})(_react2['default'].Component);
+	})(React.Component);
 	
 	;
 	
@@ -30744,17 +32558,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    jsxprefixCls: "kuma-grid-searchbar"
 	};
 	
-	_reactMixin2['default'].onClass(SearchBar, _react2['default'].addons.LinkedStateMixin);
+	reactMixin.onClass(SearchBar, React.addons.LinkedStateMixin);
 	
-	exports['default'] = SearchBar;
-	module.exports = exports['default'];
+	exports["default"] = SearchBar;
+	module.exports = exports["default"];
 
 /***/ },
-/* 248 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var mixin = __webpack_require__(249);
-	var assign = __webpack_require__(160);
+	var mixin = __webpack_require__(254);
+	var assign = __webpack_require__(84);
 	
 	var mixinProto = mixin({
 	  // lifecycle stuff is as you'd expect
@@ -30907,7 +32721,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 249 */
+/* 254 */
 /***/ function(module, exports) {
 
 	var objToStr = function(x){ return Object.prototype.toString.call(x); };
@@ -31090,7 +32904,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 250 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31103,10 +32917,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	module.exports = __webpack_require__(251);
+	module.exports = __webpack_require__(256);
 
 /***/ },
-/* 251 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31127,13 +32941,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcPagination = __webpack_require__(252);
+	var _rcPagination = __webpack_require__(257);
 	
 	var _rcPagination2 = _interopRequireDefault(_rcPagination);
 	
-	var _objectAssign = __webpack_require__(160);
+	var _objectAssign = __webpack_require__(84);
 	
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+	
+	var _uxcoreSelect2 = __webpack_require__(175);
+	
+	var _uxcoreSelect22 = _interopRequireDefault(_uxcoreSelect2);
 	
 	var Pagination = (function (_RcPagination) {
 		_inherits(Pagination, _RcPagination);
@@ -31152,21 +32970,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	Pagination.displayName = 'uxcore-pagination';
 	Pagination.propTypes = _rcPagination2['default'].propTypes;
 	Pagination.defaultProps = (0, _objectAssign2['default'])(_rcPagination2['default'].defaultProps, {
-		prefixCls: 'kuma-pagination'
+		prefixCls: 'kuma-pagination',
+		selectPrefixCls: 'kuma-select',
+		selectComponentClass: _uxcoreSelect22['default']
 	});
 	module.exports = exports['default'];
 
 /***/ },
-/* 252 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// export this package's api
 	'use strict';
 	
-	module.exports = __webpack_require__(253);
+	module.exports = __webpack_require__(258);
 
 /***/ },
-/* 253 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31214,9 +33034,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	var React = __webpack_require__(9);
-	var Pager = __webpack_require__(254);
-	var Options = __webpack_require__(255);
-	var KEYCODE = __webpack_require__(256);
+	var Pager = __webpack_require__(259);
+	var Options = __webpack_require__(260);
+	var KEYCODE = __webpack_require__(261);
 	
 	function noop() {}
 	
@@ -31236,7 +33056,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      pageSize: props.pageSize
 	    };
 	
-	    ['render', '_handleChange', '_handleKeyUp', '_handleKeyDown', '_changePageSize', '_isValid', '_prev', '_next', '_hasPrev', '_hasNext', '_jumpPrev', '_jumpNext', '_canJumpPrev', '_canJumpNext'].forEach(function (method) {
+	    ['render', '_handleChange', '_handleKeyUp', '_handleKeyDown', '_changePageSize', '_isValid', '_prev', '_next', '_hasPrev', '_hasNext', '_jumpPrev', '_jumpNext'].forEach(function (method) {
 	      return _this[method] = _this[method].bind(_this);
 	    });
 	  }
@@ -31266,6 +33086,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var pagerList = [];
 	      var jumpPrev = null;
 	      var jumpNext = null;
+	      var firstPager = null;
+	      var lastPager = null;
 	
 	      if (props.simple) {
 	        return React.createElement('ul', { className: prefixCls + ' ' + prefixCls + '-simple ' + props.className }, React.createElement('li', { title: 'Previous Page', onClick: this._prev, className: (this._hasPrev() ? '' : prefixCls + '-disabled ') + (prefixCls + '-prev') }, React.createElement('a', null)), React.createElement('div', { title: 'Page ' + this.state.current + ' of ' + allPages, className: prefixCls + '-simple-pager' }, React.createElement('input', { type: 'text', value: this.state._current, onKeyDown: this._handleKeyDown, onKeyUp: this._handleKeyUp, onChange: this._handleKeyUp }), React.createElement('span', { className: prefixCls + '-slash' }, '／'), allPages), React.createElement('li', { title: 'Next Page', onClick: this._next, className: (this._hasNext() ? '' : prefixCls + '-disabled ') + (prefixCls + '-next') }, React.createElement('a', null)));
@@ -31279,36 +33101,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } else {
 	        jumpPrev = React.createElement('li', { title: 'Previous 5 Page', key: 'prev', onClick: this._jumpPrev, className: prefixCls + '-jump-prev' }, React.createElement('a', null));
 	        jumpNext = React.createElement('li', { title: 'Next 5 Page', key: 'next', onClick: this._jumpNext, className: prefixCls + '-jump-next' }, React.createElement('a', null));
+	        lastPager = React.createElement(Pager, { last: true, rootPrefixCls: prefixCls, onClick: this._handleChange.bind(this, allPages), key: allPages, page: allPages, active: false });
+	        firstPager = React.createElement(Pager, { rootPrefixCls: prefixCls, onClick: this._handleChange.bind(this, 1), key: 1, page: 1, active: false });
 	
 	        var current = this.state.current;
 	
-	        // TODO: need optimization
-	        if (current <= 5) {
-	          // do not show first •••
-	          for (var i = 1; i <= 5; i++) {
-	            var active = current === i;
-	            pagerList.push(React.createElement(Pager, { rootPrefixCls: prefixCls, onClick: this._handleChange.bind(this, i), key: i, page: i, active: active }));
-	          }
+	        var left = Math.max(1, current - 2),
+	            right = Math.min(current + 2, allPages);
+	
+	        if (current - 1 <= 2) {
+	          right = 1 + 4;
+	        }
+	
+	        if (allPages - current <= 2) {
+	          left = allPages - 4;
+	        }
+	
+	        for (var i = left; i <= right; i++) {
+	          var active = current === i;
+	          pagerList.push(React.createElement(Pager, { rootPrefixCls: prefixCls, onClick: this._handleChange.bind(this, i), key: i, page: i, active: active }));
+	        }
+	
+	        if (current - 1 >= 4) {
+	          pagerList.unshift(jumpPrev);
+	        }
+	        if (allPages - current >= 4) {
 	          pagerList.push(jumpNext);
-	          pagerList.push(React.createElement(Pager, { last: true, rootPrefixCls: prefixCls, onClick: this._handleChange.bind(this, allPages), key: allPages, page: allPages, active: false }));
-	        } else if (allPages - current < 5) {
-	          // do not show last •••
-	          pagerList.push(React.createElement(Pager, { rootPrefixCls: prefixCls, onClick: this._handleChange.bind(this, 1), key: 1, page: 1, active: false }));
-	          pagerList.push(jumpPrev);
-	          for (var i = allPages - 4; i <= allPages; i++) {
-	            var active = current === i;
-	            pagerList.push(React.createElement(Pager, { last: i === allPages, rootPrefixCls: prefixCls, onClick: this._handleChange.bind(this, i), key: i, page: i, active: active }));
-	          }
-	        } else {
-	          // show both •••
-	          pagerList.push(React.createElement(Pager, { rootPrefixCls: prefixCls, onClick: this._handleChange.bind(this, 1), key: 1, page: 1, active: false }));
-	          pagerList.push(jumpPrev);
-	          for (var i = current - 2; i <= current + 2; i++) {
-	            var active = current === i;
-	            pagerList.push(React.createElement(Pager, { rootPrefixCls: prefixCls, onClick: this._handleChange.bind(this, i), key: i, page: i, active: active }));
-	          }
-	          pagerList.push(jumpNext);
-	          pagerList.push(React.createElement(Pager, { last: true, rootPrefixCls: prefixCls, onClick: this._handleChange.bind(this, allPages), key: allPages, page: allPages, active: false }));
+	        }
+	
+	        if (left !== 1) {
+	          pagerList.unshift(firstPager);
+	        }
+	        if (right !== allPages) {
+	          pagerList.push(lastPager);
 	        }
 	      }
 	
@@ -31325,13 +33150,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    // private methods
 	
-	    value: function _calcPage() {
-	      return Math.floor((this.props.total - 1) / this.state.pageSize) + 1;
+	    value: function _calcPage(pageSize) {
+	      if (typeof pageSize === 'undefined') {
+	        pageSize = this.state.pageSize;
+	      }
+	      return Math.floor((this.props.total - 1) / pageSize) + 1;
 	    }
 	  }, {
 	    key: '_isValid',
 	    value: function _isValid(page) {
-	      return typeof page === 'number' && page >= 1 && page <= this._calcPage() && page !== this.state.current;
+	      return typeof page === 'number' && page >= 1 && page !== this.state.current;
 	    }
 	  }, {
 	    key: '_handleKeyDown',
@@ -31370,21 +33198,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: '_changePageSize',
 	    value: function _changePageSize(size) {
 	      if (typeof size === 'number') {
+	        var current = this.state.current;
+	
 	        this.setState({
 	          pageSize: size
 	        });
+	
+	        if (this.state.current > this._calcPage(size)) {
+	          current = this._calcPage(size);
+	          this.setState({
+	            current: current,
+	            _current: current
+	          });
+	        }
+	
+	        this.props.onShowSizeChange(current, size);
 	      }
 	    }
 	  }, {
 	    key: '_handleChange',
 	    value: function _handleChange(page) {
 	      if (this._isValid(page)) {
+	        if (page > this._calcPage()) {
+	          page = this._calcPage();
+	        }
 	        this.setState({
 	          current: page,
 	          _current: page
 	        });
 	        this.props.onChange(page);
+	
+	        return page;
 	      }
+	
+	      return this.state.current;
 	    }
 	  }, {
 	    key: '_prev',
@@ -31403,16 +33250,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_jumpPrev',
 	    value: function _jumpPrev() {
-	      if (this._canJumpPrev()) {
-	        this._handleChange(this.state.current - 5);
-	      }
+	      this._handleChange(Math.max(1, this.state.current - 5));
 	    }
 	  }, {
 	    key: '_jumpNext',
 	    value: function _jumpNext() {
-	      if (this._canJumpNext()) {
-	        this._handleChange(this.state.current + 5);
-	      }
+	      this._handleChange(Math.min(this._calcPage(), this.state.current + 5));
 	    }
 	  }, {
 	    key: '_hasPrev',
@@ -31423,16 +33266,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: '_hasNext',
 	    value: function _hasNext() {
 	      return this.state.current < this._calcPage();
-	    }
-	  }, {
-	    key: '_canJumpPrev',
-	    value: function _canJumpPrev() {
-	      return this.state.current > 5;
-	    }
-	  }, {
-	    key: '_canJumpNext',
-	    value: function _canJumpNext() {
-	      return this._calcPage() - this.state.current > 5;
 	    }
 	  }]);
 	
@@ -31445,6 +33278,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  pageSize: React.PropTypes.number,
 	  onChange: React.PropTypes.func,
 	  showSizeChanger: React.PropTypes.bool,
+	  onShowSizeChange: React.PropTypes.func,
 	  selectComponentClass: React.PropTypes.func,
 	  showQuickJumper: React.PropTypes.bool
 	};
@@ -31459,13 +33293,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  prefixCls: 'rc-pagination',
 	  selectComponentClass: null,
 	  showQuickJumper: false,
-	  showSizeChanger: false
+	  showSizeChanger: false,
+	  onShowSizeChange: noop
 	};
 	
 	module.exports = Pagination;
 
 /***/ },
-/* 254 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31551,7 +33386,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Pager;
 
 /***/ },
-/* 255 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31599,7 +33434,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	var React = __webpack_require__(9);
-	var KEYCODE = __webpack_require__(256);
+	var KEYCODE = __webpack_require__(261);
 	
 	var Options = (function (_React$Component) {
 	  _inherits(Options, _React$Component);
@@ -31610,7 +33445,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _classCallCheck(this, Options);
 	
 	    _get(Object.getPrototypeOf(Options.prototype), 'constructor', this).call(this, props);
-	    ['_quickGo', '_changeSize'].map(function (method) {
+	
+	    this.state = {
+	      current: props.current,
+	      _current: props.current
+	    };
+	
+	    ['_handleChange', '_changeSize', '_go'].forEach(function (method) {
 	      return _this[method] = _this[method].bind(_this);
 	    });
 	  }
@@ -31619,6 +33460,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'render',
 	    value: function render() {
 	      var props = this.props;
+	      var state = this.state;
 	      var prefixCls = props.rootPrefixCls + '-options';
 	      var changeSize = props.changeSize;
 	      var quickGo = props.quickGo;
@@ -31640,7 +33482,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	
 	      if (quickGo) {
-	        goInput = React.createElement('div', { title: 'Quick jump to page', className: prefixCls + '-quick-jumper' }, '跳至', React.createElement('input', { type: 'text', defaultValue: props.current, onKeyDown: this._checkValid, onChange: this._quickGo, onKeyUp: this._quickGo }), '页');
+	        goInput = React.createElement('div', { title: 'Quick jump to page', className: prefixCls + '-quick-jumper' }, '跳至', React.createElement('input', { type: 'text', value: state._current, onChange: this._handleChange.bind(this), onKeyUp: this._go.bind(this) }), '页');
 	      }
 	
 	      return React.createElement('div', { className: '' + prefixCls }, changeSelect, goInput);
@@ -31651,23 +33493,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.props.changeSize(Number(value));
 	    }
 	  }, {
-	    key: '_checkValid',
-	    value: function _checkValid(evt) {
-	      var keyCode = evt.keyCode;
-	      var valid = keyCode >= KEYCODE.ZERO && keyCode <= KEYCODE.NINE || keyCode >= KEYCODE.NUMPAD_ZERO && keyCode <= KEYCODE.NUMPAD_NINE || keyCode === KEYCODE.DELETE || keyCode === KEYCODE.BACKSPACE || keyCode === KEYCODE.ENTER;
+	    key: '_handleChange',
+	    value: function _handleChange(evt) {
+	      var _val = evt.target.value;
 	
-	      if (!valid) {
-	        evt.preventDefault();
-	      }
+	      this.setState({
+	        _current: _val
+	      });
 	    }
 	  }, {
-	    key: '_quickGo',
-	    value: function _quickGo(evt) {
-	      var ENTER_KEY = 13;
-	      var val = Number(evt.target.value);
-	
-	      if (evt.keyCode === ENTER_KEY) {
-	        this.props.quickGo(val);
+	    key: '_go',
+	    value: function _go(e) {
+	      var _val = e.target.value;
+	      if (_val === '') {
+	        return;
+	      }
+	      var val = Number(this.state._current);
+	      if (isNaN(val)) {
+	        val = this.state.current;
+	      }
+	      if (e.keyCode === KEYCODE.ENTER) {
+	        var c = this.props.quickGo(val);
+	        this.setState({
+	          _current: c,
+	          current: c
+	        });
 	      }
 	    }
 	  }]);
@@ -31686,7 +33536,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Options;
 
 /***/ },
-/* 256 */
+/* 261 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31707,7 +33557,2013 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 257 */
+/* 262 */
+/***/ function(module, exports) {
+
+	/**
+	 * Created by xy on 15/4/16.
+	 */
+	
+	'use strict';
+	
+	var Validator = {};
+	
+	var PATTERN = {
+	    EMAIL: /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/,
+	    URL: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
+	    HEX: /^#?([a-f0-9]{6}|[a-f0-9]{3})$/i,
+	    NUM: /^((-?\d+\.\d+)|(-?\d+)|(-?\.\d+))$/,
+	    IDCARD: /(^\d{15}$)|(^\d{17}([0-9]|X)$)/i,
+	    CNMOBILE: /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+	};
+	
+	Validator.isNotEmpty = function (value) {
+	    return !!value && value.length !== 0;
+	};
+	
+	Validator.isNum = function (value) {
+	    return PATTERN.NUM.test(value);
+	};
+	
+	Validator.isInt = function (value) {
+	    return Validator.isNum(value) && parseInt(value) === value;
+	};
+	
+	Validator.isDecimal = function (value) {
+	    return Validator.isNum(value) && !Validator.isInt(value);
+	};
+	
+	Validator.isArray = function (value) {
+	    return Array.isArray(value);
+	};
+	
+	Validator.isRegExp = function (value) {
+	    if (value instanceof RegExp) {
+	        return true;
+	    }
+	    try {
+	        return !!new RegExp(value);
+	    } catch (e) {
+	        return false;
+	    }
+	};
+	
+	Validator.isObject = function (value) {
+	    return typeof value === 'object' && !Validator.isArray(value);
+	};
+	
+	Validator.isFunc = function (value) {
+	    return typeof value === 'function';
+	};
+	
+	Validator.isEmail = function (value) {
+	    return typeof value === 'string' && PATTERN.EMAIL.test(value);
+	};
+	
+	Validator.isUrl = function (value) {
+	    return typeof value === 'string' && PATTERN.URL.test(value);
+	};
+	
+	Validator.isHex = function (value) {
+	    return typeof value === 'string' && PATTERN.HEX.test(value);
+	};
+	
+	Validator.isIdCard = function (value) {
+	    return typeof value === 'string' && PATTERN.IDCARD.test(value);
+	};
+	
+	Validator.isCNMobile = function (value) {
+	    return typeof value === 'string' && PATTERN.CNMOBILE.test(value);
+	};
+	module.exports = Validator;
+
+/***/ },
+/* 263 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Grid Component for uxcore
+	 * @author zhouquan.yezq
+	 *
+	 * Copyright 2014-2015, Uxcore Team, Alinw.
+	 * All rights reserved.
+	 */
+	
+	'use strict';
+	
+	module.exports = __webpack_require__(264);
+
+/***/ },
+/* 264 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Grid Component for uxcore
+	 * @author zhouquan.yezq
+	 *
+	 * Copyright 2014-2015, UXCore Team, Alinw.
+	 * All rights reserved.
+	 */
+	
+	"use strict";
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Header = __webpack_require__(265);
+	var Tbody = __webpack_require__(267);
+	var ActionBar = __webpack_require__(274);
+	var Pagination = __webpack_require__(255);
+	var assign = __webpack_require__(84);
+	var classnames = __webpack_require__(4);
+	var uid = 0;
+	
+	var Grid = (function (_React$Component) {
+	    _inherits(Grid, _React$Component);
+	
+	    function Grid(props) {
+	        _classCallCheck(this, Grid);
+	
+	        _get(Object.getPrototypeOf(Grid.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            data: this.props.jsxdata,
+	            columns: this.processColumn(),
+	            showMask: this.props.showMask,
+	            passedData: null,
+	            params: null,
+	            pageSize: props.pageSize,
+	            currentPage: props.currentPage
+	        };
+	    }
+	
+	    _createClass(Grid, [{
+	        key: "componentWillMount",
+	        value: function componentWillMount() {
+	            this.fetchData();
+	        }
+	    }, {
+	        key: "componentDidMount",
+	        value: function componentDidMount() {
+	            var me = this;
+	            me.el = React.findDOMNode(me);
+	            // console.log("showMask:",this.props.showMask);
+	            $(me.el).find(".kuma-grid-body-wrapper").on("scroll", function (e) {
+	                var scrollLeft = this.scrollLeft;
+	                $(me.el).find(".kuma-grid-header-wrapper")[0].scrollLeft = scrollLeft;
+	            });
+	        }
+	    }, {
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {
+	            var me = this;
+	            $(me.el).find(".kuma-grid-body-wrapper").off("scroll");
+	        }
+	
+	        /*
+	         * get Query Object by combining data from searchBar, column order, pagination
+	         * and fetchParams.
+	         * @param from {string} used in props.beforeFetch
+	         */
+	
+	    }, {
+	        key: "getQueryObj",
+	        value: function getQueryObj(from) {
+	
+	            var ctx = this,
+	                queryObj = {};
+	            if (ctx.props.passedData) {
+	
+	                var queryKeys = ctx.props.queryKeys;
+	
+	                if (!queryKeys) {
+	                    queryObj = ctx.props.passedData;
+	                } else {
+	                    queryKeys.forEach(function (key) {
+	                        if (ctx.props.passedData[key] !== undefined) {
+	                            queryObj[key] = ctx.props.passedData[key];
+	                        }
+	                    });
+	                }
+	            }
+	
+	            // pagination
+	            queryObj = assign({}, queryObj, {
+	                pageSize: ctx.state.pageSize,
+	                currentPage: ctx.state.currentPage
+	            });
+	
+	            // column order
+	            var activeColumn = this.props.activeColumn;
+	            if (!!activeColumn) {
+	                queryObj = assign({}, queryObj, {
+	                    orderColumn: activeColumn.dataKey,
+	                    orderType: activeColumn.orderType
+	                });
+	            }
+	
+	            // search query
+	            var searchTxt = ctx.props.searchTxt;
+	            if (!!searchTxt) {
+	                queryObj = assign({}, queryObj, {
+	                    searchTxt: searchTxt
+	                });
+	            }
+	
+	            // fetchParams has the top priority
+	            if (!!ctx.props.fetchParams) {
+	                queryObj = assign({}, queryObj, ctx.props.fetchParams);
+	            }
+	
+	            return ctx.props.beforeFetch(queryObj, from);
+	        }
+	
+	        /*
+	         * fetch Data via Ajax
+	         * @param from {string} tell fetchData where it is invoked, the param will be 
+	         * passed to props.beforeFetch in order to help the user.
+	         */
+	
+	    }, {
+	        key: "fetchData",
+	        value: function fetchData(from) {
+	
+	            var ctx = this;
+	
+	            // fetchUrl has the top priority.
+	            if (!!ctx.props.fetchUrl) {
+	                if (!ctx.state.showMask) {
+	                    ctx.setState({
+	                        showMask: true
+	                    });
+	                }
+	                var ajaxOptions = {
+	                    url: ctx.props.fetchUrl,
+	                    data: ctx.getQueryObj(from),
+	                    dataType: "json",
+	                    success: function success(result) {
+	                        var _data = result.content;
+	                        if (result.success) {
+	                            var updateObj = {
+	                                data: ctx.props.processData(_data),
+	                                showMask: false
+	                            };
+	                            ctx.setState(updateObj);
+	                        } else {
+	                            console.log("##ERROR##");
+	                            console.log(result);
+	                        }
+	                    }
+	                };
+	
+	                if (/\.jsonp/.test(ctx.props.fetchUrl)) {
+	                    ajaxOptions.dataType = "jsonp";
+	                }
+	
+	                $.ajax(ajaxOptions);
+	            } else if (!!ctx.props.passedData) {
+	
+	                if (!ctx.props.queryKeys) {
+	                    ctx.setState({
+	                        data: ctx.props.processData(ctx.props.passedData)
+	                    });
+	                } else {
+	                    (function () {
+	                        var data = {};
+	                        ctx.props.queryKeys.forEach(function (key, index) {
+	                            if (ctx.props.passedData[key] !== undefined) {
+	                                data[key] = ctx.props.passedData[key];
+	                            }
+	                        });
+	                        ctx.setState({
+	                            data: ctx.props.processData(data)
+	                        });
+	                    })();
+	                }
+	            } else if (!!this.props.jsxdata) {
+	                ctx.setState({
+	                    data: this.props.jsxdata
+	                });
+	            } else {
+	                //default will create one row
+	                ctx.setState({
+	                    "data": {
+	                        datas: [{
+	                            jsxid: 0
+	                        }],
+	                        "currentPage": 1,
+	                        "totalCount": 0
+	                    }
+	                });
+	            }
+	        }
+	    }, {
+	        key: "processColumn",
+	        value: function processColumn() {
+	
+	            var props = this.props,
+	                columns = props.jsxcolumns,
+	                hasCheckedColumn = undefined;
+	
+	            // filter the column which has a datakey 'jsxchecked'
+	
+	            columns = columns.filter(function (item) {
+	                return item.dataKey !== 'jsxchecked' && item.datakey !== 'jsxtreeIcon';
+	            });
+	
+	            // if hidden is not set, then it's false
+	
+	            columns = columns.map(function (item, index) {
+	                item.hidden = item.hidden || false;
+	                return item;
+	            });
+	
+	            if (!!props.rowSelection) {
+	                columns = [{ dataKey: 'jsxchecked', width: 46, type: 'checkbox', align: 'right' }].concat(columns);
+	            }
+	
+	            // no rowSelection but parentHasCheckbox, render placeholder
+	            else if (!!props.parentHasCheckbox) {
+	                    columns = [{ dataKey: 'jsxwhite', width: 46, type: 'empty' }].concat(columns);
+	                }
+	
+	            if (!!props.subComp) {
+	                columns = [{ dataKey: 'jsxtreeIcon', width: 34, type: 'treeIcon' }].concat(columns);
+	            }
+	            // no subComp but has passedData, means sub mode, parent should has tree icon,
+	            // render tree icon placeholder
+	            else if (!!props.passedData) {
+	                    columns = [{ dataKey: 'jsxwhite', width: 34, type: 'empty' }].concat(columns);
+	                }
+	
+	            return columns;
+	        }
+	
+	        //handle column picker
+	    }, {
+	        key: "handleCP",
+	        value: function handleCP(index) {
+	            var _columns = [].concat(this.state.columns),
+	                hidden = _columns[index].hidden;
+	            if (hidden == undefined) hidden = true;
+	            _columns[index].hidden = !!hidden ? false : true;
+	            this.setState({
+	                columns: _columns
+	            });
+	        }
+	    }, {
+	        key: "selectAll",
+	        value: function selectAll(checked) {
+	
+	            var _data = $.extend(true, {}, this.state.data);
+	            _data.datas.map(function (item, index) {
+	                item.jsxchecked = checked;
+	                item.country = item.country;
+	                return item;
+	            });
+	
+	            var rowSelection = this.props.rowSelection;
+	
+	            if (rowSelection && rowSelection.onSelectAll) {
+	                rowSelection.onSelectAll.apply(null, [checked, _data]);
+	            }
+	            this.setState({
+	                data: _data
+	            });
+	        }
+	    }, {
+	        key: "onPageChange",
+	        value: function onPageChange(current) {
+	
+	            var me = this;
+	            me.setState({
+	                currentPage: current
+	            }, function () {
+	                me.fetchData("pagination");
+	            });
+	        }
+	    }, {
+	        key: "handleShowSizeChange",
+	        value: function handleShowSizeChange(current, pageSize) {
+	            var me = this;
+	            me.setState({
+	                currentPage: current,
+	                pageSize: pageSize
+	            }, function () {
+	                me.fetchData("pagination");
+	            });
+	        }
+	    }, {
+	        key: "renderPager",
+	        value: function renderPager() {
+	            if (this.props.showPager && this.state.data && this.state.data.totalCount) {
+	                return React.createElement(
+	                    "div",
+	                    { className: "kuma-grid-pagination" },
+	                    React.createElement(Pagination, { className: "mini",
+	                        showSizeChanger: true,
+	                        total: this.state.data.totalCount,
+	                        onShowSizeChange: this.handleShowSizeChange.bind(this),
+	                        onChange: this.onPageChange.bind(this),
+	                        current: this.state.currentPage,
+	                        pageSize: this.state.pageSize })
+	                );
+	            }
+	        }
+	    }, {
+	        key: "handleOrderColumnCB",
+	        value: function handleOrderColumnCB(type, column) {
+	
+	            this.props.activeColumn = column;
+	            this.fetchData("order");
+	        }
+	    }, {
+	        key: "actionBarCB",
+	        value: function actionBarCB(type, txt) {
+	            if (type == 'SEARCH') {
+	                // TODO: Don't set props
+	                this.props.searchTxt = txt;
+	                this.fetchData("search");
+	            } else {
+	                var _actionCofig = this.props.actionBar;
+	                _actionCofig[type] ? _actionCofig[type].apply(null, [type]) : "";
+	            }
+	        }
+	    }, {
+	        key: "getData",
+	        value: function getData() {
+	            return this.state.data;
+	        }
+	    }, {
+	        key: "addRow",
+	        value: function addRow() {
+	            this.insertData({
+	                jsxid: ++uid
+	            });
+	        }
+	    }, {
+	        key: "delRow",
+	        value: function delRow(rowData) {
+	            this.removeData(rowData);
+	        }
+	
+	        // some time, UI new some data, but not sync with db,
+	        // need cache on the client, then use save action, get
+	        // all grid data to sync with db
+	        //[{name:'',email:''}]
+	
+	    }, {
+	        key: "insertData",
+	        value: function insertData(objAux) {
+	            var _data = $.extend(true, {}, this.state.data);
+	            if (Object.prototype.toString.call(objAux) !== "[object Array]") {
+	                objAux = [objAux];
+	            }
+	            _data.datas = objAux.concat(_data.datas);
+	
+	            this.setState({
+	                data: _data
+	            });
+	        }
+	    }, {
+	        key: "removeData",
+	        value: function removeData(objAux) {
+	
+	            //at least one record
+	            if (this.state.data.datas.length == 1) {
+	                return;
+	            }
+	            var _data = $.extend(true, {}, this.state.data),
+	                _newArr = undefined;
+	
+	            if (Object.prototype.toString.call(objAux) !== "[object Array]") {
+	                objAux = [objAux];
+	            }
+	
+	            objAux.map(function (item) {
+	                _data.datas.forEach(function (element, index, array) {
+	                    if (element.jsxid == item.jsxid) {
+	                        _data.datas.splice(index, 1);
+	                    }
+	                });
+	            });
+	
+	            this.setState({
+	                data: _data
+	            });
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var _classnames;
+	
+	            var props = this.props,
+	
+	            // if grid is sub mode, people always want to align the parent
+	            // and the sub grid, so width should not be cared.
+	            _style = {
+	                width: !!props.passedData ? "auto" : props.width,
+	                height: props.height
+	            },
+	                actionBarHeight = props.actionBar ? props.actionBarHeight : 0,
+	                pagerHeight = this.props.showPager && this.state.data && this.state.data.totalCount ? 50 : 0,
+	                bodyHeight = props.height == "100%" ? props.height : props.height - props.headerHeight - actionBarHeight - pagerHeight,
+	                renderBodyProps = {
+	                columns: this.state.columns,
+	                data: this.state.data ? this.state.data.datas : [],
+	                onModifyRow: props.onModifyRow ? props.onModifyRow : function () {},
+	                rowSelection: props.rowSelection,
+	                subComp: props.subComp,
+	                actions: {
+	                    'addRow': this.addRow.bind(this),
+	                    'delRow': this.delRow.bind(this)
+	                },
+	                mask: this.state.showMask,
+	                rowHeight: this.props.rowHeight,
+	                mode: this.props.mode,
+	                key: 'grid-body'
+	            },
+	                renderHeaderProps = {
+	                columns: this.state.columns,
+	                activeColumn: this.props.activeColumn,
+	                checkAll: this.selectAll.bind(this),
+	                columnPicker: props.showColumnPicker,
+	                handleCP: this.handleCP.bind(this),
+	                headerHeight: props.headerHeight,
+	                width: props.width,
+	                orderColumnCB: this.handleOrderColumnCB.bind(this),
+	                key: 'grid-header'
+	
+	            };
+	
+	            var gridHeader = undefined,
+	                actionBar = undefined;
+	            if (props.showHeader) {
+	                gridHeader = React.createElement(Header, renderHeaderProps);
+	            }
+	
+	            if (props.actionBar || props.showSearch) {
+	                var renderActionProps = {
+	                    actionBarConfig: this.props.actionBar,
+	                    showSearch: this.props.showSearch,
+	                    actionBarCB: this.actionBarCB.bind(this),
+	                    key: 'grid-actionbar'
+	                };
+	                actionBar = React.createElement(ActionBar, renderActionProps);
+	            }
+	
+	            return React.createElement(
+	                "div",
+	                { className: classnames((_classnames = {}, _defineProperty(_classnames, props.jsxprefixCls, true), _defineProperty(_classnames, "kuma-subgrid-mode", !!props.passedData), _classnames)), style: _style },
+	                actionBar,
+	                React.createElement(
+	                    "div",
+	                    { className: "kuma-grid-content", style: {
+	                            width: !!props.passedData ? "auto" : props.width
+	                        } },
+	                    React.createElement(
+	                        "div",
+	                        { className: "kuma-grid-header-wrapper" },
+	                        gridHeader
+	                    ),
+	                    React.createElement(
+	                        "div",
+	                        { className: "kuma-grid-body-wrapper", style: {
+	                                height: bodyHeight
+	                            } },
+	                        React.createElement(Tbody, renderBodyProps)
+	                    )
+	                ),
+	                this.renderPager()
+	            );
+	        }
+	    }]);
+	
+	    return Grid;
+	})(React.Component);
+	
+	;
+	
+	Grid.defaultProps = {
+	    jsxprefixCls: "kuma-grid",
+	    showHeader: true,
+	    width: 1000,
+	    height: "100%",
+	    mode: "EDIT",
+	    headerHeight: 40,
+	    actionBarHeight: 40,
+	    showPager: true,
+	    showColumnPicker: true,
+	    showMask: false,
+	    showSearch: false,
+	    pageSize: 10,
+	    rowHeight: 76,
+	    fetchParams: '',
+	    currentPage: 1,
+	    queryKeys: [],
+	    searchTxt: '',
+	    processData: function processData(data) {
+	        return data;
+	    },
+	    beforeFetch: function beforeFetch(obj) {
+	        return obj;
+	    }
+	};
+	
+	// http://facebook.github.io/react/docs/reusable-components.html
+	Grid.propTypes = {
+	    processData: React.PropTypes.func,
+	    beforeFetch: React.PropTypes.func
+	};
+	
+	Grid.displayName = Grid;
+	
+	module.exports = Grid;
+
+/***/ },
+/* 265 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by xy on 15/4/13.
+	 */
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var CheckBox = __webpack_require__(266);
+	var assign = __webpack_require__(84);
+	
+	var Header = (function (_React$Component) {
+	    _inherits(Header, _React$Component);
+	
+	    function Header(props) {
+	        _classCallCheck(this, Header);
+	
+	        _get(Object.getPrototypeOf(Header.prototype), 'constructor', this).call(this, props);
+	        this.state = {
+	            display: 'none'
+	        };
+	    }
+	
+	    _createClass(Header, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            $(document).on('click.uxcore-grid-header', this.handleGlobalClick.bind(this));
+	        }
+	    }, {
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate() {}
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	            $(document).off('click.uxcore-grid-header');
+	        }
+	    }, {
+	        key: 'prepareStyle',
+	        value: function prepareStyle() {}
+	    }, {
+	        key: 'handleGlobalClick',
+	        value: function handleGlobalClick(e) {
+	            if (this.props.columnPicker) {
+	                this.hideColumnPick(e);
+	            }
+	        }
+	    }, {
+	        key: 'handleCheckBoxChange',
+	        value: function handleCheckBoxChange() {
+	            var v = this.refs.checkbox.getValue();
+	            this.props.checkAll.apply(null, [v]);
+	        }
+	    }, {
+	        key: 'handleColumnPicker',
+	        value: function handleColumnPicker(e) {
+	
+	            e.stopPropagation();
+	            if (this.state.display == 'block') {
+	                this.setState({
+	                    display: 'none'
+	                });
+	            } else {
+	                this.setState({
+	                    display: 'block'
+	                });
+	            }
+	        }
+	    }, {
+	        key: 'hideColumnPick',
+	        value: function hideColumnPick(e) {
+	            if (!$(e.target).hasClass('kuma-column-picker')) {
+	                this.setState({
+	                    display: 'none'
+	                });
+	            }
+	        }
+	    }, {
+	        key: 'handleColumns',
+	        value: function handleColumns(index) {
+	            this.props.handleCP.apply(null, [index]);
+	        }
+	
+	        //prepare the column picker html fragement
+	
+	    }, {
+	        key: 'renderPicker',
+	        value: function renderPicker() {
+	            var me = this,
+	                _style = {
+	                display: this.state.display
+	            };
+	
+	            return React.createElement(
+	                'div',
+	                { className: 'kuma-column-picker-container' },
+	                React.createElement('i', { className: 'kuma-icon kuma-icon-target-list kuma-column-picker', onClick: this.handleColumnPicker.bind(this) }),
+	                React.createElement(
+	                    'ul',
+	                    { className: 'kuma-grid-colmnpicker', style: _style, ref: 'columnpicker' },
+	                    this.props.columns.map(function (item, index) {
+	                        if (item.dataKey == 'jsxchecked' || item.dataKey == "jsxtreeIcon" || item.dataKey == "jsxwhite") return;
+	                        if (item.hidden) {
+	                            return React.createElement(
+	                                'li',
+	                                { ref: '', key: index, onClick: me.handleColumns.bind(me, index) },
+	                                item.title
+	                            );
+	                        } else {
+	                            return React.createElement(
+	                                'li',
+	                                { ref: '', key: index, onClick: me.handleColumns.bind(me, index) },
+	                                React.createElement('i', { className: 'kuma-icon kuma-icon-choose' }),
+	                                item.title
+	                            );
+	                        }
+	                    })
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'handleColumnOrder',
+	        value: function handleColumnOrder(type, column) {
+	
+	            column.orderType = type;
+	            this.props.orderColumnCB.apply(null, [type, column]);
+	        }
+	    }, {
+	        key: 'renderOrderIcon',
+	        value: function renderOrderIcon(column) {
+	            var ctx = this;
+	            if (column.ordered) {
+	                var desc = "sort-down",
+	                    asc = "sort-up";
+	                if (this.props.activeColumn && column.dataKey == this.props.activeColumn.dataKey) {
+	                    if (column.orderType == "desc") {
+	                        desc = "sort-down-active";
+	                    } else {
+	                        asc = "sort-up-active";
+	                    }
+	                }
+	                return React.createElement(
+	                    'span',
+	                    { className: 'kuma-grid-h-sort' },
+	                    React.createElement('i', { className: asc, onClick: this.handleColumnOrder.bind(ctx, 'asc', column) }),
+	                    React.createElement('i', { className: desc, onClick: this.handleColumnOrder.bind(ctx, 'desc', column) })
+	                );
+	            }
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	
+	            var props = this.props,
+	                ctx = this,
+	                _picker = undefined;
+	
+	            if (this.props.columnPicker) {
+	                _picker = this.renderPicker();
+	            }
+	
+	            var _style = {
+	                height: props.headerHeight ? props.headerHeight : 40,
+	                lineHeight: (props.headerHeight ? props.headerHeight : 40) + "px"
+	            };
+	
+	            return React.createElement(
+	                'div',
+	                { className: props.jsxprefixCls, style: _style },
+	                props.columns.map(function (item, index) {
+	
+	                    if (item.hidden) return;
+	
+	                    var _style = {
+	                        width: item.width ? item.width : 100,
+	                        textAlign: item.align ? item.align : "left"
+	                    },
+	                        _v = undefined;
+	
+	                    if (item.type == 'checkbox') {
+	                        assign(_style, {
+	                            paddingRight: 32,
+	                            paddingLeft: 12,
+	                            width: item.width ? item.width : 92
+	                        });
+	
+	                        _v = React.createElement(CheckBox, { ref: 'checkbox', onchange: ctx.handleCheckBoxChange.bind(ctx) });
+	                    } else {
+	                        _v = item.title;
+	                    }
+	
+	                    return React.createElement(
+	                        'div',
+	                        { key: index, className: 'kuma-grid-cell', style: _style },
+	                        React.createElement(
+	                            'span',
+	                            null,
+	                            _v
+	                        ),
+	                        ctx.renderOrderIcon(item)
+	                    );
+	                }),
+	                _picker
+	            );
+	        }
+	    }]);
+	
+	    return Header;
+	})(React.Component);
+	
+	;
+	
+	Header.propTypes = {};
+	
+	Header.defaultProps = {
+	    jsxprefixCls: "kuma-grid-header"
+	};
+	
+	exports['default'] = Header;
+	module.exports = exports['default'];
+
+/***/ },
+/* 266 */
+/***/ function(module, exports) {
+
+	/**
+	 * A checkbox field
+	 */
+	
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var CheckBox = (function (_React$Component) {
+	    _inherits(CheckBox, _React$Component);
+	
+	    function CheckBox(props) {
+	        _classCallCheck(this, CheckBox);
+	
+	        _get(Object.getPrototypeOf(CheckBox.prototype), 'constructor', this).call(this, props);
+	    }
+	
+	    _createClass(CheckBox, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {}
+	    }, {
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate() {}
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {}
+	    }, {
+	        key: 'prepareStyle',
+	        value: function prepareStyle() {}
+	    }, {
+	        key: 'handleChange',
+	        value: function handleChange(e) {
+	            var v = this.getValue();
+	            v = v ? 'checked' : '';
+	            this.props.onchange.apply(null, [e]);
+	            /*this.setState({
+	                checked: v
+	            })*/
+	        }
+	    }, {
+	        key: 'getValue',
+	        value: function getValue() {
+	            return this.refs.checkbox.getDOMNode().checked;
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	
+	            var props = this.props;
+	
+	            if (props.mode !== 'VIEW') {
+	                var renderProps = {
+	                    className: "kuma-checkbox",
+	                    checked: this.props.jsxchecked,
+	                    onChange: this.handleChange.bind(this)
+	                };
+	                return React.createElement(
+	                    'label',
+	                    null,
+	                    React.createElement('input', _extends({ type: 'checkbox', ref: 'checkbox' }, renderProps)),
+	                    React.createElement('s', null)
+	                );
+	            } else {
+	                return React.createElement('span', { key: 'text' });
+	            }
+	        }
+	    }]);
+	
+	    return CheckBox;
+	})(React.Component);
+	
+	;
+	
+	CheckBox.propTypes = {};
+	
+	CheckBox.defaultProps = {};
+	
+	exports['default'] = CheckBox;
+	module.exports = exports['default'];
+
+/***/ },
+/* 267 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by xy on 15/4/13.
+	 */
+	
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Row = __webpack_require__(268);
+	var Mask = __webpack_require__(273);
+	
+	var Tbody = (function (_React$Component) {
+	    _inherits(Tbody, _React$Component);
+	
+	    function Tbody(props) {
+	        _classCallCheck(this, Tbody);
+	
+	        _get(Object.getPrototypeOf(Tbody.prototype), "constructor", this).call(this, props);
+	        this.state = {};
+	    }
+	
+	    _createClass(Tbody, [{
+	        key: "componentDidMount",
+	        value: function componentDidMount() {}
+	    }, {
+	        key: "componentDidUpdate",
+	        value: function componentDidUpdate() {}
+	    }, {
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {}
+	    }, {
+	        key: "prepareStyle",
+	        value: function prepareStyle() {}
+	    }, {
+	        key: "renderEmptyData",
+	        value: function renderEmptyData() {
+	            if (this.props.data.length == 0) {
+	                var _style = {
+	                    lineHeight: this.props.height - 10 + "px"
+	                };
+	                return React.createElement(
+	                    "div",
+	                    { className: "kuma-gird-body-emptyword", style: _style },
+	                    "暂无数据."
+	                );
+	            }
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	
+	            var _props = this.props,
+	                _columns = _props.columns,
+	                _data = _props.data.length > 0 ? _props.data : [];
+	            var _style = {
+	                // width: _props.width,
+	                // height: _props.height,
+	                // overflowY:'auto'
+	            };
+	
+	            return React.createElement(
+	                "div",
+	                { className: this.props.jsxprefixCls, style: _style },
+	                this.renderEmptyData(),
+	                _data.map(function (item, index) {
+	                    var renderProps = {
+	                        columns: _columns,
+	                        rowIndex: index,
+	                        data: _data,
+	                        onModifyRow: _props.onModifyRow,
+	                        rowSelection: _props.rowSelection,
+	                        subComp: _props.subComp,
+	                        actions: _props.actions,
+	                        key: 'row' + index,
+	                        rowHeight: _props.rowHeight,
+	                        mode: _props.mode,
+	                        ts: new Date().getTime()
+	                    };
+	                    return React.createElement(Row, renderProps);
+	                }),
+	                React.createElement(Mask, { visible: _props.mask })
+	            );
+	        }
+	    }]);
+	
+	    return Tbody;
+	})(React.Component);
+	
+	;
+	
+	Tbody.propTypes = {};
+	
+	Tbody.defaultProps = {
+	    jsxprefixCls: "kuma-grid-body"
+	};
+	
+	exports["default"] = Tbody;
+	module.exports = exports["default"];
+
+/***/ },
+/* 268 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by xy on 15/4/13.
+	 */
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Cell = __webpack_require__(269);
+	
+	var Row = (function (_React$Component) {
+	    _inherits(Row, _React$Component);
+	
+	    function Row(props) {
+	        _classCallCheck(this, Row);
+	
+	        _get(Object.getPrototypeOf(Row.prototype), "constructor", this).call(this, props);
+	        // console.log("++row++");
+	    }
+	
+	    _createClass(Row, [{
+	        key: "componentDidMount",
+	        value: function componentDidMount() {}
+	    }, {
+	        key: "componentDidUpdate",
+	        value: function componentDidUpdate() {}
+	    }, {
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {}
+	    }, {
+	        key: "handleClick",
+	        value: function handleClick() {}
+	    }, {
+	        key: "showSubComp",
+	        value: function showSubComp() {
+	            this.props.showSubComp = !this.props.showSubComp;
+	            this.forceUpdate();
+	        }
+	    }, {
+	        key: "renderSubComp",
+	        value: function renderSubComp() {
+	
+	            var props = this.props;
+	            if (props.subComp && this.props.showSubComp) {
+	                var subComp = React.cloneElement(props.subComp, {
+	                    passedData: this.props.data[this.props.rowIndex],
+	                    parentHasCheckbox: !!this.props.rowSelection
+	                });
+	                return React.createElement(
+	                    "div",
+	                    { className: "kuma-grid-subrow", ref: "subRow" },
+	                    subComp
+	                );
+	            } else {
+	                return false;
+	            }
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	
+	            var props = this.props,
+	                _columns = props.columns,
+	                _style = {},
+	                _data = props.data,
+	                ctx = this;
+	
+	            return React.createElement(
+	                "div",
+	                { className: this.props.jsxprefixCls, style: _style, onClick: this.handleClick.bind(this) },
+	                _columns.map(function (item, index) {
+	
+	                    if (item.hidden) return;
+	
+	                    var renderProps = {
+	                        column: item,
+	                        align: item.align,
+	                        rowData: _data[props.rowIndex],
+	                        cellIndex: index,
+	                        hasSubComp: props.subComp ? true : false,
+	                        data: _data,
+	                        showSubCompCallback: ctx.showSubComp,
+	                        st_showSubComp: ctx.props.showSubComp,
+	                        ctx: ctx,
+	                        onModifyRow: props.onModifyRow,
+	                        rowSelection: props.rowSelection,
+	                        actions: props.actions,
+	                        mode: props.mode,
+	                        key: "cell" + index
+	                    };
+	                    //if have vertical data structure, how to process it
+	                    return React.createElement(Cell, renderProps);
+	                }),
+	                this.renderSubComp()
+	            );
+	        }
+	    }]);
+	
+	    return Row;
+	})(React.Component);
+	
+	;
+	
+	Row.propTypes = {
+	    jsxprefixCls: React.PropTypes.string,
+	    showSubComp: React.PropTypes.bool
+	};
+	
+	Row.defaultProps = {
+	    jsxprefixCls: "kuma-grid-row",
+	    showSubComp: false
+	};
+	
+	exports["default"] = Row;
+	module.exports = exports["default"];
+
+/***/ },
+/* 269 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by xy on 15/4/13.
+	 */
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var CheckBox = __webpack_require__(266);
+	var TextField = __webpack_require__(270);
+	var SelectField = __webpack_require__(271);
+	var util = __webpack_require__(272);
+	var classnames = __webpack_require__(4);
+	
+	var Cell = (function (_React$Component) {
+	    _inherits(Cell, _React$Component);
+	
+	    function Cell(props) {
+	        _classCallCheck(this, Cell);
+	
+	        _get(Object.getPrototypeOf(Cell.prototype), 'constructor', this).call(this, props);
+	        this.state = {
+	            'mode': 'view',
+	            'fold': 1 // 1- fold  0-unfold
+	        };
+	    }
+	
+	    _createClass(Cell, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {}
+	    }, {
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate() {}
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {}
+	    }, {
+	        key: 'prepareStyle',
+	        value: function prepareStyle() {}
+	    }, {
+	        key: 'handleClick',
+	        value: function handleClick(e) {
+	            /* this.setState({
+	                 mode:"edit"
+	             })*/
+	        }
+	    }, {
+	        key: 'getSelectionRows',
+	        value: function getSelectionRows() {
+	            var _props = this.props;
+	            return _props.data.filter(function (item) {
+	                return item.jsxchecked;
+	            });
+	        }
+	    }, {
+	        key: 'handleCheckChange',
+	        value: function handleCheckChange(e) {
+	            var _props = this.props,
+	                v = _props.rowData;
+	            v.jsxchecked = e.target.checked;
+	            this.setState({});
+	            if (_props.rowSelection) {
+	                _props.rowSelection.onSelect.apply(null, [v.jsxchecked, v, this.getSelectionRows()]);
+	            }
+	        }
+	    }, {
+	        key: 'handleTxtChange',
+	        value: function handleTxtChange(e) {
+	            var _props = this.props;
+	            _props.rowData[_props.column.dataKey] = e.target.value;
+	        }
+	    }, {
+	        key: 'handleChange',
+	        value: function handleChange(v) {
+	            var _props = this.props;
+	            _props.rowData[_props.column.dataKey] = v;
+	        }
+	    }, {
+	        key: 'onblur',
+	        value: function onblur(e) {
+	
+	            var _props = this.props;
+	            _props.rowData[_props.column.dataKey] = e.target.value;
+	
+	            return;
+	            var _props = this.props,
+	                record = _props.rowData,
+	                value = record[_props.column.dataKey];
+	            var isValid = _props.onModifyRow.apply(null, [value, _props.column.dataKey, record]);
+	            if (isValid) {
+	                this.setState({
+	                    mode: "view"
+	                });
+	            } else {
+	                e.target.focus ? e.target.focus() : "";
+	            }
+	        }
+	    }, {
+	        key: 'showSubComp',
+	        value: function showSubComp() {
+	            this.props.showSubCompCallback.call(this.props.ctx);
+	        }
+	    }, {
+	        key: 'renderTreeIcon',
+	        value: function renderTreeIcon() {
+	            if (this.props.cellIndex == 0 && this.props.hasSubComp) {
+	                var _open = this.props.st_showSubComp;
+	                return React.createElement(
+	                    'span',
+	                    { className: 'kuma-grid-tree-icon', onClick: this.showSubComp.bind(this) },
+	                    React.createElement('i', { className: classnames({
+	                            "kuma-icon": true,
+	                            "kuma-icon-tree-open-2": _open,
+	                            "kuma-icon-tree-close-2": !_open
+	                        }) })
+	                );
+	            }
+	        }
+	    }, {
+	        key: 'doAction',
+	        value: function doAction(rowData, items, e) {
+	
+	            var el = $(e.target);
+	            if (el.hasClass('action')) {
+	                if (el.data('type') == 'inlineEdit') {
+	                    this.showSubComp();
+	                    return;
+	                } else if (el.data('type') == 'addRow') {
+	                    this.props.actions['addRow'].apply();
+	                } else if (el.data('type') == 'delRow') {
+	                    this.props.actions['delRow'].apply(null, [rowData]);
+	                }
+	                items.map(function (item) {
+	                    if (item.type == el.data('type')) {
+	                        item.cb ? item.cb.apply(null, [rowData]) : '';
+	                    }
+	                });
+	            }
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	
+	            var props = this.props,
+	                ctx = this,
+	                _column = props.column,
+	                _width = _column.width,
+	                _style = {
+	                width: _width ? _width : 100,
+	                textAlign: props.align ? props.align : "left"
+	            },
+	                _v = props.rowData,
+	                renderProps = undefined;
+	
+	            if (_column.render) {
+	                _v = _column.render.apply(null, [_v]);
+	            } else if (_column.type == 'action' && props.mode == 'EDIT') {
+	
+	                _v = React.createElement(
+	                    'div',
+	                    { className: 'action-container', onClick: this.doAction.bind(this, _v, _column.items) },
+	                    _column.items.map(function (child, index) {
+	                        return React.createElement(
+	                            'span',
+	                            { className: 'action', key: index, 'data-type': child.type },
+	                            child.title
+	                        );
+	                    })
+	                );
+	            } else if (_column.type == 'checkbox') {
+	
+	                _style.paddingRight = 32;
+	                _style.paddingLeft = 12;
+	
+	                var checked = undefined;
+	                if (_v.jsxchecked) {
+	                    checked = 'checked';
+	                } else {
+	                    checked = "";
+	                }
+	                _v = React.createElement(CheckBox, { mode: props.mode, align: props.align, jsxchecked: checked, ref: 'checkbox', onchange: this.handleCheckChange.bind(this) });
+	            } else if (_column.type == 'treeIcon') {
+	                _v = ctx.renderTreeIcon();
+	            } else if (_column.type == 'text') {
+	                renderProps = {
+	                    value: _v[_column.dataKey],
+	                    mode: props.mode,
+	                    onchange: this.handleTxtChange.bind(this),
+	                    onblur: this.onblur.bind(this)
+	                };
+	                _v = React.createElement(TextField, renderProps);
+	            } else if (_column.type == 'select') {
+	                renderProps = {
+	                    value: _v[_column.dataKey],
+	                    mode: props.mode,
+	                    config: _column,
+	                    handleChange: this.handleChange.bind(this)
+	                };
+	                _v = React.createElement(SelectField, renderProps);
+	            } else if (_column.type == 'money' || _column.type == "card" || _column.type == "cnmobile") {
+	                _v = React.createElement(
+	                    'div',
+	                    { title: props.rowData[_column.dataKey] },
+	                    util.formatValue(props.rowData[_column.dataKey], _column.type, _column.delimiter)
+	                );
+	            } else if (_column.type == "person" && !!_column.plugin && _column.token) {
+	                try {
+	                    var Hovercard = _column.plugin;
+	                    _v = React.createElement(
+	                        Hovercard,
+	                        { emplId: props.rowData[_column.dataKey], placement: 'right', token: _column.token },
+	                        React.createElement(
+	                            'div',
+	                            null,
+	                            props.rowData[_column.dataKey]
+	                        )
+	                    );
+	                } catch (e) {
+	                    console.log(e);
+	                }
+	            } else {
+	                _v = React.createElement(
+	                    'div',
+	                    { title: props.rowData[_column.dataKey] },
+	                    props.rowData[_column.dataKey]
+	                );
+	            }
+	
+	            return React.createElement(
+	                'div',
+	                { className: props.jsxprefixCls, style: _style, onClick: this.handleClick.bind(this) },
+	                _v
+	            );
+	        }
+	    }]);
+	
+	    return Cell;
+	})(React.Component);
+	
+	;
+	
+	Cell.propTypes = {};
+	
+	Cell.defaultProps = {
+	    jsxprefixCls: "kuma-grid-cell"
+	};
+	
+	exports['default'] = Cell;
+	module.exports = exports['default'];
+
+/***/ },
+/* 270 */
+/***/ function(module, exports) {
+
+	/**
+	 * A editable  plain text field
+	 */
+	
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var TextField = (function (_React$Component) {
+	    _inherits(TextField, _React$Component);
+	
+	    function TextField(props) {
+	        _classCallCheck(this, TextField);
+	
+	        _get(Object.getPrototypeOf(TextField.prototype), 'constructor', this).call(this, props);
+	        this.state = {
+	            value: this.props.value
+	        };
+	    }
+	
+	    _createClass(TextField, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            //this.focus();
+	        }
+	    }, {
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate() {}
+	    }, {
+	        key: 'focus',
+	        value: function focus() {
+	            this.refs.txtfield.getDOMNode().focus();
+	        }
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {}
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            this.setState({
+	                value: nextProps.value
+	            });
+	        }
+	    }, {
+	        key: 'handleChange',
+	        value: function handleChange(newValue) {
+	            this.setState({ value: newValue });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	
+	            var props = this.props,
+	                renderProps = undefined;
+	            if (props.mode !== 'VIEW') {
+	                renderProps = {
+	                    className: "kuma-input",
+	                    ref: 'txtfield',
+	                    onBlur: props.onblur.bind(this)
+	                };
+	
+	                var valueLink = {
+	                    value: this.state.value,
+	                    requestChange: this.handleChange.bind(this)
+	                };
+	                return React.createElement('input', _extends({ type: 'text' }, renderProps, { valueLink: valueLink }));
+	            } else {
+	                return React.createElement(
+	                    'span',
+	                    { key: 'text' },
+	                    this.state.value
+	                );
+	            }
+	        }
+	    }]);
+	
+	    return TextField;
+	})(React.Component);
+	
+	;
+	
+	TextField.propTypes = {};
+	
+	TextField.defaultProps = {};
+	
+	exports['default'] = TextField;
+	module.exports = exports['default'];
+
+/***/ },
+/* 271 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Grid Component for uxcore
+	 * @author zhouquan.yezq
+	 *
+	 * Copyright 2014-2015, UXCore Team, Alinw.
+	 * All rights reserved.
+	 */
+	
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Select = __webpack_require__(175);
+	var Option = Select.Option;
+	
+	var SelectField = (function (_React$Component) {
+	    _inherits(SelectField, _React$Component);
+	
+	    function SelectField(props) {
+	        _classCallCheck(this, SelectField);
+	
+	        _get(Object.getPrototypeOf(SelectField.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            value: this.props.value
+	        };
+	    }
+	
+	    _createClass(SelectField, [{
+	        key: "componentDidMount",
+	        value: function componentDidMount() {}
+	    }, {
+	        key: "componentDidUpdate",
+	        value: function componentDidUpdate() {}
+	    }, {
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {}
+	    }, {
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
+	
+	            this.setState({
+	                value: nextProps.value
+	            });
+	        }
+	    }, {
+	        key: "handleChange",
+	        value: function handleChange(value) {
+	
+	            this.setState({
+	                value: value
+	            });
+	            this.props.handleChange.apply(null, [value]);
+	        }
+	    }, {
+	        key: "renderOptions",
+	        value: function renderOptions(config) {
+	            var _arr = [];
+	            for (var key in config.options) {
+	                _arr.push(React.createElement(
+	                    Option,
+	                    { value: key, key: key },
+	                    config.options[key]
+	                ));
+	            }
+	            return _arr;
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	
+	            var props = this.props,
+	                renderProps = undefined,
+	                config = props.config;
+	            if (props.mode !== 'VIEW') {
+	                return React.createElement(
+	                    Select,
+	                    { value: this.state.value, optionLabelProp: "children", showSearch: false, style: { width: config.width - 10 }, onChange: this.handleChange.bind(this) },
+	                    this.renderOptions(config).map(function (item) {
+	                        return item;
+	                    })
+	                );
+	            } else {
+	                return React.createElement(
+	                    "span",
+	                    { key: "text" },
+	                    this.state.value
+	                );
+	            }
+	        }
+	    }]);
+	
+	    return SelectField;
+	})(React.Component);
+	
+	;
+	
+	SelectField.propTypes = {};
+	
+	SelectField.defaultProps = {};
+	
+	exports["default"] = SelectField;
+	module.exports = exports["default"];
+
+/***/ },
+/* 272 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	var util = {
+	    formatValue: function formatValue(value, type, delimiter) {
+	        delimiter = delimiter || " ";
+	        if (type == "money") {
+	            return value.replace(/(\d{3})(?!$)/g, "$1" + delimiter);
+	        } else if (type == "card") {
+	            return value.replace(/(\d{4})(?!$)/g, "$1" + delimiter);
+	        } else if (type == "cnmobile") {
+	            return value.replace(/^(\+?0?86)(?!$)/, "$1" + delimiter).replace(/(\d{4})(?!$)/g, "$1" + delimiter);
+	        }
+	    }
+	};
+	
+	module.exports = util;
+
+/***/ },
+/* 273 */
+/***/ function(module, exports) {
+
+	/**
+	 * @author: zhouquan.yezq
+	 * @time : 8/12 2015
+	 */
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Mask = (function (_React$Component) {
+	    _inherits(Mask, _React$Component);
+	
+	    function Mask(props) {
+	        _classCallCheck(this, Mask);
+	
+	        _get(Object.getPrototypeOf(Mask.prototype), "constructor", this).call(this, props);
+	    }
+	
+	    _createClass(Mask, [{
+	        key: "componentDidMount",
+	        value: function componentDidMount() {}
+	    }, {
+	        key: "componentDidUpdate",
+	        value: function componentDidUpdate() {}
+	    }, {
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {}
+	
+	        // visible/size
+	    }, {
+	        key: "render",
+	        value: function render() {
+	
+	            var props = this.props,
+	                visible = props.visible,
+	                loadTips = props.tips ? props.tips : "Loading...";
+	            var _className = props.jsxprefixCls;
+	            // console.log("visible:",visible);
+	            if (!visible) {
+	                _className = _className + " kuma-mask-hide";
+	            }
+	            return React.createElement(
+	                "div",
+	                { className: _className },
+	                React.createElement(
+	                    "div",
+	                    { className: "kuma-mask-centerblk" },
+	                    React.createElement(
+	                        "span",
+	                        null,
+	                        loadTips
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return Mask;
+	})(React.Component);
+	
+	;
+	
+	Mask.propTypes = {};
+	
+	Mask.defaultProps = {
+	    jsxprefixCls: "kuma-mask"
+	};
+	
+	exports["default"] = Mask;
+	module.exports = exports["default"];
+
+/***/ },
+/* 274 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Grid Component for uxcore
+	 * @author zhouquan.yezq
+	 *
+	 * Copyright 2014-2015, UXCore Team, Alinw.
+	 * All rights reserved.
+	 */
+	
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var SearchBar = __webpack_require__(275);
+	var classnames = __webpack_require__(4);
+	var Button = __webpack_require__(2);
+	
+	var ActionBar = (function (_React$Component) {
+	    _inherits(ActionBar, _React$Component);
+	
+	    function ActionBar(props) {
+	        _classCallCheck(this, ActionBar);
+	
+	        _get(Object.getPrototypeOf(ActionBar.prototype), "constructor", this).call(this, props);
+	    }
+	
+	    _createClass(ActionBar, [{
+	        key: "doAction",
+	        value: function doAction(type) {
+	            this.props.actionBarCB(type);
+	        }
+	    }, {
+	        key: "renderActionBtn",
+	        value: function renderActionBtn(type) {
+	
+	            var _props = this.props,
+	                _config = _props.actionBarConfig;
+	
+	            return React.createElement(
+	                Button,
+	                { type: "secondary", size: "medium", onClick: this.doAction.bind(this, type) },
+	                type
+	            );
+	        }
+	    }, {
+	        key: "renderSearchBar",
+	        value: function renderSearchBar() {
+	
+	            var renderSearchBarProps = {
+	                actionBarCB: this.props.actionBarCB,
+	                key: 'searchbar'
+	            };
+	            if (this.props.showSearch) {
+	                return React.createElement(SearchBar, _extends({ key: "searchbar" }, renderSearchBarProps));
+	            }
+	        }
+	
+	        /**
+	        * @param {JSON}
+	        */
+	    }, {
+	        key: "getActionItem",
+	        value: function getActionItem(config) {
+	            var items = [];
+	            for (var i in config) {
+	                if (config.hasOwnProperty(i)) {
+	                    items.push(i);
+	                }
+	            }
+	            return items;
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var _classnames;
+	
+	            var me = this,
+	                _props = this.props,
+	                _barConfig = _props.actionBarConfig;
+	
+	            return React.createElement(
+	                "div",
+	                { className: classnames((_classnames = {}, _defineProperty(_classnames, _props.jsxprefixCls, _props.jsxprefixCls), _defineProperty(_classnames, "fn-clear", true), _classnames)) },
+	                me.getActionItem(_barConfig).map(function (item) {
+	                    return me.renderActionBtn(item);
+	                }),
+	                me.renderSearchBar()
+	            );
+	        }
+	    }]);
+	
+	    return ActionBar;
+	})(React.Component);
+	
+	;
+	
+	ActionBar.propTypes = {};
+	
+	ActionBar.defaultProps = {
+	    jsxprefixCls: "kuma-grid-actionbar"
+	};
+	
+	exports["default"] = ActionBar;
+	module.exports = exports["default"];
+
+/***/ },
+/* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Grid Component for uxcore
+	 * @author zhouquan.yezq
+	 *
+	 * Copyright 2014-2015, UXCore Team, Alinw.
+	 * All rights reserved.
+	 */
+	
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var reactMixin = __webpack_require__(253);
+	
+	var SearchBar = (function (_React$Component) {
+	    _inherits(SearchBar, _React$Component);
+	
+	    function SearchBar(props) {
+	        _classCallCheck(this, SearchBar);
+	
+	        _get(Object.getPrototypeOf(SearchBar.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            searchTxt: ""
+	        };
+	    }
+	
+	    _createClass(SearchBar, [{
+	        key: "componentDidMount",
+	        value: function componentDidMount() {}
+	    }, {
+	        key: "componentDidUpdate",
+	        value: function componentDidUpdate() {}
+	    }, {
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {}
+	    }, {
+	        key: "prepareStyle",
+	        value: function prepareStyle() {}
+	    }, {
+	        key: "doSearch",
+	        value: function doSearch() {
+	            this.props.actionBarCB("SEARCH", this.state.searchTxt);
+	        }
+	    }, {
+	        key: "onKeyDown",
+	        value: function onKeyDown(e) {
+	            if (e.keyCode == 13) {
+	                this.doSearch();
+	            }
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	
+	            var _className = this.props.jsxprefixCls;
+	            return React.createElement(
+	                "div",
+	                { className: _className },
+	                React.createElement("input", { type: "text", className: "kuma-input", placeholder: "搜索表格内容", valueLink: this.linkState('searchTxt'), onKeyDown: this.onKeyDown.bind(this) }),
+	                React.createElement("i", { className: "kuma-icon kuma-icon-search", onClick: this.doSearch.bind(this) })
+	            );
+	        }
+	    }]);
+	
+	    return SearchBar;
+	})(React.Component);
+	
+	;
+	
+	SearchBar.propTypes = {};
+	
+	SearchBar.defaultProps = {
+	    jsxprefixCls: "kuma-grid-searchbar"
+	};
+	
+	reactMixin.onClass(SearchBar, React.addons.LinkedStateMixin);
+	
+	exports["default"] = SearchBar;
+	module.exports = exports["default"];
+
+/***/ },
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31720,10 +35576,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	module.exports = __webpack_require__(258);
+	module.exports = __webpack_require__(277);
 
 /***/ },
-/* 258 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31744,11 +35600,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcTabs = __webpack_require__(259);
+	var _rcTabs = __webpack_require__(278);
 	
 	var _rcTabs2 = _interopRequireDefault(_rcTabs);
 	
-	var _objectAssign = __webpack_require__(160);
+	var _objectAssign = __webpack_require__(84);
 	
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
@@ -31773,15 +35629,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 259 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	module.exports = __webpack_require__(260);
+	module.exports = __webpack_require__(279);
 
 /***/ },
-/* 260 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31798,19 +35654,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _KeyCode = __webpack_require__(261);
+	var _KeyCode = __webpack_require__(280);
 	
 	var _KeyCode2 = _interopRequireDefault(_KeyCode);
 	
-	var _TabPane = __webpack_require__(262);
+	var _TabPane = __webpack_require__(281);
 	
 	var _TabPane2 = _interopRequireDefault(_TabPane);
 	
-	var _Nav = __webpack_require__(263);
+	var _Nav = __webpack_require__(282);
 	
 	var _Nav2 = _interopRequireDefault(_Nav);
 	
-	var _rcAnimate = __webpack_require__(266);
+	var _rcAnimate = __webpack_require__(285);
 	
 	var _rcAnimate2 = _interopRequireDefault(_rcAnimate);
 	
@@ -32036,7 +35892,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 261 */
+/* 280 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -32065,7 +35921,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// also NUM_SOUTH
 
 /***/ },
-/* 262 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32108,7 +35964,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 263 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32143,7 +35999,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _utils = __webpack_require__(264);
+	var _utils = __webpack_require__(283);
 	
 	function noop() {}
 	
@@ -32155,7 +36011,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    onTabClick: _react2['default'].PropTypes.func
 	  },
 	
-	  mixins: [__webpack_require__(265)],
+	  mixins: [__webpack_require__(284)],
 	
 	  getInitialState: function getInitialState() {
 	    return {
@@ -32335,7 +36191,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 264 */
+/* 283 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32397,7 +36253,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 265 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32410,7 +36266,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _utils = __webpack_require__(264);
+	var _utils = __webpack_require__(283);
 	
 	var _react = __webpack_require__(9);
 	
@@ -32455,16 +36311,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 266 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// export this package's api
 	'use strict';
 	
-	module.exports = __webpack_require__(267);
+	module.exports = __webpack_require__(286);
 
 /***/ },
-/* 267 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32489,15 +36345,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _ChildrenUtils = __webpack_require__(268);
+	var _ChildrenUtils = __webpack_require__(287);
 	
 	var _ChildrenUtils2 = _interopRequireDefault(_ChildrenUtils);
 	
-	var _AnimateChild = __webpack_require__(269);
+	var _AnimateChild = __webpack_require__(288);
 	
 	var _AnimateChild2 = _interopRequireDefault(_AnimateChild);
 	
-	var _util = __webpack_require__(273);
+	var _util = __webpack_require__(292);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -32779,7 +36635,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 268 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32898,7 +36754,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 269 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32915,11 +36771,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _cssAnimation = __webpack_require__(270);
+	var _cssAnimation = __webpack_require__(289);
 	
 	var _cssAnimation2 = _interopRequireDefault(_cssAnimation);
 	
-	var _util = __webpack_require__(273);
+	var _util = __webpack_require__(292);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -32998,13 +36854,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 270 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Event = __webpack_require__(271);
-	var Css = __webpack_require__(272);
+	var Event = __webpack_require__(290);
+	var Css = __webpack_require__(291);
 	var isCssAnimationSupported = Event.endEvents.length !== 0;
 	
 	function getDuration(node, name) {
@@ -33156,7 +37012,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = cssAnimation;
 
 /***/ },
-/* 271 */
+/* 290 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33244,7 +37100,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = TransitionEvents;
 
 /***/ },
-/* 272 */
+/* 291 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33275,7 +37131,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 273 */
+/* 292 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -33308,7 +37164,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 274 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -33321,10 +37177,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	module.exports = __webpack_require__(275);
+	module.exports = __webpack_require__(294);
 
 /***/ },
-/* 275 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33347,7 +37203,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcTooltip = __webpack_require__(276);
+	var _rcTooltip = __webpack_require__(295);
 	
 	var _rcTooltip2 = _interopRequireDefault(_rcTooltip);
 	
@@ -33404,15 +37260,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 276 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	module.exports = __webpack_require__(277);
+	module.exports = __webpack_require__(296);
 
 /***/ },
-/* 277 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33439,9 +37295,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcUtil = __webpack_require__(278);
+	var _rcUtil = __webpack_require__(297);
 	
-	var _Popup = __webpack_require__(290);
+	var _Popup = __webpack_require__(309);
 	
 	var _Popup2 = _interopRequireDefault(_Popup);
 	
@@ -33717,31 +37573,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 278 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	module.exports = {
-	  guid: __webpack_require__(279),
-	  classSet: __webpack_require__(280),
-	  joinClasses: __webpack_require__(281),
-	  KeyCode: __webpack_require__(282),
-	  PureRenderMixin: __webpack_require__(283),
-	  shallowEqual: __webpack_require__(284),
-	  createChainedFunction: __webpack_require__(285),
+	  guid: __webpack_require__(298),
+	  classSet: __webpack_require__(299),
+	  joinClasses: __webpack_require__(300),
+	  KeyCode: __webpack_require__(301),
+	  PureRenderMixin: __webpack_require__(302),
+	  shallowEqual: __webpack_require__(303),
+	  createChainedFunction: __webpack_require__(304),
 	  Dom: {
-	    addEventListener: __webpack_require__(286),
-	    contains: __webpack_require__(287)
+	    addEventListener: __webpack_require__(305),
+	    contains: __webpack_require__(306)
 	  },
 	  Children: {
-	    toArray: __webpack_require__(288),
-	    mapSelf: __webpack_require__(289)
+	    toArray: __webpack_require__(307),
+	    mapSelf: __webpack_require__(308)
 	  }
 	};
 
 /***/ },
-/* 279 */
+/* 298 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33752,7 +37608,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 280 */
+/* 299 */
 /***/ function(module, exports) {
 
 	/**
@@ -33798,7 +37654,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = cx;
 
 /***/ },
-/* 281 */
+/* 300 */
 /***/ function(module, exports) {
 
 	/**
@@ -33844,7 +37700,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = joinClasses;
 
 /***/ },
-/* 282 */
+/* 301 */
 /***/ function(module, exports) {
 
 	/**
@@ -34369,7 +38225,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = KeyCode;
 
 /***/ },
-/* 283 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -34385,7 +38241,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	"use strict";
 	
-	var shallowEqual = __webpack_require__(284);
+	var shallowEqual = __webpack_require__(303);
 	
 	/**
 	 * If your React component's render function is "pure", e.g. it will render the
@@ -34420,7 +38276,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ReactComponentWithPureRenderMixin;
 
 /***/ },
-/* 284 */
+/* 303 */
 /***/ function(module, exports) {
 
 	/**
@@ -34466,7 +38322,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = shallowEqual;
 
 /***/ },
-/* 285 */
+/* 304 */
 /***/ function(module, exports) {
 
 	/**
@@ -34494,7 +38350,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = createChainedFunction;
 
 /***/ },
-/* 286 */
+/* 305 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34518,7 +38374,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 287 */
+/* 306 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -34535,7 +38391,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 288 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34551,7 +38407,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 289 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34568,7 +38424,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 290 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34585,13 +38441,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _utils = __webpack_require__(291);
+	var _utils = __webpack_require__(310);
 	
-	var _rcAlign = __webpack_require__(292);
+	var _rcAlign = __webpack_require__(311);
 	
 	var _rcAlign2 = _interopRequireDefault(_rcAlign);
 	
-	var _rcAnimate = __webpack_require__(296);
+	var _rcAnimate = __webpack_require__(315);
 	
 	var _rcAnimate2 = _interopRequireDefault(_rcAnimate);
 	
@@ -34688,7 +38544,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 291 */
+/* 310 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34712,7 +38568,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 292 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34726,7 +38582,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _Align = __webpack_require__(293);
+	var _Align = __webpack_require__(312);
 	
 	var _Align2 = _interopRequireDefault(_Align);
 	
@@ -34734,7 +38590,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 293 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34793,11 +38649,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _domAlign = __webpack_require__(294);
+	var _domAlign = __webpack_require__(313);
 	
 	var _domAlign2 = _interopRequireDefault(_domAlign);
 	
-	var _rcUtil = __webpack_require__(278);
+	var _rcUtil = __webpack_require__(297);
 	
 	var _rcUtil2 = _interopRequireDefault(_rcUtil);
 	
@@ -34935,7 +38791,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 294 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -34953,7 +38809,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _utils = __webpack_require__(295);
+	var _utils = __webpack_require__(314);
 	
 	var _utils2 = _interopRequireDefault(_utils);
 	
@@ -35317,7 +39173,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 295 */
+/* 314 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -35773,16 +39629,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 296 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// export this package's api
 	'use strict';
 	
-	module.exports = __webpack_require__(297);
+	module.exports = __webpack_require__(316);
 
 /***/ },
-/* 297 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35807,15 +39663,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _ChildrenUtils = __webpack_require__(298);
+	var _ChildrenUtils = __webpack_require__(317);
 	
 	var _ChildrenUtils2 = _interopRequireDefault(_ChildrenUtils);
 	
-	var _AnimateChild = __webpack_require__(299);
+	var _AnimateChild = __webpack_require__(318);
 	
 	var _AnimateChild2 = _interopRequireDefault(_AnimateChild);
 	
-	var _util = __webpack_require__(303);
+	var _util = __webpack_require__(322);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -36097,7 +39953,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 298 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36216,7 +40072,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 299 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36233,11 +40089,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _cssAnimation = __webpack_require__(300);
+	var _cssAnimation = __webpack_require__(319);
 	
 	var _cssAnimation2 = _interopRequireDefault(_cssAnimation);
 	
-	var _util = __webpack_require__(303);
+	var _util = __webpack_require__(322);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -36316,13 +40172,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 300 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Event = __webpack_require__(301);
-	var Css = __webpack_require__(302);
+	var Event = __webpack_require__(320);
+	var Css = __webpack_require__(321);
 	var isCssAnimationSupported = Event.endEvents.length !== 0;
 	
 	function getDuration(node, name) {
@@ -36474,7 +40330,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = cssAnimation;
 
 /***/ },
-/* 301 */
+/* 320 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -36562,7 +40418,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = TransitionEvents;
 
 /***/ },
-/* 302 */
+/* 321 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -36593,7 +40449,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 303 */
+/* 322 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -36626,7 +40482,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 304 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -36639,25 +40495,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	module.exports = __webpack_require__(305);
+	module.exports = __webpack_require__(324);
 
 /***/ },
-/* 305 */
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, '__esModule', {
-	  value: true
+	    value: true
 	});
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
@@ -36667,28 +40519,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _objectAssign = __webpack_require__(160);
+	var _objectAssign = __webpack_require__(84);
 	
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
-	var _rcTree = __webpack_require__(306);
+	var _rcTree = __webpack_require__(325);
 	
 	var _rcTree2 = _interopRequireDefault(_rcTree);
 	
-	var _rcUtil = __webpack_require__(308);
+	var _rcUtil = __webpack_require__(327);
 	
 	var RcTreeNode = _rcTree2['default'].TreeNode;
 	
 	var Tree = (function (_RcTree) {
-	  _inherits(Tree, _RcTree);
+	    _inherits(Tree, _RcTree);
 	
-	  function Tree(props) {
-	    _classCallCheck(this, Tree);
+	    function Tree(props) {
+	        _classCallCheck(this, Tree);
 	
-	    _get(Object.getPrototypeOf(Tree.prototype), 'constructor', this).call(this, props);
-	  }
+	        _get(Object.getPrototypeOf(Tree.prototype), 'constructor', this).call(this, props);
+	    }
 	
-	  return Tree;
+	    return Tree;
 	})(_rcTree2['default']);
 	
 	exports['default'] = Tree;
@@ -36696,45 +40548,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	Tree.displayName = 'uxcore-tree';
 	Tree.propTypes = _rcTree2['default'].propTypes;
 	(0, _objectAssign2['default'])(_rcTree2['default'].defaultProps, {
-	  prefixCls: 'kuma-tree'
+	    prefixCls: 'kuma-tree',
+	    showIcon: false
 	});
 	
 	var TreeNode = (function (_RcTreeNode) {
-	  _inherits(TreeNode, _RcTreeNode);
+	    _inherits(TreeNode, _RcTreeNode);
 	
-	  function TreeNode(props) {
-	    _classCallCheck(this, TreeNode);
+	    function TreeNode(props) {
+	        _classCallCheck(this, TreeNode);
 	
-	    _get(Object.getPrototypeOf(TreeNode.prototype), 'constructor', this).call(this, props);
-	  }
-	
-	  _createClass(TreeNode, [{
-	    key: 'renderChildren',
-	    value: function renderChildren(props) {
-	      var children = props.children;
-	      var newChildren = children;
-	      if (children.type === TreeNode || Array.isArray(children) && children.every(function (item) {
-	        return item.type === TreeNode;
-	      })) {
-	        var _cls;
-	
-	        var cls = (_cls = {}, _defineProperty(_cls, props.prefixCls + '-child-tree', true), _defineProperty(_cls, props.prefixCls + '-child-tree-open', props.expanded), _cls);
-	        if (props.showLine) {
-	          cls[props.prefixCls + '-line'] = this.getPosition(props.pos).center;
-	        }
-	        newChildren = this.newChildren = _react2['default'].createElement(
-	          'ul',
-	          { className: (0, _rcUtil.classSet)(cls), expanded: props.expanded },
-	          _react2['default'].Children.map(children, function (item, index) {
-	            return props.root.renderTreeNode(item, index, props.pos);
-	          }, props.root)
-	        );
-	      }
-	      return newChildren;
+	        _get(Object.getPrototypeOf(TreeNode.prototype), 'constructor', this).call(this, props);
 	    }
-	  }]);
 	
-	  return TreeNode;
+	    return TreeNode;
 	})(RcTreeNode);
 	
 	exports.TreeNode = TreeNode;
@@ -36744,7 +40571,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	(0, _objectAssign2['default'])(RcTreeNode.defaultProps, {});
 
 /***/ },
-/* 306 */
+/* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36757,11 +40584,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _Tree = __webpack_require__(307);
+	var _Tree = __webpack_require__(326);
 	
 	var _Tree2 = _interopRequireDefault(_Tree);
 	
-	var _TreeNode = __webpack_require__(320);
+	var _TreeNode = __webpack_require__(339);
 	
 	var _TreeNode2 = _interopRequireDefault(_TreeNode);
 	
@@ -36771,7 +40598,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 307 */
+/* 326 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36848,7 +40675,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcUtil = __webpack_require__(308);
+	var _rcUtil = __webpack_require__(327);
 	
 	// sorted array ['0-0','0-1', '0-0-1', '0-1-1'] => ['0-0', '0-1']
 	var filterMin = function filterMin(arr) {
@@ -36876,10 +40703,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    ['handleKeyDown', 'handleCheck'].forEach(function (m) {
 	      _this[m] = _this[m].bind(_this);
 	    });
+	    this.defaultExpandAll = props.defaultExpandAll;
 	    var expandedKeys = props.defaultExpandedKeys;
 	    var checkedKeys = props.defaultCheckedKeys;
-	    this.defaultExpandAll = props.defaultExpandAll;
+	    if ('checkedKeys' in props) {
+	      checkedKeys = props.checkedKeys || [];
+	    }
 	    var selectedKeys = props.multiple ? [].concat(_toConsumableArray(props.defaultSelectedKeys)) : [props.defaultSelectedKeys[0]];
+	    if ('selectedKeys' in props) {
+	      selectedKeys = props.multiple ? [].concat(_toConsumableArray(props.selectedKeys)) : [props.selectedKeys[0]];
+	    }
 	    this.state = {
 	      expandedKeys: expandedKeys,
 	      checkedKeys: checkedKeys,
@@ -36888,6 +40721,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	
 	  _createClass(Tree, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      var props = {};
+	      if ('checkedKeys' in nextProps) {
+	        props.checkedKeys = nextProps.checkedKeys;
+	      }
+	      if ('selectedKeys' in nextProps) {
+	        props.selectedKeys = nextProps.multiple ? nextProps.selectedKeys : [nextProps.selectedKeys[0]];
+	      }
+	      this.setState(props);
+	    }
+	  }, {
 	    key: 'getCheckKeys',
 	    value: function getCheckKeys() {
 	      var _this2 = this;
@@ -37075,16 +40920,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.handleCheckState(this.treeNodesChkStates, [pos], !checked);
 	      var checkKeys = this.getCheckKeys();
 	      this.checkPartKeys = checkKeys.checkPartKeys;
-	      this.setState({
-	        checkedKeys: checkKeys.checkedKeys
-	      });
-	      if (this.props.onCheck) {
-	        this.props.onCheck({
-	          event: 'check',
-	          checked: checked,
-	          node: treeNode,
-	          checkedKeys: checkKeys.checkedKeys
+	      var checkedKeys = checkKeys.checkedKeys;
+	      var newSt = {
+	        event: 'check',
+	        node: treeNode
+	      };
+	      if (!('checkedKeys' in this.props)) {
+	        this.setState({
+	          checkedKeys: checkedKeys
 	        });
+	        newSt.checked = checked;
+	      } else {
+	        checkedKeys = this.state.checkedKeys;
+	      }
+	      newSt.checkedKeys = checkedKeys;
+	      if (this.props.onCheck) {
+	        this.props.onCheck(newSt);
 	      }
 	    }
 	  }, {
@@ -37105,16 +40956,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        selectedKeys.push(eventKey);
 	      }
-	      this.setState({
-	        selectedKeys: selectedKeys
-	      });
-	      if (props.onSelect) {
-	        props.onSelect({
-	          event: 'select',
-	          selected: selected,
-	          node: treeNode,
+	      var newSt = {
+	        event: 'select',
+	        node: treeNode
+	      };
+	      if (!('selectedKeys' in this.props)) {
+	        this.setState({
 	          selectedKeys: selectedKeys
 	        });
+	        newSt.selected = selected;
+	      } else {
+	        selectedKeys = this.state.selectedKeys;
+	      }
+	      newSt.selectedKeys = selectedKeys;
+	      if (props.onSelect) {
+	        props.onSelect(newSt);
 	      }
 	    }
 	  }, {
@@ -37188,31 +41044,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 308 */
+/* 327 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	module.exports = {
-	  guid: __webpack_require__(309),
-	  classSet: __webpack_require__(310),
-	  joinClasses: __webpack_require__(311),
-	  KeyCode: __webpack_require__(312),
-	  PureRenderMixin: __webpack_require__(313),
-	  shallowEqual: __webpack_require__(314),
-	  createChainedFunction: __webpack_require__(315),
+	  guid: __webpack_require__(328),
+	  classSet: __webpack_require__(329),
+	  joinClasses: __webpack_require__(330),
+	  KeyCode: __webpack_require__(331),
+	  PureRenderMixin: __webpack_require__(332),
+	  shallowEqual: __webpack_require__(333),
+	  createChainedFunction: __webpack_require__(334),
 	  Dom: {
-	    addEventListener: __webpack_require__(316),
-	    contains: __webpack_require__(317)
+	    addEventListener: __webpack_require__(335),
+	    contains: __webpack_require__(336)
 	  },
 	  Children: {
-	    toArray: __webpack_require__(318),
-	    mapSelf: __webpack_require__(319)
+	    toArray: __webpack_require__(337),
+	    mapSelf: __webpack_require__(338)
 	  }
 	};
 
 /***/ },
-/* 309 */
+/* 328 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37223,7 +41079,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 310 */
+/* 329 */
 /***/ function(module, exports) {
 
 	/**
@@ -37269,7 +41125,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = cx;
 
 /***/ },
-/* 311 */
+/* 330 */
 /***/ function(module, exports) {
 
 	/**
@@ -37315,7 +41171,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = joinClasses;
 
 /***/ },
-/* 312 */
+/* 331 */
 /***/ function(module, exports) {
 
 	/**
@@ -37840,7 +41696,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = KeyCode;
 
 /***/ },
-/* 313 */
+/* 332 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -37856,7 +41712,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	"use strict";
 	
-	var shallowEqual = __webpack_require__(314);
+	var shallowEqual = __webpack_require__(333);
 	
 	/**
 	 * If your React component's render function is "pure", e.g. it will render the
@@ -37891,7 +41747,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ReactComponentWithPureRenderMixin;
 
 /***/ },
-/* 314 */
+/* 333 */
 /***/ function(module, exports) {
 
 	/**
@@ -37937,7 +41793,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = shallowEqual;
 
 /***/ },
-/* 315 */
+/* 334 */
 /***/ function(module, exports) {
 
 	/**
@@ -37965,7 +41821,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = createChainedFunction;
 
 /***/ },
-/* 316 */
+/* 335 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37989,7 +41845,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 317 */
+/* 336 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -38006,7 +41862,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 318 */
+/* 337 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38022,7 +41878,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 319 */
+/* 338 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38039,7 +41895,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 320 */
+/* 339 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38116,13 +41972,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcUtil = __webpack_require__(308);
+	var _rcUtil = __webpack_require__(327);
 	
-	var _rcAnimate = __webpack_require__(321);
+	var _rcAnimate = __webpack_require__(340);
 	
 	var _rcAnimate2 = _interopRequireDefault(_rcAnimate);
 	
-	var _objectAssign = __webpack_require__(329);
+	var _objectAssign = __webpack_require__(348);
 	
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
@@ -38328,16 +42184,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 321 */
+/* 340 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// export this package's api
 	'use strict';
 	
-	module.exports = __webpack_require__(322);
+	module.exports = __webpack_require__(341);
 
 /***/ },
-/* 322 */
+/* 341 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38362,15 +42218,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _ChildrenUtils = __webpack_require__(323);
+	var _ChildrenUtils = __webpack_require__(342);
 	
 	var _ChildrenUtils2 = _interopRequireDefault(_ChildrenUtils);
 	
-	var _AnimateChild = __webpack_require__(324);
+	var _AnimateChild = __webpack_require__(343);
 	
 	var _AnimateChild2 = _interopRequireDefault(_AnimateChild);
 	
-	var _util = __webpack_require__(328);
+	var _util = __webpack_require__(347);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -38652,7 +42508,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 323 */
+/* 342 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38771,7 +42627,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 324 */
+/* 343 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38788,11 +42644,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _cssAnimation = __webpack_require__(325);
+	var _cssAnimation = __webpack_require__(344);
 	
 	var _cssAnimation2 = _interopRequireDefault(_cssAnimation);
 	
-	var _util = __webpack_require__(328);
+	var _util = __webpack_require__(347);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -38871,13 +42727,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 325 */
+/* 344 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Event = __webpack_require__(326);
-	var Css = __webpack_require__(327);
+	var Event = __webpack_require__(345);
+	var Css = __webpack_require__(346);
 	var isCssAnimationSupported = Event.endEvents.length !== 0;
 	
 	function getDuration(node, name) {
@@ -39029,7 +42885,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = cssAnimation;
 
 /***/ },
-/* 326 */
+/* 345 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -39117,7 +42973,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = TransitionEvents;
 
 /***/ },
-/* 327 */
+/* 346 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -39148,7 +43004,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 328 */
+/* 347 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -39181,7 +43037,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 329 */
+/* 348 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -39225,7 +43081,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 330 */
+/* 349 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -39235,10 +43091,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	module.exports = __webpack_require__(331);
+	module.exports = __webpack_require__(350);
 
 /***/ },
-/* 331 */
+/* 350 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39247,16 +43103,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var _classnames = __webpack_require__(164);
-	
-	var _classnames2 = _interopRequireDefault(_classnames);
-	
+	var classnames = __webpack_require__(4);
 	var update = React.addons.update;
 	
 	var Transfer = (function (_React$Component) {
@@ -39288,6 +43139,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param {array} arr2
 	         */
 	
+	    }, {
+	        key: 'selectItems',
+	        value: function selectItems(arr) {
+	            var me = this;
+	            var data = update(me.state, {});
+	            data.chosen.forEach(function (item, index) {
+	                if (arr.indexOf(item.value) != -1) {
+	                    item.selected = true;
+	                }
+	            });
+	            data.unChosen.forEach(function (item, index) {
+	                if (arr.indexOf(item.value) != -1) {
+	                    item.selected = true;
+	                }
+	            });
+	            me.setState(data);
+	        }
 	    }, {
 	        key: '_changeChosenData',
 	        value: function _changeChosenData(arr1, arr2) {
@@ -39345,7 +43213,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                chosen: newChosen,
 	                unChosen: newUnChosen
 	            }, function () {
-	                me.props.onChange(me.state.chosen);
+	                me.props.onChange(me.state);
 	            });
 	        }
 	    }, {
@@ -39358,7 +43226,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                { key: index, 'data-key': index, 'data-value': item.value, 'data-chosen': item.chosen, onClick: me._handleItemClick.bind(me) },
 	                React.createElement(
 	                    'a',
-	                    { className: (0, _classnames2['default'])({
+	                    { className: classnames({
 	                            "selected": !!item.selected
 	                        }), href: 'javascript:;', title: item.description },
 	                    item.name
@@ -39434,13 +43302,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            React.createElement(
 	                                'td',
 	                                { className: 'kuma-transfer-buttons' },
-	                                React.createElement('a', { href: 'javascript:;', 'data-direction': 'left', className: (0, _classnames2['default'])({
+	                                React.createElement('a', { href: 'javascript:;', 'data-direction': 'left', className: classnames({
 	                                        enable: me.state.chosen.some(function (item) {
 	                                            return !!item.selected;
 	                                        })
 	                                    }), onClick: me._handleButtonClick.bind(me) }),
 	                                React.createElement('br', null),
-	                                React.createElement('a', { href: 'javascript:;', 'data-direction': 'right', className: (0, _classnames2['default'])({
+	                                React.createElement('a', { href: 'javascript:;', 'data-direction': 'right', className: classnames({
 	                                        enable: me.state.unChosen.some(function (item) {
 	                                            return !!item.selected;
 	                                        })
@@ -39482,7 +43350,113 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Transfer;
 
 /***/ },
-/* 332 */
+/* 351 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	module.exports = __webpack_require__(352);
+
+/***/ },
+/* 352 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	* thanks for https://github.com/chenglou/react-radio-group
+	* @author: zhouquan.yezq
+	* @time  : 5/25 2015
+	*/
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	var _react = __webpack_require__(9);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var component = _react2['default'].createClass({
+	    displayName: 'component',
+	
+	    mixins: [],
+	    propTypes: {},
+	    getDefaultProps: function getDefaultProps() {
+	        return {};
+	    },
+	    getInitialState: function getInitialState() {
+	        return {
+	            defaultValue: this.props.defaultValue
+	        };
+	    },
+	    componentDidMount: function componentDidMount() {
+	        this.setRadioNames();
+	        this.setCheckedRadio();
+	    },
+	
+	    componentDidUpdate: function componentDidUpdate() {
+	        this.setRadioNames();
+	        this.setCheckedRadio();
+	    },
+	    render: function render() {
+	        return _react2['default'].createElement(
+	            'div',
+	            { className: 'kuma-radio-group', onChange: this.props.onChange },
+	            this.props.children
+	        );
+	    },
+	
+	    setRadioNames: function setRadioNames() {
+	        // stay DRY and don't put the same `name` on all radios manually. Put it on
+	        // the tag and it'll be done here
+	        var $radios = this.getRadios();
+	        for (var i = 0, length = $radios.length; i < length; i++) {
+	            $radios[i].setAttribute('name', this.props.jsxname);
+	        }
+	    },
+	
+	    getRadios: function getRadios() {
+	        return this.getDOMNode().querySelectorAll('input[type="radio"]');
+	    },
+	
+	    setCheckedRadio: function setCheckedRadio() {
+	        var $radios = this.getRadios();
+	        // if `value` is passed from parent, always use that value. This is similar
+	        // to React's controlled component. If `defaultValue` is used instead,
+	        // subsequent updates to defaultValue are ignored. Note: when `defaultValue`
+	        // and `value` are both passed, the latter takes precedence, just like in
+	        // a controlled component
+	        var destinationValue = this.props.jsxvalue != null ? this.props.jsxvalue : this.state.defaultValue;
+	
+	        for (var i = 0, length = $radios.length; i < length; i++) {
+	            var $radio = $radios[i];
+	
+	            // intentionally use implicit conversion for those who accidentally used,
+	            // say, `valueToChange` of 1 (integer) to compare it with `value` of "1"
+	            // (auto conversion to valid html value from React)
+	            if ($radio.value == destinationValue) {
+	                $radio.checked = true;
+	            }
+	        }
+	    },
+	
+	    getCheckedValue: function getCheckedValue() {
+	        var $radios = this.getRadios();
+	        for (var i = 0, length = $radios.length; i < length; i++) {
+	            if ($radios[i].checked) {
+	                return $radios[i].value;
+	            }
+	        }
+	    }
+	
+	});
+	exports['default'] = component;
+	module.exports = exports['default'];
+
+/***/ },
+/* 353 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -39495,10 +43469,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	module.exports = __webpack_require__(333);
+	module.exports = __webpack_require__(354);
 
 /***/ },
-/* 333 */
+/* 354 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -39519,7 +43493,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Tooltip = __webpack_require__(334);
+	var Tooltip = __webpack_require__(355);
 	
 	var Popover = (function (_React$Component) {
 	    _inherits(Popover, _React$Component);
@@ -39603,15 +43577,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Popover;
 
 /***/ },
-/* 334 */
+/* 355 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	module.exports = __webpack_require__(335);
+	module.exports = __webpack_require__(356);
 
 /***/ },
-/* 335 */
+/* 356 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39638,9 +43612,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcUtil = __webpack_require__(336);
+	var _rcUtil = __webpack_require__(357);
 	
-	var _Popup = __webpack_require__(348);
+	var _Popup = __webpack_require__(369);
 	
 	var _Popup2 = _interopRequireDefault(_Popup);
 	
@@ -39916,31 +43890,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 336 */
+/* 357 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	module.exports = {
-	  guid: __webpack_require__(337),
-	  classSet: __webpack_require__(338),
-	  joinClasses: __webpack_require__(339),
-	  KeyCode: __webpack_require__(340),
-	  PureRenderMixin: __webpack_require__(341),
-	  shallowEqual: __webpack_require__(342),
-	  createChainedFunction: __webpack_require__(343),
+	  guid: __webpack_require__(358),
+	  classSet: __webpack_require__(359),
+	  joinClasses: __webpack_require__(360),
+	  KeyCode: __webpack_require__(361),
+	  PureRenderMixin: __webpack_require__(362),
+	  shallowEqual: __webpack_require__(363),
+	  createChainedFunction: __webpack_require__(364),
 	  Dom: {
-	    addEventListener: __webpack_require__(344),
-	    contains: __webpack_require__(345)
+	    addEventListener: __webpack_require__(365),
+	    contains: __webpack_require__(366)
 	  },
 	  Children: {
-	    toArray: __webpack_require__(346),
-	    mapSelf: __webpack_require__(347)
+	    toArray: __webpack_require__(367),
+	    mapSelf: __webpack_require__(368)
 	  }
 	};
 
 /***/ },
-/* 337 */
+/* 358 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -39951,7 +43925,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 338 */
+/* 359 */
 /***/ function(module, exports) {
 
 	/**
@@ -39997,7 +43971,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = cx;
 
 /***/ },
-/* 339 */
+/* 360 */
 /***/ function(module, exports) {
 
 	/**
@@ -40043,7 +44017,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = joinClasses;
 
 /***/ },
-/* 340 */
+/* 361 */
 /***/ function(module, exports) {
 
 	/**
@@ -40568,7 +44542,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = KeyCode;
 
 /***/ },
-/* 341 */
+/* 362 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -40584,7 +44558,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	"use strict";
 	
-	var shallowEqual = __webpack_require__(342);
+	var shallowEqual = __webpack_require__(363);
 	
 	/**
 	 * If your React component's render function is "pure", e.g. it will render the
@@ -40619,7 +44593,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ReactComponentWithPureRenderMixin;
 
 /***/ },
-/* 342 */
+/* 363 */
 /***/ function(module, exports) {
 
 	/**
@@ -40665,7 +44639,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = shallowEqual;
 
 /***/ },
-/* 343 */
+/* 364 */
 /***/ function(module, exports) {
 
 	/**
@@ -40693,7 +44667,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = createChainedFunction;
 
 /***/ },
-/* 344 */
+/* 365 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -40717,7 +44691,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 345 */
+/* 366 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -40734,7 +44708,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 346 */
+/* 367 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40750,7 +44724,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 347 */
+/* 368 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40767,7 +44741,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 348 */
+/* 369 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40784,13 +44758,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _utils = __webpack_require__(349);
+	var _utils = __webpack_require__(370);
 	
-	var _rcAlign = __webpack_require__(350);
+	var _rcAlign = __webpack_require__(371);
 	
 	var _rcAlign2 = _interopRequireDefault(_rcAlign);
 	
-	var _rcAnimate = __webpack_require__(354);
+	var _rcAnimate = __webpack_require__(375);
 	
 	var _rcAnimate2 = _interopRequireDefault(_rcAnimate);
 	
@@ -40888,7 +44862,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 349 */
+/* 370 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -40912,7 +44886,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 350 */
+/* 371 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40926,7 +44900,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _Align = __webpack_require__(351);
+	var _Align = __webpack_require__(372);
 	
 	var _Align2 = _interopRequireDefault(_Align);
 	
@@ -40934,7 +44908,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 351 */
+/* 372 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40993,11 +44967,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _domAlign = __webpack_require__(352);
+	var _domAlign = __webpack_require__(373);
 	
 	var _domAlign2 = _interopRequireDefault(_domAlign);
 	
-	var _rcUtil = __webpack_require__(336);
+	var _rcUtil = __webpack_require__(357);
 	
 	var _rcUtil2 = _interopRequireDefault(_rcUtil);
 	
@@ -41135,7 +45109,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 352 */
+/* 373 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -41153,7 +45127,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _utils = __webpack_require__(353);
+	var _utils = __webpack_require__(374);
 	
 	var _utils2 = _interopRequireDefault(_utils);
 	
@@ -41517,7 +45491,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 353 */
+/* 374 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -41973,16 +45947,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 354 */
+/* 375 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// export this package's api
 	'use strict';
 	
-	module.exports = __webpack_require__(355);
+	module.exports = __webpack_require__(376);
 
 /***/ },
-/* 355 */
+/* 376 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42007,15 +45981,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _ChildrenUtils = __webpack_require__(356);
+	var _ChildrenUtils = __webpack_require__(377);
 	
 	var _ChildrenUtils2 = _interopRequireDefault(_ChildrenUtils);
 	
-	var _AnimateChild = __webpack_require__(357);
+	var _AnimateChild = __webpack_require__(378);
 	
 	var _AnimateChild2 = _interopRequireDefault(_AnimateChild);
 	
-	var _util = __webpack_require__(361);
+	var _util = __webpack_require__(382);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -42297,7 +46271,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 356 */
+/* 377 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42416,7 +46390,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 357 */
+/* 378 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42433,11 +46407,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _cssAnimation = __webpack_require__(358);
+	var _cssAnimation = __webpack_require__(379);
 	
 	var _cssAnimation2 = _interopRequireDefault(_cssAnimation);
 	
-	var _util = __webpack_require__(361);
+	var _util = __webpack_require__(382);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -42516,13 +46490,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 358 */
+/* 379 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Event = __webpack_require__(359);
-	var Css = __webpack_require__(360);
+	var Event = __webpack_require__(380);
+	var Css = __webpack_require__(381);
 	var isCssAnimationSupported = Event.endEvents.length !== 0;
 	
 	function getDuration(node, name) {
@@ -42674,7 +46648,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = cssAnimation;
 
 /***/ },
-/* 359 */
+/* 380 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -42762,7 +46736,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = TransitionEvents;
 
 /***/ },
-/* 360 */
+/* 381 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -42793,7 +46767,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 361 */
+/* 382 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -42824,6 +46798,4609 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	exports["default"] = util;
 	module.exports = exports["default"];
+
+/***/ },
+/* 383 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * FisGrid Component for uxcore
+	 * @author guanghong.wsj
+	 *
+	 * Copyright 2014-2015, Uxcore Team, Alinw.
+	 * All rights reserved.
+	 */
+	
+	'use strict';
+	
+	module.exports = __webpack_require__(384);
+
+/***/ },
+/* 384 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * FisGrid Component for uxcore
+	 * @author guanghong.wsj
+	 *
+	 * Copyright 2014-2015, Uxcore Team, Alinw.
+	 * All rights reserved.
+	 */
+	
+	"use strict";
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Grid = __webpack_require__(263);
+	var Dialog = __webpack_require__(63);
+	var assign = __webpack_require__(84);
+	
+	var FisGrid = (function (_React$Component) {
+	    _inherits(FisGrid, _React$Component);
+	
+	    function FisGrid(props) {
+	        _classCallCheck(this, FisGrid);
+	
+	        _get(Object.getPrototypeOf(FisGrid.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            showNewDialog: false,
+	            showEditDialog: false,
+	            showDeleteConfirmDialog: false
+	        };
+	    }
+	
+	    _createClass(FisGrid, [{
+	        key: "componentWillMount",
+	        value: function componentWillMount() {
+	            var me = this;
+	            me.addNewData = me.props.options.addNewData;
+	            me.editData = me.props.options.editData;
+	            me.deleteData = me.props.options.deleteData;
+	        }
+	    }, {
+	        key: "fetchData",
+	        value: function fetchData(from) {
+	            var me = this;
+	            me.refs.grid.fetchData(from);
+	        }
+	    }, {
+	        key: "ajax",
+	        value: function ajax(options, data, success) {
+	            var ajaxOptions = {
+	                url: options.url,
+	                type: options.type || 'GET',
+	                data: {
+	                    data: data
+	                },
+	                success: success
+	            };
+	
+	            if (/\.jsonp/.test(options.url)) {
+	                ajaxOptions.dataType = "jsonp";
+	            }
+	
+	            $.ajax(ajaxOptions);
+	        }
+	    }, {
+	        key: "handleNewOk",
+	        value: function handleNewOk() {
+	            var me = this;
+	            var data = me.refs.newDialog.getValues();
+	            if (data.pass) {
+	                me.ajax(me.addNewData, data.values, function (result) {
+	                    if (result.success) {
+	                        location.reload();
+	                    } else {
+	                        console.log("jsonp not success");
+	                    }
+	                });
+	            }
+	        }
+	    }, {
+	        key: "handleNewCancel",
+	        value: function handleNewCancel() {
+	            var me = this;
+	            me.refs.newDialog.resetValues();
+	            me.setState({
+	                showNewDialog: false
+	            });
+	        }
+	    }, {
+	        key: "handleEditOk",
+	        value: function handleEditOk() {
+	            var me = this;
+	            var data = me.refs.editDialog.getValues();
+	            if (data.pass) {
+	                var ajaxOptions = {
+	                    url: me.editData.url,
+	                    type: me.editData.type || 'GET',
+	                    data: {
+	                        data: data.values
+	                    },
+	                    success: function success(result) {
+	                        if (result.success) {
+	                            me.refs.grid.fetchData();
+	                            me.setState({
+	                                showEditDialog: false
+	                            });
+	                        } else {
+	                            console.log("jsonp not success");
+	                        }
+	                    }
+	                };
+	
+	                if (/\.jsonp/.test(me.editData.url)) {
+	                    ajaxOptions.dataType = "jsonp";
+	                }
+	
+	                $.ajax(ajaxOptions);
+	            }
+	        }
+	    }, {
+	        key: "handleEditCancel",
+	        value: function handleEditCancel() {
+	            var me = this;
+	            me.refs.editDialog.resetValues();
+	            me.setState({
+	                showEditDialog: false
+	            });
+	        }
+	    }, {
+	        key: "handleDelOk",
+	        value: function handleDelOk() {
+	            var me = this;
+	            var ajaxOptions = {
+	                url: me.deleteData.url,
+	                type: me.deleteData.type || 'GET',
+	                data: {
+	                    data: me.state.data
+	                },
+	                success: function success(result) {
+	                    if (result.success) {
+	                        me.refs.grid.fetchData();
+	                        me.setState({
+	                            showDeleteConfirmDialog: false
+	                        });
+	                    } else {
+	                        console.log("sendData not success");
+	                    }
+	                }
+	            };
+	
+	            if (/\.jsonp/.test(me.deleteData.url)) {
+	                ajaxOptions.dataType = "jsonp";
+	            }
+	
+	            $.ajax(ajaxOptions);
+	        }
+	    }, {
+	        key: "handleDelCancel",
+	        value: function handleDelCancel() {
+	            var me = this;
+	            me.setState({
+	                showDeleteConfirmDialog: false
+	            });
+	        }
+	    }, {
+	        key: "renderNewDialog",
+	        value: function renderNewDialog() {
+	            var me = this;
+	            if (!!me.addNewData) {
+	                return React.createElement(
+	                    Dialog,
+	                    { title: "新增数据", mask: true, visible: me.state.showNewDialog, width: 1000, onOk: me.handleNewOk.bind(me), onCancel: me.handleNewCancel.bind(me) },
+	                    React.cloneElement(me.addNewData.comp, {
+	                        ref: "newDialog"
+	                    })
+	                );
+	            }
+	        }
+	    }, {
+	        key: "renderEditDialog",
+	        value: function renderEditDialog() {
+	            var me = this;
+	            if (!!me.editData) {
+	                return React.createElement(
+	                    Dialog,
+	                    { title: "编辑数据", mask: true, visible: me.state.showEditDialog, width: 1000, onOk: me.handleEditOk.bind(me), onCancel: me.handleEditCancel.bind(me) },
+	                    React.cloneElement(me.editData.comp, {
+	                        ref: "editDialog",
+	                        jsxvalues: me.state.editValues
+	                    })
+	                );
+	            }
+	        }
+	    }, {
+	        key: "renderDeleteConfirmDialog",
+	        value: function renderDeleteConfirmDialog() {
+	            var me = this;
+	            if (!!me.deleteData) {
+	                return React.createElement(
+	                    Dialog,
+	                    { title: "确认删除", mask: true, visible: me.state.showDeleteConfirmDialog, width: 400, onOk: me.handleDelOk.bind(me), onCancel: me.handleDelCancel.bind(me) },
+	                    React.createElement(
+	                        "div",
+	                        null,
+	                        "确认删除吗？"
+	                    )
+	                );
+	            }
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var me = this;
+	            var renderOptions = me.props.options;
+	
+	            if (!!me.editData) {
+	                renderOptions.jsxcolumns = renderOptions.jsxcolumns.concat([{
+	                    dataKey: "jsxedit",
+	                    type: "action",
+	                    title: "操作",
+	                    width: 100,
+	                    items: [{
+	                        title: "编辑",
+	                        cb: function cb(rowData) {
+	                            me.setState({
+	                                editValues: rowData,
+	                                rowData: rowData,
+	                                showEditDialog: true
+	                            });
+	                        }
+	                    }]
+	                }]);
+	            }
+	            if (!!me.addNewData) {
+	                renderOptions.actionBar = assign({}, renderOptions.actionBar, {
+	                    "新增": function _() {
+	                        me.setState({
+	                            showNewDialog: true
+	                        });
+	                    }
+	                });
+	            }
+	
+	            if (!!me.deleteData) {
+	                renderOptions.actionBar = assign({}, renderOptions.actionBar, {
+	                    "删除": function _() {
+	                        me.setState({
+	                            showDeleteConfirmDialog: true
+	                        });
+	                    }
+	                });
+	                renderOptions = assign({}, renderOptions, {
+	                    rowSelection: {
+	                        onSelect: function onSelect(record, selected, selectedRows) {
+	                            me.setState({
+	                                data: selectedRows
+	                            });
+	                        },
+	                        onSelectAll: function onSelectAll(selected, selectedRows) {
+	                            me.setState({
+	                                data: selectedRows
+	                            });
+	                        }
+	                    }
+	                });
+	            }
+	
+	            if (!!me.props.passedData) {
+	                renderOptions = assign({}, renderOptions, {
+	                    passedData: me.props.passedData,
+	                    parentHasCheckbox: me.props.parentHasCheckbox
+	                });
+	            }
+	            return React.createElement(
+	                "div",
+	                { "class": "uxcore-fis-grid" },
+	                React.createElement(Grid, _extends({ ref: "grid" }, renderOptions)),
+	                me.renderNewDialog(),
+	                me.renderEditDialog(),
+	                me.renderDeleteConfirmDialog()
+	            );
+	        }
+	    }]);
+	
+	    return FisGrid;
+	})(React.Component);
+	
+	FisGrid.defaultProps = {};
+	
+	// http://facebook.github.io/react/docs/reusable-components.html
+	FisGrid.propTypes = {};
+	
+	FisGrid.displayName = "FisGrid";
+	
+	module.exports = FisGrid;
+
+/***/ },
+/* 385 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Hovercard Component for uxcore
+	 * @author jinghong
+	 *
+	 * Copyright 2014-2015, Uxcore Team, Alinw.
+	 * All rights reserved.
+	 */
+	
+	'use strict';
+	
+	module.exports = __webpack_require__(386);
+
+/***/ },
+/* 386 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Hovercard Component for uxcore
+	 * @author jinghong
+	 *
+	 * Copyright 2014-2015, Uxcore Team, Alinw.
+	 * All rights reserved.
+	 */
+	
+	"use strict";
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Component = React.Component;
+	var Tooltip = __webpack_require__(387);
+	var Emitter = __webpack_require__(415);
+	
+	var LANG = {
+	    "zh-cn": {
+	        followTitle: "未关注，点击后关注",
+	        eachFollowedTitle: "相互关注，点击取消关注",
+	        cancelFollowedTitle: "已关注，点击取消关注",
+	        procesText: "处理中，请稍候",
+	        emailAddrText: "邮件",
+	        extensionPhoneTitle: "点击拨打电话",
+	        extensionPhoneText: "分机",
+	        aliwwText: "旺旺",
+	        errorTip: "抱歉，该员工信息不存在！",
+	        hangupPhoneCall: "拨打中，点击挂断电话"
+	    },
+	    "en": {
+	        followTitle: "Click to follow",
+	        eachFollowedTitle: "Mutual Friends. Click to unfollow.",
+	        cancelFollowedTitle: "Followed. Click to unfollow.",
+	        procesText: "Processing...",
+	        emailAddrText: "Email",
+	        extensionPhoneTitle: "Click to dial the number",
+	        extensionPhoneText: "Phone",
+	        aliwwText: "Wang",
+	        errorTip: "Sorry. No information found!",
+	        hangupPhoneCall: "Click to hang up"
+	    }
+	};
+	
+	var DevicePixelRatio = 'devicePixelRatio' in window ? +window.devicePixelRatio : 1;
+	function getAvatarUrl(userInfo) {
+	    var size = undefined;
+	
+	    if (DevicePixelRatio > 1) {
+	        size = '80x80';
+	    } else {
+	        size = '40x40';
+	    }
+	
+	    if (userInfo.photoPath) {
+	        var host = userInfo.photoPath.indexOf('.tfsprivate') < 0 ? '//aliwork.alicdn.com/' : '//g01.alibaba-inc.com/';
+	
+	        return host + userInfo.photoPath + '_' + size;
+	    } else if (userInfo.avatar) {
+	        var url = [userInfo.avatar.split('.jpg')[0], '.' + size + '.jpg'].join('');
+	        if (url.indexOf('//') < 0) {
+	            url = 'https://work.alibaba-inc.com' + url;
+	        }
+	    } else {
+	        return '//aliwork.alicdn.com/tfscom/T1fxt7FtJlXXXXXXXX_' + size;
+	    }
+	}
+	
+	var Avatar = (function (_Component) {
+	    _inherits(Avatar, _Component);
+	
+	    function Avatar() {
+	        _classCallCheck(this, Avatar);
+	
+	        _get(Object.getPrototypeOf(Avatar.prototype), "constructor", this).apply(this, arguments);
+	    }
+	
+	    _createClass(Avatar, [{
+	        key: "render",
+	        value: function render() {
+	            var userInfo = this.props.user.userInfo;
+	            return React.createElement(
+	                "div",
+	                { className: "kuma-hovercard-avatar" },
+	                React.createElement(
+	                    "a",
+	                    { href: "https://work.alibaba-inc.com/work/u/" + userInfo.emplId, target: "_blank" },
+	                    React.createElement("img", { src: getAvatarUrl(userInfo) })
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return Avatar;
+	})(Component);
+	
+	var UserDetail = (function (_Component2) {
+	    _inherits(UserDetail, _Component2);
+	
+	    function UserDetail() {
+	        _classCallCheck(this, UserDetail);
+	
+	        _get(Object.getPrototypeOf(UserDetail.prototype), "constructor", this).apply(this, arguments);
+	    }
+	
+	    _createClass(UserDetail, [{
+	        key: "render",
+	        value: function render() {
+	            var userInfo = this.props.user.userInfo;
+	
+	            var displayName = userInfo.name;
+	            if (userInfo.nickNameCn && this.props.locale !== 'en') {
+	                displayName += '(' + userInfo.nickNameCn + ')';
+	            }
+	            displayName += ' ' + (this.props.locale === 'en' ? '(' + userInfo.emplId + ')' : " " + userInfo.emplId);
+	
+	            return React.createElement(
+	                "ul",
+	                { className: "kuma-hovercard-content" },
+	                React.createElement(
+	                    "li",
+	                    { title: displayName },
+	                    React.createElement(
+	                        "a",
+	                        { href: "https://work.alibaba-inc.com/work/u/" + userInfo.emplId, target: "_blank", className: "kuma-hovercard-name g-csscut-more" },
+	                        displayName
+	                    )
+	                ),
+	                this.props.hideJobDesc ? React.createElement(
+	                    "li",
+	                    { className: "g-csscut-more singledetail", title: userInfo.deptDesc },
+	                    userInfo.deptDesc
+	                ) : null,
+	                this.props.hideJobDesc ? null : React.createElement(
+	                    "li",
+	                    { className: "g-csscut-more", title: userInfo.jobDesc },
+	                    userInfo.jobDesc
+	                ),
+	                this.props.hideJobDesc ? null : React.createElement(
+	                    "li",
+	                    { className: "g-csscut-more", title: userInfo.deptDesc },
+	                    userInfo.deptDesc
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return UserDetail;
+	})(Component);
+	
+	var Connection = (function (_Component3) {
+	    _inherits(Connection, _Component3);
+	
+	    function Connection(props) {
+	        var _this = this;
+	
+	        _classCallCheck(this, Connection);
+	
+	        _get(Object.getPrototypeOf(Connection.prototype), "constructor", this).call(this, props);
+	
+	        this.user = this.props.user;
+	
+	        this.state = {
+	            connection: this.user.getConnection()
+	        };
+	
+	        var connectionchange = function connectionchange(connection) {
+	            _this.setState({ connection: connection });
+	        };
+	
+	        this.user.on('connectionchange', connectionchange);
+	
+	        this.stopListen = function () {
+	            _this.user.off('connectionchange', connectionchange);
+	        };
+	    }
+	
+	    _createClass(Connection, [{
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {
+	            this.stopListen && this.stopListen();
+	        }
+	    }, {
+	        key: "changeRelation",
+	        value: function changeRelation() {
+	            if (!this.state.connection) {
+	                return;
+	            }
+	            if (this.state.connection === 'friends' || this.state.connection === 'bilateral') {
+	                this.user.breakup();
+	            } else {
+	                this.user.follow();
+	            }
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var lang = LANG[this.props.locale];
+	            var connection = undefined;
+	            if (this.state.connection === 'bilateral') {
+	                connection = React.createElement("span", { className: "kuma-hovercard-friends", title: lang.eachFollowedTitle });
+	            } else if (this.state.connection === 'following') {
+	                connection = React.createElement("span", { className: "kuma-hovercard-followed", title: lang.cancelFollowedTitle });
+	            } else if (this.state.connection === 'noncontact' || this.state.connection === 'followers') {
+	                connection = React.createElement("span", { className: "kuma-hovercard-stranger", title: lang.followTitle });
+	            } else {
+	                connection = React.createElement("span", { className: "kuma-hovercard-connecting", title: lang.procesText });
+	            }
+	            return React.createElement(
+	                "div",
+	                { className: "kuma-hovercard-conn", onClick: this.changeRelation.bind(this) },
+	                connection
+	            );
+	        }
+	    }]);
+	
+	    return Connection;
+	})(Component);
+	
+	var At = (function (_Component4) {
+	    _inherits(At, _Component4);
+	
+	    function At() {
+	        _classCallCheck(this, At);
+	
+	        _get(Object.getPrototypeOf(At.prototype), "constructor", this).apply(this, arguments);
+	    }
+	
+	    _createClass(At, [{
+	        key: "render",
+	        value: function render() {
+	            var _this2 = this;
+	
+	            return React.createElement("li", { className: "kuma-hovercard-at", onClick: function () {
+	                    _this2.props.user.callAt();
+	                } });
+	        }
+	    }]);
+	
+	    return At;
+	})(Component);
+	
+	var PhoneCall = (function (_Component5) {
+	    _inherits(PhoneCall, _Component5);
+	
+	    function PhoneCall(props) {
+	        var _this3 = this;
+	
+	        _classCallCheck(this, PhoneCall);
+	
+	        _get(Object.getPrototypeOf(PhoneCall.prototype), "constructor", this).call(this, props);
+	
+	        this.user = this.props.user;
+	
+	        this.state = {
+	            status: this.user.getPhoneStatus()
+	        };
+	
+	        var phonestatus = function phonestatus(status) {
+	            _this3.setState({ status: status });
+	        };
+	
+	        this.user.on('phonestatus', phonestatus);
+	
+	        this.stopListen = function () {
+	            _this3.user.off('phonestatus', phonestatus);
+	        };
+	    }
+	
+	    _createClass(PhoneCall, [{
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {
+	            this.stopListen && this.stopListen();
+	        }
+	    }, {
+	        key: "onClick",
+	        value: function onClick() {
+	            if (this.state.status === 'on') {
+	                this.user.hangExtPhone();
+	            } else {
+	                this.user.callExtPhone();
+	            }
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var lang = LANG[this.props.locale];
+	
+	            return React.createElement(
+	                "li",
+	                { className: "kuma-hovercard-phone " + (this.state.status === 'on' ? 'kuma-hovercard-phoneon' : 'kuma-hovercard-phoneoff'),
+	                    title: this.state.status === 'on' ? lang.hangupPhoneCall : lang.extensionPhoneTitle,
+	                    onClick: this.onClick.bind(this) },
+	                React.createElement(
+	                    "span",
+	                    null,
+	                    lang.extensionPhoneText
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return PhoneCall;
+	})(Component);
+	
+	var WangWang = (function (_Component6) {
+	    _inherits(WangWang, _Component6);
+	
+	    function WangWang() {
+	        _classCallCheck(this, WangWang);
+	
+	        _get(Object.getPrototypeOf(WangWang.prototype), "constructor", this).apply(this, arguments);
+	    }
+	
+	    _createClass(WangWang, [{
+	        key: "render",
+	        value: function render() {
+	            var _this4 = this;
+	
+	            var lang = LANG[this.props.locale];
+	
+	            return React.createElement(
+	                "li",
+	                { className: "kuma-hovercard-ww", onClick: function () {
+	                        _this4.props.user.callWangWang();
+	                    } },
+	                React.createElement(
+	                    "span",
+	                    null,
+	                    lang.aliwwText
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return WangWang;
+	})(Component);
+	
+	var Mail = (function (_Component7) {
+	    _inherits(Mail, _Component7);
+	
+	    function Mail() {
+	        _classCallCheck(this, Mail);
+	
+	        _get(Object.getPrototypeOf(Mail.prototype), "constructor", this).apply(this, arguments);
+	    }
+	
+	    _createClass(Mail, [{
+	        key: "render",
+	        value: function render() {
+	            var _this5 = this;
+	
+	            var lang = LANG[this.props.locale];
+	
+	            return React.createElement(
+	                "li",
+	                { className: "kuma-hovercard-email", onClick: function () {
+	                        _this5.props.user.callMail();
+	                    } },
+	                React.createElement(
+	                    "span",
+	                    null,
+	                    lang.emailAddrText
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return Mail;
+	})(Component);
+	
+	var Tools = (function (_Component8) {
+	    _inherits(Tools, _Component8);
+	
+	    function Tools() {
+	        _classCallCheck(this, Tools);
+	
+	        _get(Object.getPrototypeOf(Tools.prototype), "constructor", this).apply(this, arguments);
+	    }
+	
+	    _createClass(Tools, [{
+	        key: "render",
+	        value: function render() {
+	            return React.createElement(
+	                "div",
+	                { className: "kuma-hovercard-tools" },
+	                React.createElement(
+	                    "ul",
+	                    null,
+	                    React.createElement(At, { user: this.props.user, locale: this.props.locale }),
+	                    this.props.user.hasExtPhone() ? React.createElement(PhoneCall, { user: this.props.user, locale: this.props.locale }) : null,
+	                    this.props.user.hasWW() ? React.createElement(WangWang, { user: this.props.user, locale: this.props.locale }) : null,
+	                    this.props.user.hasMail() ? React.createElement(Mail, { user: this.props.user, locale: this.props.locale }) : null
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return Tools;
+	})(Component);
+	
+	var User = (function (_Emitter) {
+	    _inherits(User, _Emitter);
+	
+	    function User(params, userInfo) {
+	        _classCallCheck(this, User);
+	
+	        _get(Object.getPrototypeOf(User.prototype), "constructor", this).call(this);
+	        this.locale = params.locale;
+	        this.token = params.token;
+	        this.params = params;
+	        this.ready = 0;
+	        if (userInfo) {
+	            this.userInfo = userInfo;
+	            this.ready = 1;
+	        } else {
+	            this.userInfo = { emplId: params.emplId };
+	        }
+	    }
+	
+	    _createClass(User, [{
+	        key: "prepare",
+	        value: function prepare() {
+	            if (this.prepared) return;
+	            this.prepared = 1;
+	
+	            if (this.ready) {
+	                this.wangwangStatus();
+	            } else {
+	                this.fetchUserInfo();
+	            }
+	        }
+	    }, {
+	        key: "getConnection",
+	        value: function getConnection() {
+	            return this.userInfo.connection;
+	        }
+	    }, {
+	        key: "getPhoneStatus",
+	        value: function getPhoneStatus() {
+	            return this.phoneStatus || 'off';
+	        }
+	    }, {
+	        key: "hasExtPhone",
+	        value: function hasExtPhone() {
+	            return this.userInfo.extensionPhone != null && this.userInfo.extensionPhone !== '';
+	        }
+	    }, {
+	        key: "hasWW",
+	        value: function hasWW() {
+	            return this.userInfo.tbWW || this.userInfo.aliWW;
+	        }
+	    }, {
+	        key: "hasMail",
+	        value: function hasMail() {
+	            return this.userInfo.emailAddr != null && this.userInfo.emailAddr !== '';
+	        }
+	    }, {
+	        key: "isReady",
+	        value: function isReady() {
+	            return this.ready > 0;
+	        }
+	    }, {
+	        key: "isValid",
+	        value: function isValid() {
+	            return this.userInfo.emplId != null && this.userInfo.emplId !== '' && this.userInfo.name != null && this.userInfo.name !== '';
+	        }
+	    }, {
+	        key: "getAccessToken",
+	        value: function getAccessToken() {
+	            var tokenSource = this.params.token;
+	            if (typeof tokenSource == 'function') {
+	                return tokenSource();
+	            } else {
+	                return tokenSource;
+	            }
+	        }
+	    }, {
+	        key: "callOpenAPI",
+	        value: function callOpenAPI(api, params) {
+	            if (!params) {
+	                params = {};
+	            }
+	            params['_'] = +new Date();
+	            params['accessToken'] = this.getAccessToken();
+	
+	            return jQuery.ajax({
+	                url: "https://work.alibaba-inc.com" + api + '?' + jQuery.param(params),
+	                dataType: "jsonp",
+	                timeout: 5000
+	            });
+	        }
+	    }, {
+	        key: "fetchUserInfo",
+	        value: function fetchUserInfo() {
+	            var _this6 = this;
+	
+	            var params = {
+	                searchEmplId: this.params.emplId,
+	                lang: this.params.locale
+	            };
+	            if (this.params.extra) {
+	                for (var k in this.params.extra) {
+	                    if (this.params.extra.hasOwnProperty(k) && !params[k]) {
+	                        params[k] = this.params.extra[k];
+	                    }
+	                }
+	            }
+	            this.callOpenAPI("/work/xservice/open/api/v1/relation/getUserConnection.jsonp", params).done(function (res) {
+	                try {
+	                    var data = res.content.userInfo;
+	                    data.loginId = res.content.loginUserId;
+	                    data.connection = res.content.connection || false;
+	
+	                    _this6.userInfo = data;
+	                } catch (e) {
+	                    _this6.userInfo = {};
+	                }
+	                _this6.ready = 1;
+	                _this6.wangwangStatus();
+	                _this6.emit('ready', _this6.userInfo);
+	            });
+	        }
+	    }, {
+	        key: "follow",
+	        value: function follow() {
+	            var _this7 = this;
+	
+	            this.lastConnection = this.userInfo.connection;
+	            this.userInfo.connection = null;
+	            this.emit('connectionchange', null);
+	            this.callOpenAPI("/work/xservice/open/api/v1/relation/followPerson.jsonp", { "emplId": this.userInfo.emplId }).done(function (res) {
+	                _this7.userInfo.connection = res.content;
+	                _this7.emit('connectionchange', res.content);
+	            }).fail(function () {
+	                _this7.userInfo.connection = _this7.lastConnection;
+	                _this7.emit('connectionchange', _this7.lastConnection);
+	            });
+	        }
+	    }, {
+	        key: "breakup",
+	        value: function breakup() {
+	            var _this8 = this;
+	
+	            this.lastConnection = this.userInfo.connection;
+	            this.userInfo.connection = null;
+	            this.emit('connectionchange', null);
+	            this.callOpenAPI("/work/xservice/open/api/v1/relation/removeMyFollowing.jsonp", { "followerEmplId": this.userInfo.loginId, "followeeEmplId": this.userInfo.emplId }).done(function (res) {
+	                // followers
+	                _this8.userInfo.connection = res.content;
+	                _this8.emit('connectionchange', res.content);
+	            }).fail(function () {
+	                _this8.userInfo.connection = _this8.lastConnection;
+	                _this8.emit('connectionchange', _this8.lastConnection);
+	            });
+	        }
+	    }, {
+	        key: "hangExtPhone",
+	        value: function hangExtPhone() {
+	            var _this9 = this;
+	
+	            if (!this.phoneCallUuid) return;
+	
+	            this.callOpenAPI("/work/xservice/open/api/v1/common/stopPhoneCall.jsonp", { "uuid": this.phoneCallUuid }).done(function (res) {
+	                if (res.content && (res.content === 'ok' || res.content === 'uuid:' + _this9.phoneCallUuid)) {
+	                    _this9.phoneCallUuid = null;
+	                    _this9.phoneStatus = 'off';
+	                    _this9.emit('phonestatus', _this9.phoneStatus);
+	                }
+	            });
+	        }
+	    }, {
+	        key: "callMail",
+	        value: function callMail() {
+	            top.location.href = "mailto:" + this.userInfo.emailAddr;
+	        }
+	    }, {
+	        key: "callExtPhone",
+	        value: function callExtPhone() {
+	            var _this10 = this;
+	
+	            this.callOpenAPI("/work/xservice/open/api/v1/common/makePhoneCall.jsonp", { "number": this.userInfo.extensionPhone, "isMobileNumber": false }).done(function (res) {
+	                if (res.content && res.content.substr(0, 4) === 'uuid') {
+	                    _this10.phoneCallUuid = res.content.substr(5);
+	                    _this10.phoneStatus = 'on';
+	                    _this10.emit('phonestatus', _this10.phoneStatus);
+	                }
+	            });
+	        }
+	    }, {
+	        key: "callAt",
+	        value: function callAt() {
+	            var who = '(' + this.userInfo.emplId + ')';
+	            if (this.userInfo.nickNameCn) {
+	                who = '@' + this.userInfo.nickNameCn + who;
+	            } else {
+	                who = '@' + this.userInfo.name + who;
+	            }
+	            var win = window.open("https://work.alibaba-inc.com/work/home?privateat=" + who, '_blank');
+	            win.focus();
+	        }
+	    }, {
+	        key: "callWangWang",
+	        value: function callWangWang() {
+	            var preferAccount = this.getPreferWWAccount();
+	            if (!preferAccount) return;
+	
+	            var siteid = preferAccount.substr(0, 8) === 'cnalichn' ? 'cntaobao' : 'cnalichn';
+	            var wwlink = 'aliim:sendmsg?touid=' + preferAccount + '&siteid=' + siteid + '&fenliu=1&status=2';
+	
+	            top.location.href = wwlink;
+	        }
+	    }, {
+	        key: "getPreferWWAccount",
+	        value: function getPreferWWAccount() {
+	            if (this.preferAccount) {
+	                return this.preferAccount;
+	            }
+	            return this.getWWUids()[0] || '';
+	        }
+	    }, {
+	        key: "getWWUids",
+	        value: function getWWUids() {
+	            var uids = [];
+	            if (this.userInfo.tbWW) {
+	                uids.push('cntaobao' + this.userInfo.tbWW);
+	            }
+	            if (this.userInfo.aliWW) {
+	                uids.push('cnalichn' + this.userInfo.aliWW);
+	            }
+	            return uids;
+	        }
+	    }, {
+	        key: "wangwangStatus",
+	        value: function wangwangStatus() {
+	            var _this11 = this;
+	
+	            var uids = this.getWWUids();
+	            jQuery.ajax({
+	                url: '//amos.alicdn.com/mullidstatus.aw',
+	                dataType: 'jsonp',
+	                data: {
+	                    "charset": "utf-8",
+	                    "uids": uids.join(';')
+	                }
+	            }).done(function (res) {
+	                var preferAccount = uids[0] || '';
+	                var data = res.data;
+	                for (var i = 0, l = data.length; i < l; i++) {
+	                    if (data[i] > 0) {
+	                        preferAccount = uids[i];
+	                        break;
+	                    }
+	                }
+	                _this11.preferAccount = preferAccount;
+	            });
+	        }
+	    }]);
+	
+	    return User;
+	})(Emitter);
+	
+	var UserCache = {};
+	
+	function getUser(props) {
+	    var emplId = props.userInfo && props.userInfo.emplId || props.emplId;
+	
+	    if (emplId && UserCache.hasOwnProperty(emplId)) {
+	        return UserCache[emplId];
+	    }
+	
+	    var params = {
+	        emplId: emplId,
+	        token: props.token,
+	        locale: props.locale
+	    };
+	
+	    var user = new User(params, props.userInfo);
+	
+	    if (emplId) {
+	        UserCache[emplId] = user;
+	    }
+	
+	    return user;
+	}
+	
+	var Hovercard = (function (_Component9) {
+	    _inherits(Hovercard, _Component9);
+	
+	    function Hovercard(props) {
+	        var _this12 = this;
+	
+	        _classCallCheck(this, Hovercard);
+	
+	        _get(Object.getPrototypeOf(Hovercard.prototype), "constructor", this).call(this, props);
+	
+	        this.user = getUser(this.props);
+	
+	        var ready = function ready() {
+	            _this12.setState({});
+	        };
+	        this.user.on('ready', ready);
+	        this.stopListen = function () {
+	            _this12.user.off('ready', ready);
+	        };
+	
+	        this.state = {};
+	    }
+	
+	    _createClass(Hovercard, [{
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {
+	            this.stopListen && this.stopListen();
+	        }
+	    }, {
+	        key: "generateOverlay",
+	        value: function generateOverlay() {
+	            var lang = LANG[this.props.locale];
+	
+	            if (!this.user.isReady()) {
+	                return null;
+	            }
+	
+	            if (!this.user.isValid()) {
+	                return React.createElement(
+	                    "div",
+	                    { className: "kuma-hovercard-container alinw-hovercard" },
+	                    React.createElement(
+	                        "div",
+	                        { className: "kuma-hovercard-error" },
+	                        lang.errorTip
+	                    )
+	                );
+	            }
+	
+	            return React.createElement(
+	                "div",
+	                { className: "kuma-hovercard-container alinw-hovercard" },
+	                React.createElement(
+	                    "div",
+	                    { className: "kuma-hovercard-info" },
+	                    React.createElement(Avatar, { user: this.user, locale: this.props.locale }),
+	                    React.createElement(UserDetail, { user: this.user, hideJobDesc: this.props.hideJobDesc, locale: this.props.locale }),
+	                    this.props.showConn ? React.createElement(Connection, { user: this.user, locale: this.props.locale }) : null
+	                ),
+	                React.createElement(Tools, { user: this.user, locale: this.props.locale })
+	            );
+	        }
+	    }, {
+	        key: "onVisibleChange",
+	        value: function onVisibleChange(visible) {
+	            if (visible) {
+	                this.user.prepare();
+	            }
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var placement = this.props.placement || { points: ['tl', 'bl'], overflow: { adjustX: true, adjustY: true } };
+	            return React.createElement(
+	                Tooltip,
+	                { prefixCls: "kuma-hovercard", trigger: "hover", delay: this.props.showDelay,
+	                    onVisibleChange: this.onVisibleChange.bind(this), overlay: this.generateOverlay(),
+	                    placement: placement },
+	                this.props.children
+	            );
+	        }
+	    }]);
+	
+	    return Hovercard;
+	})(Component);
+	
+	Hovercard.defaultProps = {
+	    showDelay: 0.1,
+	    hideJobDesc: false,
+	    showConn: true,
+	    token: '',
+	    emplId: '',
+	    userInfo: null,
+	    locale: 'zh-cn',
+	    placement: null
+	};
+	
+	// http://facebook.github.io/react/docs/reusable-components.html
+	Hovercard.propTypes = {
+	    token: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.func]),
+	    emplId: React.PropTypes.string,
+	    userInfo: React.PropTypes.object,
+	    hideJobDesc: React.PropTypes.bool,
+	    showConn: React.PropTypes.bool,
+	    showDelay: React.PropTypes.number,
+	    locale: React.PropTypes.oneOf(['zh-cn', 'en']),
+	    placement: React.PropTypes.oneOf(['top', 'bottom', 'left', 'right'])
+	};
+	
+	Hovercard.displayName = "Hovercard";
+	
+	module.exports = Hovercard;
+
+/***/ },
+/* 387 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	module.exports = __webpack_require__(388);
+
+/***/ },
+/* 388 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = arguments[i];for (var key in source) {
+	      if (Object.prototype.hasOwnProperty.call(source, key)) {
+	        target[key] = source[key];
+	      }
+	    }
+	  }return target;
+	};
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	var _react = __webpack_require__(9);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _rcUtil = __webpack_require__(389);
+	
+	var _Popup = __webpack_require__(401);
+	
+	var _Popup2 = _interopRequireDefault(_Popup);
+	
+	var Tooltip = _react2['default'].createClass({
+	  displayName: 'Tooltip',
+	
+	  propTypes: {
+	    trigger: _react2['default'].PropTypes.any,
+	    placement: _react2['default'].PropTypes.any,
+	    onVisibleChange: _react2['default'].PropTypes.func,
+	    afterVisibleChange: _react2['default'].PropTypes.func,
+	    overlay: _react2['default'].PropTypes.node.isRequired,
+	    overlayStyle: _react2['default'].PropTypes.object,
+	    overlayClassName: _react2['default'].PropTypes.string,
+	    wrapStyle: _react2['default'].PropTypes.object,
+	    mouseEnterDelay: _react2['default'].PropTypes.number,
+	    mouseLeaveDelay: _react2['default'].PropTypes.number
+	  },
+	
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      prefixCls: 'rc-tooltip',
+	      onVisibleChange: function onVisibleChange() {},
+	      afterVisibleChange: function afterVisibleChange() {},
+	      mouseEnterDelay: 0,
+	      mouseLeaveDelay: 0.1,
+	      overlayStyle: {},
+	      wrapStyle: {},
+	      placement: 'right',
+	      trigger: ['hover']
+	    };
+	  },
+	
+	  getInitialState: function getInitialState() {
+	    var props = this.props;
+	    var visible = undefined;
+	    if ('visible' in props) {
+	      visible = props.visible;
+	    } else {
+	      visible = props.defaultVisible;
+	    }
+	    return { visible: visible };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    this.componentDidUpdate(this.props, this.state);
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if ('visible' in nextProps) {
+	      this.setState({
+	        visible: !!nextProps.visible
+	      });
+	    }
+	  },
+	
+	  componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
+	    var _this = this;
+	
+	    var props = this.props;
+	    var state = this.state;
+	    if (this.popupRendered) {
+	      var _ret = (function () {
+	        var self = _this;
+	        _react2['default'].render(_this.getPopupElement(), _this.getTipContainer(), function renderPopup() {
+	          self.popupInstance = this;
+	          if (prevState.visible !== state.visible) {
+	            props.afterVisibleChange(state.visible);
+	          }
+	        });
+	        if (props.trigger.indexOf('click') !== -1) {
+	          if (state.visible) {
+	            if (!_this.clickOutsideHandler) {
+	              _this.clickOutsideHandler = _rcUtil.Dom.addEventListener(document, 'mousedown', _this.onDocumentClick);
+	              _this.touchOutsideHandler = _rcUtil.Dom.addEventListener(document, 'touchstart', _this.onDocumentClick);
+	            }
+	            return {
+	              v: undefined
+	            };
+	          }
+	        }
+	        if (_this.clickOutsideHandler) {
+	          _this.clickOutsideHandler.remove();
+	          _this.touchOutsideHandler.remove();
+	          _this.clickOutsideHandler = null;
+	          _this.touchOutsideHandler = null;
+	        }
+	      })();
+	
+	      if (typeof _ret === 'object') return _ret.v;
+	    }
+	  },
+	
+	  componentWillUnmount: function componentWillUnmount() {
+	    var tipContainer = this.tipContainer;
+	    if (tipContainer) {
+	      _react2['default'].unmountComponentAtNode(tipContainer);
+	      document.body.removeChild(tipContainer);
+	      this.tipContainer = null;
+	    }
+	    if (this.delayTimer) {
+	      clearTimeout(this.delayTimer);
+	      this.delayTimer = null;
+	    }
+	    if (this.clickOutsideHandler) {
+	      this.clickOutsideHandler.remove();
+	      this.touchOutsideHandler.remove();
+	      this.clickOutsideHandler = null;
+	      this.touchOutsideHandler = null;
+	    }
+	  },
+	
+	  onMouseEnter: function onMouseEnter() {
+	    this.delaySetVisible(true, this.props.mouseEnterDelay);
+	  },
+	
+	  onMouseLeave: function onMouseLeave() {
+	    this.delaySetVisible(false, this.props.mouseLeaveDelay);
+	  },
+	
+	  onFocus: function onFocus() {
+	    this.focusTime = Date.now();
+	    this.setVisible(true);
+	  },
+	
+	  onMouseDown: function onMouseDown() {
+	    this.preClickTime = Date.now();
+	  },
+	
+	  onTouchStart: function onTouchStart() {
+	    this.preTouchTime = Date.now();
+	  },
+	
+	  onBlur: function onBlur() {
+	    this.setVisible(false);
+	  },
+	
+	  onClick: function onClick(e) {
+	    // focus will trigger click
+	    if (this.focusTime) {
+	      var preTime = undefined;
+	      if (this.preClickTime && this.preTouchTime) {
+	        preTime = Math.min(this.preClickTime, this.preTouchTime);
+	      } else if (this.preClickTime) {
+	        preTime = this.preClickTime;
+	      } else if (this.preTouchTime) {
+	        preTime = this.preTouchTime;
+	      }
+	      if (Math.abs(preTime - this.focusTime) < 20) {
+	        return;
+	      }
+	      this.focusTime = 0;
+	    }
+	    this.preClickTime = 0;
+	    this.preTouchTime = 0;
+	    e.preventDefault();
+	    if (this.state.visible) {
+	      this.setVisible(false);
+	    } else {
+	      this.setVisible(true);
+	    }
+	  },
+	
+	  onDocumentClick: function onDocumentClick(e) {
+	    var target = e.target;
+	    var root = _react2['default'].findDOMNode(this);
+	    var popupNode = this.getPopupDomNode();
+	    if (!_rcUtil.Dom.contains(root, target) && !_rcUtil.Dom.contains(popupNode, target)) {
+	      this.setVisible(false);
+	    }
+	  },
+	
+	  getPopupDomNode: function getPopupDomNode() {
+	    // for test
+	    return this.popupInstance.getPopupDomNode();
+	  },
+	
+	  getTipContainer: function getTipContainer() {
+	    if (!this.tipContainer) {
+	      this.tipContainer = document.createElement('div');
+	      document.body.appendChild(this.tipContainer);
+	    }
+	    return this.tipContainer;
+	  },
+	
+	  getPopupElement: function getPopupElement() {
+	    if (!this.popupRendered) {
+	      return null;
+	    }
+	    var props = this.props;
+	    var state = this.state;
+	    var mouseProps = {};
+	    if (props.trigger.indexOf('hover') !== -1) {
+	      mouseProps.onMouseEnter = this.onMouseEnter;
+	      mouseProps.onMouseLeave = this.onMouseLeave;
+	    }
+	    return _react2['default'].createElement(_Popup2['default'], _extends({ prefixCls: props.prefixCls,
+	      visible: state.visible,
+	      className: props.overlayClassName,
+	      trigger: props.trigger,
+	      placement: props.placement,
+	      animation: props.animation
+	    }, mouseProps, {
+	      wrap: this,
+	      style: props.overlayStyle,
+	      transitionName: props.transitionName }), props.overlay);
+	  },
+	
+	  render: function render() {
+	    if (this.state.visible) {
+	      this.popupRendered = true;
+	    }
+	    var props = this.props;
+	    var children = props.children;
+	    var child = _react2['default'].Children.only(children);
+	    var childProps = child.props || {};
+	    var newChildProps = {};
+	    var trigger = props.trigger;
+	    if (trigger.indexOf('click') !== -1) {
+	      newChildProps.onClick = (0, _rcUtil.createChainedFunction)(this.onClick, childProps.onClick);
+	      newChildProps.onMouseDown = (0, _rcUtil.createChainedFunction)(this.onMouseDown, childProps.onMouseDown);
+	      newChildProps.onTouchStart = (0, _rcUtil.createChainedFunction)(this.onTouchStart, childProps.onTouchStart);
+	    }
+	    if (trigger.indexOf('hover') !== -1) {
+	      newChildProps.onMouseEnter = (0, _rcUtil.createChainedFunction)(this.onMouseEnter, childProps.onMouseEnter);
+	      newChildProps.onMouseLeave = (0, _rcUtil.createChainedFunction)(this.onMouseLeave, childProps.onMouseLeave);
+	    }
+	    if (trigger.indexOf('focus') !== -1) {
+	      newChildProps.onFocus = (0, _rcUtil.createChainedFunction)(this.onFocus, childProps.onFocus);
+	      newChildProps.onBlur = (0, _rcUtil.createChainedFunction)(this.onBlur, childProps.onBlur);
+	    }
+	
+	    var className = props.prefixCls + '-wrap';
+	
+	    if (this.state.visible) {
+	      className += ' ' + props.prefixCls + '-wrap-open';
+	    }
+	
+	    return _react2['default'].createElement('span', { className: className, style: props.wrapStyle }, _react2['default'].cloneElement(child, newChildProps));
+	  },
+	
+	  setVisible: function setVisible(visible) {
+	    if (this.state.visible !== visible) {
+	      if (!('visible' in this.props)) {
+	        this.setState({
+	          visible: visible
+	        });
+	      }
+	      this.props.onVisibleChange(visible);
+	    }
+	  },
+	
+	  delaySetVisible: function delaySetVisible(visible, delayS) {
+	    var _this2 = this;
+	
+	    var delay = delayS * 1000;
+	    if (this.delayTimer) {
+	      clearTimeout(this.delayTimer);
+	      this.delayTimer = null;
+	    }
+	    if (delay) {
+	      this.delayTimer = setTimeout(function () {
+	        _this2.setVisible(visible);
+	        _this2.delayTimer = null;
+	      }, delay);
+	    } else {
+	      this.setVisible(visible);
+	    }
+	  }
+	});
+	
+	exports['default'] = Tooltip;
+	module.exports = exports['default'];
+
+/***/ },
+/* 389 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	module.exports = {
+	  guid: __webpack_require__(390),
+	  classSet: __webpack_require__(391),
+	  joinClasses: __webpack_require__(392),
+	  KeyCode: __webpack_require__(393),
+	  PureRenderMixin: __webpack_require__(394),
+	  shallowEqual: __webpack_require__(395),
+	  createChainedFunction: __webpack_require__(396),
+	  Dom: {
+	    addEventListener: __webpack_require__(397),
+	    contains: __webpack_require__(398)
+	  },
+	  Children: {
+	    toArray: __webpack_require__(399),
+	    mapSelf: __webpack_require__(400)
+	  }
+	};
+
+/***/ },
+/* 390 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var seed = 0;
+	module.exports = function () {
+	  return Date.now() + '_' + seed++;
+	};
+
+/***/ },
+/* 391 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This file contains an unmodified version of:
+	 * https://github.com/facebook/react/blob/v0.12.0/src/vendor/stubs/cx.js
+	 *
+	 * This source code is licensed under the BSD-style license found here:
+	 * https://github.com/facebook/react/blob/v0.12.0/LICENSE
+	 * An additional grant of patent rights can be found here:
+	 * https://github.com/facebook/react/blob/v0.12.0/PATENTS
+	 */
+	
+	/**
+	 * This function is used to mark string literals representing CSS class names
+	 * so that they can be transformed statically. This allows for modularization
+	 * and minification of CSS class names.
+	 *
+	 * In static_upstream, this function is actually implemented, but it should
+	 * eventually be replaced with something more descriptive, and the transform
+	 * that is used in the main stack should be ported for use elsewhere.
+	 *
+	 * @param string|object className to modularize, or an object of key/values.
+	 *                      In the object case, the values are conditions that
+	 *                      determine if the className keys should be included.
+	 * @param [string ...]  Variable list of classNames in the string case.
+	 * @return string       Renderable space-separated CSS className.
+	 */
+	'use strict';
+	
+	function cx(classNames) {
+	  if (typeof classNames === 'object') {
+	    return Object.keys(classNames).filter(function (className) {
+	      return classNames[className];
+	    }).join(' ');
+	  } else {
+	    return Array.prototype.join.call(arguments, ' ');
+	  }
+	}
+	
+	module.exports = cx;
+
+/***/ },
+/* 392 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This file contains an unmodified version of:
+	 * https://github.com/facebook/react/blob/v0.12.0/src/utils/joinClasses.js
+	 *
+	 * This source code is licensed under the BSD-style license found here:
+	 * https://github.com/facebook/react/blob/v0.12.0/LICENSE
+	 * An additional grant of patent rights can be found here:
+	 * https://github.com/facebook/react/blob/v0.12.0/PATENTS
+	 */
+	
+	"use strict";
+	
+	/**
+	 * Combines multiple className strings into one.
+	 * http://jsperf.com/joinclasses-args-vs-array
+	 *
+	 * @param {...?string} classes
+	 * @return {string}
+	 */
+	
+	function joinClasses(className /*, ... */) {
+	  if (!className) {
+	    className = '';
+	  }
+	  var nextClass;
+	  var argLength = arguments.length;
+	  if (argLength > 1) {
+	    for (var ii = 1; ii < argLength; ii++) {
+	      nextClass = arguments[ii];
+	      if (nextClass) {
+	        className = (className ? className + ' ' : '') + nextClass;
+	      }
+	    }
+	  }
+	  return className;
+	}
+	
+	module.exports = joinClasses;
+
+/***/ },
+/* 393 */
+/***/ function(module, exports) {
+
+	/**
+	 * @ignore
+	 * some key-codes definition and utils from closure-library
+	 * @author yiminghe@gmail.com
+	 */
+	
+	'use strict';
+	
+	var KeyCode = {
+	  /**
+	   * MAC_ENTER
+	   */
+	  MAC_ENTER: 3,
+	  /**
+	   * BACKSPACE
+	   */
+	  BACKSPACE: 8,
+	  /**
+	   * TAB
+	   */
+	  TAB: 9,
+	  /**
+	   * NUMLOCK on FF/Safari Mac
+	   */
+	  NUM_CENTER: 12, // NUMLOCK on FF/Safari Mac
+	  /**
+	   * ENTER
+	   */
+	  ENTER: 13,
+	  /**
+	   * SHIFT
+	   */
+	  SHIFT: 16,
+	  /**
+	   * CTRL
+	   */
+	  CTRL: 17,
+	  /**
+	   * ALT
+	   */
+	  ALT: 18,
+	  /**
+	   * PAUSE
+	   */
+	  PAUSE: 19,
+	  /**
+	   * CAPS_LOCK
+	   */
+	  CAPS_LOCK: 20,
+	  /**
+	   * ESC
+	   */
+	  ESC: 27,
+	  /**
+	   * SPACE
+	   */
+	  SPACE: 32,
+	  /**
+	   * PAGE_UP
+	   */
+	  PAGE_UP: 33, // also NUM_NORTH_EAST
+	  /**
+	   * PAGE_DOWN
+	   */
+	  PAGE_DOWN: 34, // also NUM_SOUTH_EAST
+	  /**
+	   * END
+	   */
+	  END: 35, // also NUM_SOUTH_WEST
+	  /**
+	   * HOME
+	   */
+	  HOME: 36, // also NUM_NORTH_WEST
+	  /**
+	   * LEFT
+	   */
+	  LEFT: 37, // also NUM_WEST
+	  /**
+	   * UP
+	   */
+	  UP: 38, // also NUM_NORTH
+	  /**
+	   * RIGHT
+	   */
+	  RIGHT: 39, // also NUM_EAST
+	  /**
+	   * DOWN
+	   */
+	  DOWN: 40, // also NUM_SOUTH
+	  /**
+	   * PRINT_SCREEN
+	   */
+	  PRINT_SCREEN: 44,
+	  /**
+	   * INSERT
+	   */
+	  INSERT: 45, // also NUM_INSERT
+	  /**
+	   * DELETE
+	   */
+	  DELETE: 46, // also NUM_DELETE
+	  /**
+	   * ZERO
+	   */
+	  ZERO: 48,
+	  /**
+	   * ONE
+	   */
+	  ONE: 49,
+	  /**
+	   * TWO
+	   */
+	  TWO: 50,
+	  /**
+	   * THREE
+	   */
+	  THREE: 51,
+	  /**
+	   * FOUR
+	   */
+	  FOUR: 52,
+	  /**
+	   * FIVE
+	   */
+	  FIVE: 53,
+	  /**
+	   * SIX
+	   */
+	  SIX: 54,
+	  /**
+	   * SEVEN
+	   */
+	  SEVEN: 55,
+	  /**
+	   * EIGHT
+	   */
+	  EIGHT: 56,
+	  /**
+	   * NINE
+	   */
+	  NINE: 57,
+	  /**
+	   * QUESTION_MARK
+	   */
+	  QUESTION_MARK: 63, // needs localization
+	  /**
+	   * A
+	   */
+	  A: 65,
+	  /**
+	   * B
+	   */
+	  B: 66,
+	  /**
+	   * C
+	   */
+	  C: 67,
+	  /**
+	   * D
+	   */
+	  D: 68,
+	  /**
+	   * E
+	   */
+	  E: 69,
+	  /**
+	   * F
+	   */
+	  F: 70,
+	  /**
+	   * G
+	   */
+	  G: 71,
+	  /**
+	   * H
+	   */
+	  H: 72,
+	  /**
+	   * I
+	   */
+	  I: 73,
+	  /**
+	   * J
+	   */
+	  J: 74,
+	  /**
+	   * K
+	   */
+	  K: 75,
+	  /**
+	   * L
+	   */
+	  L: 76,
+	  /**
+	   * M
+	   */
+	  M: 77,
+	  /**
+	   * N
+	   */
+	  N: 78,
+	  /**
+	   * O
+	   */
+	  O: 79,
+	  /**
+	   * P
+	   */
+	  P: 80,
+	  /**
+	   * Q
+	   */
+	  Q: 81,
+	  /**
+	   * R
+	   */
+	  R: 82,
+	  /**
+	   * S
+	   */
+	  S: 83,
+	  /**
+	   * T
+	   */
+	  T: 84,
+	  /**
+	   * U
+	   */
+	  U: 85,
+	  /**
+	   * V
+	   */
+	  V: 86,
+	  /**
+	   * W
+	   */
+	  W: 87,
+	  /**
+	   * X
+	   */
+	  X: 88,
+	  /**
+	   * Y
+	   */
+	  Y: 89,
+	  /**
+	   * Z
+	   */
+	  Z: 90,
+	  /**
+	   * META
+	   */
+	  META: 91, // WIN_KEY_LEFT
+	  /**
+	   * WIN_KEY_RIGHT
+	   */
+	  WIN_KEY_RIGHT: 92,
+	  /**
+	   * CONTEXT_MENU
+	   */
+	  CONTEXT_MENU: 93,
+	  /**
+	   * NUM_ZERO
+	   */
+	  NUM_ZERO: 96,
+	  /**
+	   * NUM_ONE
+	   */
+	  NUM_ONE: 97,
+	  /**
+	   * NUM_TWO
+	   */
+	  NUM_TWO: 98,
+	  /**
+	   * NUM_THREE
+	   */
+	  NUM_THREE: 99,
+	  /**
+	   * NUM_FOUR
+	   */
+	  NUM_FOUR: 100,
+	  /**
+	   * NUM_FIVE
+	   */
+	  NUM_FIVE: 101,
+	  /**
+	   * NUM_SIX
+	   */
+	  NUM_SIX: 102,
+	  /**
+	   * NUM_SEVEN
+	   */
+	  NUM_SEVEN: 103,
+	  /**
+	   * NUM_EIGHT
+	   */
+	  NUM_EIGHT: 104,
+	  /**
+	   * NUM_NINE
+	   */
+	  NUM_NINE: 105,
+	  /**
+	   * NUM_MULTIPLY
+	   */
+	  NUM_MULTIPLY: 106,
+	  /**
+	   * NUM_PLUS
+	   */
+	  NUM_PLUS: 107,
+	  /**
+	   * NUM_MINUS
+	   */
+	  NUM_MINUS: 109,
+	  /**
+	   * NUM_PERIOD
+	   */
+	  NUM_PERIOD: 110,
+	  /**
+	   * NUM_DIVISION
+	   */
+	  NUM_DIVISION: 111,
+	  /**
+	   * F1
+	   */
+	  F1: 112,
+	  /**
+	   * F2
+	   */
+	  F2: 113,
+	  /**
+	   * F3
+	   */
+	  F3: 114,
+	  /**
+	   * F4
+	   */
+	  F4: 115,
+	  /**
+	   * F5
+	   */
+	  F5: 116,
+	  /**
+	   * F6
+	   */
+	  F6: 117,
+	  /**
+	   * F7
+	   */
+	  F7: 118,
+	  /**
+	   * F8
+	   */
+	  F8: 119,
+	  /**
+	   * F9
+	   */
+	  F9: 120,
+	  /**
+	   * F10
+	   */
+	  F10: 121,
+	  /**
+	   * F11
+	   */
+	  F11: 122,
+	  /**
+	   * F12
+	   */
+	  F12: 123,
+	  /**
+	   * NUMLOCK
+	   */
+	  NUMLOCK: 144,
+	  /**
+	   * SEMICOLON
+	   */
+	  SEMICOLON: 186, // needs localization
+	  /**
+	   * DASH
+	   */
+	  DASH: 189, // needs localization
+	  /**
+	   * EQUALS
+	   */
+	  EQUALS: 187, // needs localization
+	  /**
+	   * COMMA
+	   */
+	  COMMA: 188, // needs localization
+	  /**
+	   * PERIOD
+	   */
+	  PERIOD: 190, // needs localization
+	  /**
+	   * SLASH
+	   */
+	  SLASH: 191, // needs localization
+	  /**
+	   * APOSTROPHE
+	   */
+	  APOSTROPHE: 192, // needs localization
+	  /**
+	   * SINGLE_QUOTE
+	   */
+	  SINGLE_QUOTE: 222, // needs localization
+	  /**
+	   * OPEN_SQUARE_BRACKET
+	   */
+	  OPEN_SQUARE_BRACKET: 219, // needs localization
+	  /**
+	   * BACKSLASH
+	   */
+	  BACKSLASH: 220, // needs localization
+	  /**
+	   * CLOSE_SQUARE_BRACKET
+	   */
+	  CLOSE_SQUARE_BRACKET: 221, // needs localization
+	  /**
+	   * WIN_KEY
+	   */
+	  WIN_KEY: 224,
+	  /**
+	   * MAC_FF_META
+	   */
+	  MAC_FF_META: 224, // Firefox (Gecko) fires this for the meta key instead of 91
+	  /**
+	   * WIN_IME
+	   */
+	  WIN_IME: 229
+	};
+	
+	/*
+	 whether text and modified key is entered at the same time.
+	 */
+	KeyCode.isTextModifyingKeyEvent = function (e) {
+	  var keyCode = e.keyCode;
+	  if (e.altKey && !e.ctrlKey || e.metaKey ||
+	  // Function keys don't generate text
+	  keyCode >= KeyCode.F1 && keyCode <= KeyCode.F12) {
+	    return false;
+	  }
+	
+	  // The following keys are quite harmless, even in combination with
+	  // CTRL, ALT or SHIFT.
+	  switch (keyCode) {
+	    case KeyCode.ALT:
+	    case KeyCode.CAPS_LOCK:
+	    case KeyCode.CONTEXT_MENU:
+	    case KeyCode.CTRL:
+	    case KeyCode.DOWN:
+	    case KeyCode.END:
+	    case KeyCode.ESC:
+	    case KeyCode.HOME:
+	    case KeyCode.INSERT:
+	    case KeyCode.LEFT:
+	    case KeyCode.MAC_FF_META:
+	    case KeyCode.META:
+	    case KeyCode.NUMLOCK:
+	    case KeyCode.NUM_CENTER:
+	    case KeyCode.PAGE_DOWN:
+	    case KeyCode.PAGE_UP:
+	    case KeyCode.PAUSE:
+	    case KeyCode.PRINT_SCREEN:
+	    case KeyCode.RIGHT:
+	    case KeyCode.SHIFT:
+	    case KeyCode.UP:
+	    case KeyCode.WIN_KEY:
+	    case KeyCode.WIN_KEY_RIGHT:
+	      return false;
+	    default:
+	      return true;
+	  }
+	};
+	
+	/*
+	 whether character is entered.
+	 */
+	KeyCode.isCharacterKey = function (keyCode) {
+	  if (keyCode >= KeyCode.ZERO && keyCode <= KeyCode.NINE) {
+	    return true;
+	  }
+	
+	  if (keyCode >= KeyCode.NUM_ZERO && keyCode <= KeyCode.NUM_MULTIPLY) {
+	    return true;
+	  }
+	
+	  if (keyCode >= KeyCode.A && keyCode <= KeyCode.Z) {
+	    return true;
+	  }
+	
+	  // Safari sends zero key code for non-latin characters.
+	  if (window.navigation.userAgent.indexOf('WebKit') !== -1 && keyCode === 0) {
+	    return true;
+	  }
+	
+	  switch (keyCode) {
+	    case KeyCode.SPACE:
+	    case KeyCode.QUESTION_MARK:
+	    case KeyCode.NUM_PLUS:
+	    case KeyCode.NUM_MINUS:
+	    case KeyCode.NUM_PERIOD:
+	    case KeyCode.NUM_DIVISION:
+	    case KeyCode.SEMICOLON:
+	    case KeyCode.DASH:
+	    case KeyCode.EQUALS:
+	    case KeyCode.COMMA:
+	    case KeyCode.PERIOD:
+	    case KeyCode.SLASH:
+	    case KeyCode.APOSTROPHE:
+	    case KeyCode.SINGLE_QUOTE:
+	    case KeyCode.OPEN_SQUARE_BRACKET:
+	    case KeyCode.BACKSLASH:
+	    case KeyCode.CLOSE_SQUARE_BRACKET:
+	      return true;
+	    default:
+	      return false;
+	  }
+	};
+	
+	module.exports = KeyCode;
+
+/***/ },
+/* 394 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	* @providesModule ReactComponentWithPureRenderMixin
+	*/
+	
+	"use strict";
+	
+	var shallowEqual = __webpack_require__(395);
+	
+	/**
+	 * If your React component's render function is "pure", e.g. it will render the
+	 * same result given the same props and state, provide this Mixin for a
+	 * considerable performance boost.
+	 *
+	 * Most React components have pure render functions.
+	 *
+	 * Example:
+	 *
+	 *   var ReactComponentWithPureRenderMixin =
+	 *     require('ReactComponentWithPureRenderMixin');
+	 *   React.createClass({
+	 *     mixins: [ReactComponentWithPureRenderMixin],
+	 *
+	 *     render: function() {
+	 *       return <div className={this.props.className}>foo</div>;
+	 *     }
+	 *   });
+	 *
+	 * Note: This only checks shallow equality for props and state. If these contain
+	 * complex data structures this mixin may have false-negatives for deeper
+	 * differences. Only mixin to components which have simple props and state, or
+	 * use `forceUpdate()` when you know deep data structures have changed.
+	 */
+	var ReactComponentWithPureRenderMixin = {
+	  shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+	    return !shallowEqual(this.props, nextProps) || !shallowEqual(this.state, nextState);
+	  }
+	};
+	
+	module.exports = ReactComponentWithPureRenderMixin;
+
+/***/ },
+/* 395 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule shallowEqual
+	 */
+	
+	"use strict";
+	
+	/**
+	 * Performs equality by iterating through keys on an object and returning
+	 * false when any key has values which are not strictly equal between
+	 * objA and objB. Returns true when the values of all keys are strictly equal.
+	 *
+	 * @return {boolean}
+	 */
+	function shallowEqual(objA, objB) {
+	  if (objA === objB) {
+	    return true;
+	  }
+	  var key;
+	  // Test for A's keys different from B.
+	  for (key in objA) {
+	    if (objA.hasOwnProperty(key) && (!objB.hasOwnProperty(key) || objA[key] !== objB[key])) {
+	      return false;
+	    }
+	  }
+	  // Test for B's keys missing from A.
+	  for (key in objB) {
+	    if (objB.hasOwnProperty(key) && !objA.hasOwnProperty(key)) {
+	      return false;
+	    }
+	  }
+	  return true;
+	}
+	
+	module.exports = shallowEqual;
+
+/***/ },
+/* 396 */
+/***/ function(module, exports) {
+
+	/**
+	 * Safe chained function
+	 *
+	 * Will only create a new function if needed,
+	 * otherwise will pass back existing functions or null.
+	 *
+	 * @returns {function|null}
+	 */
+	"use strict";
+	
+	function createChainedFunction() {
+	  var args = arguments;
+	
+	  return function chainedFunction() {
+	    for (var i = 0; i < args.length; i++) {
+	      if (args[i] && args[i].apply) {
+	        args[i].apply(this, arguments);
+	      }
+	    }
+	  };
+	}
+	
+	module.exports = createChainedFunction;
+
+/***/ },
+/* 397 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	module.exports = function (target, eventType, callback) {
+	  if (target.addEventListener) {
+	    target.addEventListener(eventType, callback, false);
+	    return {
+	      remove: function remove() {
+	        target.removeEventListener(eventType, callback, false);
+	      }
+	    };
+	  } else if (target.attachEvent) {
+	    target.attachEvent('on' + eventType, callback);
+	    return {
+	      remove: function remove() {
+	        target.detachEvent('on' + eventType, callback);
+	      }
+	    };
+	  }
+	};
+
+/***/ },
+/* 398 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	module.exports = function (root, node) {
+	  while (node) {
+	    if (node === root) {
+	      return true;
+	    }
+	    node = node.parentNode;
+	  }
+	
+	  return false;
+	};
+
+/***/ },
+/* 399 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(9);
+	
+	module.exports = function (children) {
+	  var ret = [];
+	  React.Children.forEach(children, function (c) {
+	    ret.push(c);
+	  });
+	  return ret;
+	};
+
+/***/ },
+/* 400 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(9);
+	
+	function mirror(o) {
+	  return o;
+	}
+	
+	module.exports = function (children) {
+	  // return ReactFragment
+	  return React.Children.map(children, mirror);
+	};
+
+/***/ },
+/* 401 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	var _react = __webpack_require__(9);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _utils = __webpack_require__(402);
+	
+	var _rcAlign = __webpack_require__(403);
+	
+	var _rcAlign2 = _interopRequireDefault(_rcAlign);
+	
+	var _rcAnimate = __webpack_require__(407);
+	
+	var _rcAnimate2 = _interopRequireDefault(_rcAnimate);
+	
+	var placementAlignMap = {
+	  left: { points: ['cr', 'cl'] },
+	  right: { points: ['cl', 'cr'] },
+	  top: { points: ['bc', 'tc'] },
+	  bottom: { points: ['tc', 'bc'] }
+	};
+	
+	var Popup = _react2['default'].createClass({
+	  displayName: 'Popup',
+	
+	  propTypes: {
+	    visible: _react2['default'].PropTypes.bool,
+	    wrap: _react2['default'].PropTypes.object,
+	    style: _react2['default'].PropTypes.object,
+	    onMouseEnter: _react2['default'].PropTypes.func,
+	    onMouseLeave: _react2['default'].PropTypes.func
+	  },
+	
+	  // optimize for speed
+	  shouldComponentUpdate: function shouldComponentUpdate(nextProps) {
+	    return this.props.visible || nextProps.visible;
+	  },
+	
+	  onAlign: function onAlign(popupDomNode, align) {
+	    var props = this.props;
+	    var placement = props.placement;
+	    if (placement && placement.points) {
+	      var originalClassName = (0, _utils.getToolTipClassByPlacement)(props.prefixCls, placement);
+	      var nextClassName = (0, _utils.getToolTipClassByPlacement)(props.prefixCls, align);
+	      if (nextClassName !== originalClassName) {
+	        popupDomNode.className = popupDomNode.className.replace(originalClassName, nextClassName);
+	      }
+	    }
+	  },
+	
+	  getPopupDomNode: function getPopupDomNode() {
+	    return _react2['default'].findDOMNode(this);
+	  },
+	
+	  getTarget: function getTarget() {
+	    return _react2['default'].findDOMNode(this.props.wrap).firstChild;
+	  },
+	
+	  getTransitionName: function getTransitionName() {
+	    var props = this.props;
+	    var transitionName = props.transitionName;
+	    if (!transitionName && props.animation) {
+	      transitionName = props.prefixCls + '-' + props.animation;
+	    }
+	    return transitionName;
+	  },
+	
+	  render: function render() {
+	    var props = this.props;
+	    var className = (0, _utils.getToolTipClassByPlacement)(props.prefixCls, props.placement);
+	    if (props.className) {
+	      className += ' ' + props.className;
+	    }
+	    var style = this.props.style;
+	    if (!props.visible) {
+	      className += ' ' + props.prefixCls + '-hidden';
+	    }
+	    var arrowClassName = props.prefixCls + '-arrow';
+	    var innerClassname = props.prefixCls + '-inner';
+	
+	    var placement = props.placement;
+	    var align = undefined;
+	    if (placement && placement.points) {
+	      align = placement;
+	    } else {
+	      align = placementAlignMap[placement];
+	    }
+	
+	    return _react2['default'].createElement(_rcAnimate2['default'], { component: '',
+	      exclusive: true,
+	      transitionAppear: true,
+	      transitionName: this.getTransitionName(),
+	      showProp: 'data-visible' }, _react2['default'].createElement(_rcAlign2['default'], { target: this.getTarget,
+	      key: 'popup',
+	      monitorWindowResize: true,
+	      'data-visible': props.visible,
+	      disabled: !props.visible,
+	      align: align,
+	      onAlign: this.onAlign }, _react2['default'].createElement('div', { className: className,
+	      onMouseEnter: props.onMouseEnter,
+	      onMouseLeave: props.onMouseLeave,
+	      style: style }, _react2['default'].createElement('div', { className: arrowClassName }), _react2['default'].createElement('div', { className: innerClassname }, props.children))));
+	  }
+	});
+	
+	exports['default'] = Popup;
+	module.exports = exports['default'];
+
+/***/ },
+/* 402 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports.getToolTipClassByPlacement = getToolTipClassByPlacement;
+	
+	function getToolTipClassByPlacement(prefixCls, placement) {
+	  if (typeof placement === 'string') {
+	    return prefixCls + ' ' + prefixCls + '-placement-' + placement;
+	  }
+	  var offset = placement.offset || [0, 0];
+	  var offsetClass = '';
+	  if (offset && offset.length) {
+	    offsetClass = prefixCls + '-placement-offset-x-' + offset[0] + ' ' + prefixCls + '-placement-offset-y-' + offset[1];
+	  }
+	  var points = placement.points;
+	  return prefixCls + ' ' + offsetClass + ' ' + prefixCls + '-placement-points-' + points[0] + '-' + points[1];
+	}
+
+/***/ },
+/* 403 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	// export this package's api
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	var _Align = __webpack_require__(404);
+	
+	var _Align2 = _interopRequireDefault(_Align);
+	
+	exports['default'] = _Align2['default'];
+	module.exports = exports['default'];
+
+/***/ },
+/* 404 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	var _createClass = (function () {
+	  function defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ('value' in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+	    }
+	  }return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	  };
+	})();
+	
+	var _get = function get(_x, _x2, _x3) {
+	  var _again = true;_function: while (_again) {
+	    var object = _x,
+	        property = _x2,
+	        receiver = _x3;desc = parent = getter = undefined;_again = false;if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+	      var parent = Object.getPrototypeOf(object);if (parent === null) {
+	        return undefined;
+	      } else {
+	        _x = parent;_x2 = property;_x3 = receiver;_again = true;continue _function;
+	      }
+	    } else if ('value' in desc) {
+	      return desc.value;
+	    } else {
+	      var getter = desc.get;if (getter === undefined) {
+	        return undefined;
+	      }return getter.call(receiver);
+	    }
+	  }
+	};
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	function _classCallCheck(instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError('Cannot call a class as a function');
+	  }
+	}
+	
+	function _inherits(subClass, superClass) {
+	  if (typeof superClass !== 'function' && superClass !== null) {
+	    throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+	}
+	
+	var _react = __webpack_require__(9);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _domAlign = __webpack_require__(405);
+	
+	var _domAlign2 = _interopRequireDefault(_domAlign);
+	
+	var _rcUtil = __webpack_require__(389);
+	
+	var _rcUtil2 = _interopRequireDefault(_rcUtil);
+	
+	function isWindow(obj) {
+	  /*eslint-disable eqeqeq */
+	  return obj != null && obj == obj.window;
+	  /*eslint-enable eqeqeq */
+	}
+	
+	function buffer(fn, ms) {
+	  var timer;
+	  return function () {
+	    if (timer) {
+	      clearTimeout(timer);
+	    }
+	    timer = setTimeout(fn, ms);
+	  };
+	}
+	
+	var Align = (function (_React$Component) {
+	  _inherits(Align, _React$Component);
+	
+	  function Align(props) {
+	    _classCallCheck(this, Align);
+	
+	    _get(Object.getPrototypeOf(Align.prototype), 'constructor', this).apply(this, arguments);
+	    this.handleWindowResize = this.handleWindowResize.bind(this);
+	  }
+	
+	  _createClass(Align, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var props = this.props;
+	      // if parent ref not attached .... use document.getElementById
+	      if (!props.disabled) {
+	        var source = _react2['default'].findDOMNode(this);
+	        props.onAlign(source, (0, _domAlign2['default'])(source, props.target(), props.align));
+	        if (props.monitorWindowResize) {
+	          this.startMonitorWindowResize();
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'startMonitorWindowResize',
+	    value: function startMonitorWindowResize() {
+	      if (!this.resizeHandler) {
+	        this.resizeHandler = _rcUtil2['default'].Dom.addEventListener(window, 'resize', buffer(this.handleWindowResize, this.props.monitorBufferTime));
+	      }
+	    }
+	  }, {
+	    key: 'stopMonitorWindowResize',
+	    value: function stopMonitorWindowResize() {
+	      if (this.resizeHandler) {
+	        this.resizeHandler.remove();
+	        this.resizeHandler = null;
+	      }
+	    }
+	  }, {
+	    key: 'handleWindowResize',
+	    value: function handleWindowResize() {
+	      var props = this.props;
+	      if (!props.disabled) {
+	        var source = _react2['default'].findDOMNode(this);
+	        props.onAlign(source, (0, _domAlign2['default'])(source, props.target(), props.align));
+	      }
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      this.stopMonitorWindowResize();
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate(prevProps) {
+	      var reAlign = false;
+	      var props = this.props;
+	      var currentTarget;
+	
+	      if (!props.disabled) {
+	        if (prevProps.disabled || prevProps.align !== props.align) {
+	          reAlign = true;
+	          currentTarget = props.target();
+	        } else {
+	          var lastTarget = prevProps.target();
+	          currentTarget = props.target();
+	          if (isWindow(lastTarget) && isWindow(currentTarget)) {
+	            reAlign = false;
+	          } else if (lastTarget !== currentTarget) {
+	            reAlign = true;
+	          }
+	        }
+	      }
+	
+	      if (reAlign) {
+	        var source = _react2['default'].findDOMNode(this);
+	        props.onAlign(source, (0, _domAlign2['default'])(source, currentTarget, props.align));
+	      }
+	
+	      if (props.monitorWindowResize && !props.disabled) {
+	        this.startMonitorWindowResize();
+	      } else {
+	        this.stopMonitorWindowResize();
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2['default'].Children.only(this.props.children);
+	    }
+	  }]);
+	
+	  return Align;
+	})(_react2['default'].Component);
+	
+	Align.defaultProps = {
+	  target: function target() {
+	    return window;
+	  },
+	  onAlign: function onAlign() {},
+	  monitorBufferTime: 50,
+	  monitorWindowResize: false,
+	  disabled: false
+	};
+	
+	Align.PropTypes = {
+	  align: _react2['default'].PropTypes.object.isRequired,
+	  target: _react2['default'].PropTypes.func,
+	  onAlign: _react2['default'].PropTypes.func,
+	  monitorBufferTime: _react2['default'].PropTypes.number,
+	  monitorWindowResize: _react2['default'].PropTypes.bool,
+	  disabled: _react2['default'].PropTypes.bool
+	};
+	
+	exports['default'] = Align;
+	module.exports = exports['default'];
+
+/***/ },
+/* 405 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * align dom node flexibly
+	 * @author yiminghe@gmail.com
+	 */
+	
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	var _utils = __webpack_require__(406);
+	
+	var _utils2 = _interopRequireDefault(_utils);
+	
+	// http://yiminghe.iteye.com/blog/1124720
+	
+	/**
+	 * 获取 node 上的 align 对齐点 相对于页面的坐标
+	 */
+	
+	function getAlignOffset(region, align) {
+	  var V = align.charAt(0);
+	  var H = align.charAt(1);
+	  var w = region.width;
+	  var h = region.height;
+	  var x = undefined;
+	  var y = undefined;
+	
+	  x = region.left;
+	  y = region.top;
+	
+	  if (V === 'c') {
+	    y += h / 2;
+	  } else if (V === 'b') {
+	    y += h;
+	  }
+	
+	  if (H === 'c') {
+	    x += w / 2;
+	  } else if (H === 'r') {
+	    x += w;
+	  }
+	
+	  return {
+	    left: x,
+	    top: y
+	  };
+	}
+	
+	/**
+	 * 得到会导致元素显示不全的祖先元素
+	 */
+	
+	function getOffsetParent(element) {
+	  // ie 这个也不是完全可行
+	  /*
+	   <div style="width: 50px;height: 100px;overflow: hidden">
+	   <div style="width: 50px;height: 100px;position: relative;" id="d6">
+	   元素 6 高 100px 宽 50px<br/>
+	   </div>
+	   </div>
+	   */
+	  // element.offsetParent does the right thing in ie7 and below. Return parent with layout!
+	  //  In other browsers it only includes elements with position absolute, relative or
+	  // fixed, not elements with overflow set to auto or scroll.
+	  //        if (UA.ie && ieMode < 8) {
+	  //            return element.offsetParent;
+	  //        }
+	  // 统一的 offsetParent 方法
+	  var doc = element.ownerDocument;
+	  var body = doc.body;
+	  var parent = undefined;
+	  var positionStyle = _utils2['default'].css(element, 'position');
+	  var skipStatic = positionStyle === 'fixed' || positionStyle === 'absolute';
+	
+	  if (!skipStatic) {
+	    return element.nodeName.toLowerCase() === 'html' ? null : element.parentNode;
+	  }
+	
+	  for (parent = element.parentNode; parent && parent !== body; parent = parent.parentNode) {
+	    positionStyle = _utils2['default'].css(parent, 'position');
+	    if (positionStyle !== 'static') {
+	      return parent;
+	    }
+	  }
+	  return null;
+	}
+	
+	/**
+	 * 获得元素的显示部分的区域
+	 */
+	
+	function getVisibleRectForElement(element) {
+	  var visibleRect = {
+	    left: 0,
+	    right: Infinity,
+	    top: 0,
+	    bottom: Infinity
+	  };
+	  var el = element;
+	  var scrollX = undefined;
+	  var scrollY = undefined;
+	  var winSize = undefined;
+	  var doc = element.ownerDocument;
+	  var win = doc.defaultView || doc.parentWindow;
+	  var body = doc.body;
+	  var documentElement = doc.documentElement;
+	
+	  // Determine the size of the visible rect by climbing the dom accounting for
+	  // all scrollable containers.
+	  while (el) {
+	    // clientWidth is zero for inline block elements in ie.
+	    if ((navigator.userAgent.indexOf('MSIE') === -1 || el.clientWidth !== 0) && (
+	    // body may have overflow set on it, yet we still get the entire
+	    // viewport. In some browsers, el.offsetParent may be
+	    // document.documentElement, so check for that too.
+	    el !== body && el !== documentElement && _utils2['default'].css(el, 'overflow') !== 'visible')) {
+	      var pos = _utils2['default'].offset(el);
+	      // add border
+	      pos.left += el.clientLeft;
+	      pos.top += el.clientTop;
+	      visibleRect.top = Math.max(visibleRect.top, pos.top);
+	      visibleRect.right = Math.min(visibleRect.right,
+	      // consider area without scrollBar
+	      pos.left + el.clientWidth);
+	      visibleRect.bottom = Math.min(visibleRect.bottom, pos.top + el.clientHeight);
+	      visibleRect.left = Math.max(visibleRect.left, pos.left);
+	    } else if (el === body || el === documentElement) {
+	      break;
+	    }
+	    el = getOffsetParent(el);
+	  }
+	
+	  // Clip by window's viewport.
+	  scrollX = _utils2['default'].getWindowScrollLeft(win);
+	  scrollY = _utils2['default'].getWindowScrollTop(win);
+	  visibleRect.left = Math.max(visibleRect.left, scrollX);
+	  visibleRect.top = Math.max(visibleRect.top, scrollY);
+	  winSize = {
+	    width: _utils2['default'].viewportWidth(win),
+	    height: _utils2['default'].viewportHeight(win)
+	  };
+	  visibleRect.right = Math.min(visibleRect.right, scrollX + winSize.width);
+	  visibleRect.bottom = Math.min(visibleRect.bottom, scrollY + winSize.height);
+	  return visibleRect.top >= 0 && visibleRect.left >= 0 && visibleRect.bottom > visibleRect.top && visibleRect.right > visibleRect.left ? visibleRect : null;
+	}
+	
+	function getElFuturePos(elRegion, refNodeRegion, points, offset) {
+	  var xy = undefined;
+	  var diff = undefined;
+	  var p1 = undefined;
+	  var p2 = undefined;
+	
+	  xy = {
+	    left: elRegion.left,
+	    top: elRegion.top
+	  };
+	
+	  p1 = getAlignOffset(refNodeRegion, points[1]);
+	  p2 = getAlignOffset(elRegion, points[0]);
+	
+	  diff = [p2.left - p1.left, p2.top - p1.top];
+	
+	  return {
+	    left: xy.left - diff[0] + +offset[0],
+	    top: xy.top - diff[1] + +offset[1]
+	  };
+	}
+	
+	function isFailX(elFuturePos, elRegion, visibleRect) {
+	  return elFuturePos.left < visibleRect.left || elFuturePos.left + elRegion.width > visibleRect.right;
+	}
+	
+	function isFailY(elFuturePos, elRegion, visibleRect) {
+	  return elFuturePos.top < visibleRect.top || elFuturePos.top + elRegion.height > visibleRect.bottom;
+	}
+	
+	function adjustForViewport(elFuturePos, elRegion, visibleRect, overflow) {
+	  var pos = _utils2['default'].clone(elFuturePos);
+	  var size = {
+	    width: elRegion.width,
+	    height: elRegion.height
+	  };
+	
+	  if (overflow.adjustX && pos.left < visibleRect.left) {
+	    pos.left = visibleRect.left;
+	  }
+	
+	  // Left edge inside and right edge outside viewport, try to resize it.
+	  if (overflow.resizeWidth && pos.left >= visibleRect.left && pos.left + size.width > visibleRect.right) {
+	    size.width -= pos.left + size.width - visibleRect.right;
+	  }
+	
+	  // Right edge outside viewport, try to move it.
+	  if (overflow.adjustX && pos.left + size.width > visibleRect.right) {
+	    // 保证左边界和可视区域左边界对齐
+	    pos.left = Math.max(visibleRect.right - size.width, visibleRect.left);
+	  }
+	
+	  // Top edge outside viewport, try to move it.
+	  if (overflow.adjustY && pos.top < visibleRect.top) {
+	    pos.top = visibleRect.top;
+	  }
+	
+	  // Top edge inside and bottom edge outside viewport, try to resize it.
+	  if (overflow.resizeHeight && pos.top >= visibleRect.top && pos.top + size.height > visibleRect.bottom) {
+	    size.height -= pos.top + size.height - visibleRect.bottom;
+	  }
+	
+	  // Bottom edge outside viewport, try to move it.
+	  if (overflow.adjustY && pos.top + size.height > visibleRect.bottom) {
+	    // 保证上边界和可视区域上边界对齐
+	    pos.top = Math.max(visibleRect.bottom - size.height, visibleRect.top);
+	  }
+	
+	  return _utils2['default'].mix(pos, size);
+	}
+	
+	function flip(points, reg, map) {
+	  var ret = [];
+	  _utils2['default'].each(points, function (p) {
+	    ret.push(p.replace(reg, function (m) {
+	      return map[m];
+	    }));
+	  });
+	  return ret;
+	}
+	
+	function flipOffset(offset, index) {
+	  offset[index] = -offset[index];
+	  return offset;
+	}
+	
+	function getRegion(node) {
+	  var offset = undefined;
+	  var w = undefined;
+	  var h = undefined;
+	  if (!_utils2['default'].isWindow(node) && node.nodeType !== 9) {
+	    offset = _utils2['default'].offset(node);
+	    w = _utils2['default'].outerWidth(node);
+	    h = _utils2['default'].outerHeight(node);
+	  } else {
+	    var win = _utils2['default'].getWindow(node);
+	    offset = {
+	      left: _utils2['default'].getWindowScrollLeft(win),
+	      top: _utils2['default'].getWindowScrollTop(win)
+	    };
+	    w = _utils2['default'].viewportWidth(win);
+	    h = _utils2['default'].viewportHeight(win);
+	  }
+	  offset.width = w;
+	  offset.height = h;
+	  return offset;
+	}
+	
+	/*
+	 * align node
+	 * @param {Element} node current dom node
+	 * @param {Object} align align config
+	 *
+	 *    @example
+	 *    {
+	 *      node: null,         // 参考元素, falsy 或 window 为可视区域, 'trigger' 为触发元素, 其他为指定元素
+	 *      points: ['cc','cc'], // ['tr', 'tl'] 表示 overlay 的 tr 与参考节点的 tl 对齐
+	 *      offset: [0, 0]      // 有效值为 [n, m]
+	 *    }
+	 */
+	function domAlign(el, refNode, align) {
+	  var points = align.points;
+	  var offset = align.offset;
+	  var overflow = align.overflow;
+	  offset = offset && [].concat(offset) || [0, 0];
+	  overflow = overflow || {};
+	  var newOverflowCfg = {};
+	
+	  var fail = 0;
+	  // 当前节点可以被放置的显示区域
+	  var visibleRect = getVisibleRectForElement(el);
+	  // 当前节点所占的区域, left/top/width/height
+	  var elRegion = getRegion(el);
+	  // 参照节点所占的区域, left/top/width/height
+	  var refNodeRegion = getRegion(refNode);
+	  // 当前节点将要被放置的位置
+	  var elFuturePos = getElFuturePos(elRegion, refNodeRegion, points, offset);
+	  // 当前节点将要所处的区域
+	  var newElRegion = _utils2['default'].merge(elRegion, elFuturePos);
+	
+	  // 如果可视区域不能完全放置当前节点时允许调整
+	  if (visibleRect && (overflow.adjustX || overflow.adjustY)) {
+	    if (overflow.adjustX) {
+	      // 如果横向不能放下
+	      if (isFailX(elFuturePos, elRegion, visibleRect)) {
+	        fail = 1;
+	        // 对齐位置反下
+	        points = flip(points, /[lr]/ig, {
+	          l: 'r',
+	          r: 'l'
+	        });
+	        // 偏移量也反下
+	        offset = flipOffset(offset, 0);
+	      }
+	    }
+	
+	    if (overflow.adjustY) {
+	      // 如果纵向不能放下
+	      if (isFailY(elFuturePos, elRegion, visibleRect)) {
+	        fail = 1;
+	        // 对齐位置反下
+	        points = flip(points, /[tb]/ig, {
+	          t: 'b',
+	          b: 't'
+	        });
+	        // 偏移量也反下
+	        offset = flipOffset(offset, 1);
+	      }
+	    }
+	
+	    // 如果失败，重新计算当前节点将要被放置的位置
+	    if (fail) {
+	      elFuturePos = getElFuturePos(elRegion, refNodeRegion, points, offset);
+	      _utils2['default'].mix(newElRegion, elFuturePos);
+	    }
+	
+	    // 检查反下后的位置是否可以放下了
+	    // 如果仍然放不下只有指定了可以调整当前方向才调整
+	    newOverflowCfg.adjustX = overflow.adjustX && isFailX(elFuturePos, elRegion, visibleRect);
+	
+	    newOverflowCfg.adjustY = overflow.adjustY && isFailY(elFuturePos, elRegion, visibleRect);
+	
+	    // 确实要调整，甚至可能会调整高度宽度
+	    if (newOverflowCfg.adjustX || newOverflowCfg.adjustY) {
+	      newElRegion = adjustForViewport(elFuturePos, elRegion, visibleRect, newOverflowCfg);
+	    }
+	  }
+	
+	  // https://github.com/kissyteam/kissy/issues/190
+	  // http://localhost:8888/kissy/src/overlay/demo/other/relative_align/align.html
+	  // 相对于屏幕位置没变，而 left/top 变了
+	  // 例如 <div 'relative'><el absolute></div>
+	  _utils2['default'].offset(el, { left: newElRegion.left, top: newElRegion.top });
+	
+	  // need judge to in case set fixed with in css on height auto element
+	  if (newElRegion.width !== elRegion.width) {
+	    _utils2['default'].css(el, 'width', el.width() + newElRegion.width - elRegion.width);
+	  }
+	
+	  if (newElRegion.height !== elRegion.height) {
+	    _utils2['default'].css(el, 'height', el.height() + newElRegion.height - elRegion.height);
+	  }
+	
+	  return {
+	    points: points,
+	    offset: offset,
+	    overflow: newOverflowCfg
+	  };
+	}
+	
+	domAlign.__getOffsetParent = getOffsetParent;
+	
+	domAlign.__getVisibleRectForElement = getVisibleRectForElement;
+	
+	exports['default'] = domAlign;
+	
+	/**
+	 *  2012-04-26 yiminghe@gmail.com
+	 *   - 优化智能对齐算法
+	 *   - 慎用 resizeXX
+	 *
+	 *  2011-07-13 yiminghe@gmail.com note:
+	 *   - 增加智能对齐，以及大小调整选项
+	 **/
+	module.exports = exports['default'];
+
+/***/ },
+/* 406 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	var RE_NUM = /[\-+]?(?:\d*\.|)\d+(?:[eE][\-+]?\d+|)/.source;
+	
+	var getComputedStyleX = undefined;
+	
+	function css(el, name, v) {
+	  var value = v;
+	  if (typeof name === 'object') {
+	    for (var i in name) {
+	      if (name.hasOwnProperty(i)) {
+	        css(el, i, name[i]);
+	      }
+	    }
+	    return undefined;
+	  }
+	  if (typeof value !== 'undefined') {
+	    if (typeof value === 'number') {
+	      value = value + 'px';
+	    }
+	    el.style[name] = value;
+	    return undefined;
+	  }
+	  return getComputedStyleX(el, name);
+	}
+	
+	function getClientPosition(elem) {
+	  var box = undefined;
+	  var x = undefined;
+	  var y = undefined;
+	  var doc = elem.ownerDocument;
+	  var body = doc.body;
+	  var docElem = doc && doc.documentElement;
+	  // 根据 GBS 最新数据，A-Grade Browsers 都已支持 getBoundingClientRect 方法，不用再考虑传统的实现方式
+	  box = elem.getBoundingClientRect();
+	
+	  // 注：jQuery 还考虑减去 docElem.clientLeft/clientTop
+	  // 但测试发现，这样反而会导致当 html 和 body 有边距/边框样式时，获取的值不正确
+	  // 此外，ie6 会忽略 html 的 margin 值，幸运地是没有谁会去设置 html 的 margin
+	
+	  x = box.left;
+	  y = box.top;
+	
+	  // In IE, most of the time, 2 extra pixels are added to the top and left
+	  // due to the implicit 2-pixel inset border.  In IE6/7 quirks mode and
+	  // IE6 standards mode, this border can be overridden by setting the
+	  // document element's border to zero -- thus, we cannot rely on the
+	  // offset always being 2 pixels.
+	
+	  // In quirks mode, the offset can be determined by querying the body's
+	  // clientLeft/clientTop, but in standards mode, it is found by querying
+	  // the document element's clientLeft/clientTop.  Since we already called
+	  // getClientBoundingRect we have already forced a reflow, so it is not
+	  // too expensive just to query them all.
+	
+	  // ie 下应该减去窗口的边框吧，毕竟默认 absolute 都是相对窗口定位的
+	  // 窗口边框标准是设 documentElement ,quirks 时设置 body
+	  // 最好禁止在 body 和 html 上边框 ，但 ie < 9 html 默认有 2px ，减去
+	  // 但是非 ie 不可能设置窗口边框，body html 也不是窗口 ,ie 可以通过 html,body 设置
+	  // 标准 ie 下 docElem.clientTop 就是 border-top
+	  // ie7 html 即窗口边框改变不了。永远为 2
+	  // 但标准 firefox/chrome/ie9 下 docElem.clientTop 是窗口边框，即使设了 border-top 也为 0
+	
+	  x -= docElem.clientLeft || body.clientLeft || 0;
+	  y -= docElem.clientTop || body.clientTop || 0;
+	
+	  return { left: x, top: y };
+	}
+	
+	function getScroll(w, top) {
+	  var ret = w['page' + (top ? 'Y' : 'X') + 'Offset'];
+	  var method = 'scroll' + (top ? 'Top' : 'Left');
+	  if (typeof ret !== 'number') {
+	    var d = w.document;
+	    // ie6,7,8 standard mode
+	    ret = d.documentElement[method];
+	    if (typeof ret !== 'number') {
+	      // quirks mode
+	      ret = d.body[method];
+	    }
+	  }
+	  return ret;
+	}
+	
+	function getScrollLeft(w) {
+	  return getScroll(w);
+	}
+	
+	function getScrollTop(w) {
+	  return getScroll(w, true);
+	}
+	
+	function getOffset(el) {
+	  var pos = getClientPosition(el);
+	  var doc = el.ownerDocument;
+	  var w = doc.defaultView || doc.parentWindow;
+	  pos.left += getScrollLeft(w);
+	  pos.top += getScrollTop(w);
+	  return pos;
+	}
+	function _getComputedStyle(elem, name, cs) {
+	  var computedStyle = cs;
+	  var val = '';
+	  var d = elem.ownerDocument;
+	
+	  // https://github.com/kissyteam/kissy/issues/61
+	  if (computedStyle = computedStyle || d.defaultView.getComputedStyle(elem, null)) {
+	    val = computedStyle.getPropertyValue(name) || computedStyle[name];
+	  }
+	
+	  return val;
+	}
+	
+	var _RE_NUM_NO_PX = new RegExp('^(' + RE_NUM + ')(?!px)[a-z%]+$', 'i');
+	var RE_POS = /^(top|right|bottom|left)$/;
+	var CURRENT_STYLE = 'currentStyle';
+	var RUNTIME_STYLE = 'runtimeStyle';
+	var LEFT = 'left';
+	var PX = 'px';
+	
+	function _getComputedStyleIE(elem, name) {
+	  // currentStyle maybe null
+	  // http://msdn.microsoft.com/en-us/library/ms535231.aspx
+	  var ret = elem[CURRENT_STYLE] && elem[CURRENT_STYLE][name];
+	
+	  // 当 width/height 设置为百分比时，通过 pixelLeft 方式转换的 width/height 值
+	  // 一开始就处理了! CUSTOM_STYLE.height,CUSTOM_STYLE.width ,cssHook 解决@2011-08-19
+	  // 在 ie 下不对，需要直接用 offset 方式
+	  // borderWidth 等值也有问题，但考虑到 borderWidth 设为百分比的概率很小，这里就不考虑了
+	
+	  // From the awesome hack by Dean Edwards
+	  // http://erik.eae.net/archives/2007/07/27/18.54.15/#comment-102291
+	  // If we're not dealing with a regular pixel number
+	  // but a number that has a weird ending, we need to convert it to pixels
+	  // exclude left right for relativity
+	  if (_RE_NUM_NO_PX.test(ret) && !RE_POS.test(name)) {
+	    // Remember the original values
+	    var style = elem.style;
+	    var left = style[LEFT];
+	    var rsLeft = elem[RUNTIME_STYLE][LEFT];
+	
+	    // prevent flashing of content
+	    elem[RUNTIME_STYLE][LEFT] = elem[CURRENT_STYLE][LEFT];
+	
+	    // Put in the new values to get a computed value out
+	    style[LEFT] = name === 'fontSize' ? '1em' : ret || 0;
+	    ret = style.pixelLeft + PX;
+	
+	    // Revert the changed values
+	    style[LEFT] = left;
+	
+	    elem[RUNTIME_STYLE][LEFT] = rsLeft;
+	  }
+	  return ret === '' ? 'auto' : ret;
+	}
+	
+	if (typeof window !== 'undefined') {
+	  getComputedStyleX = window.getComputedStyle ? _getComputedStyle : _getComputedStyleIE;
+	}
+	
+	// 设置 elem 相对 elem.ownerDocument 的坐标
+	function setOffset(elem, offset) {
+	  // set position first, in-case top/left are set even on static elem
+	  if (css(elem, 'position') === 'static') {
+	    elem.style.position = 'relative';
+	  }
+	  var preset = -9999;
+	  if ('left' in offset) {
+	    elem.style.left = preset + 'px';
+	  }
+	  if ('top' in offset) {
+	    elem.style.top = preset + 'px';
+	  }
+	  var old = getOffset(elem);
+	  var ret = {};
+	  var key = undefined;
+	  for (key in offset) {
+	    if (offset.hasOwnProperty(key)) {
+	      ret[key] = preset + offset[key] - old[key];
+	    }
+	  }
+	  css(elem, ret);
+	}
+	
+	function each(arr, fn) {
+	  for (var i = 0; i < arr.length; i++) {
+	    fn(arr[i]);
+	  }
+	}
+	
+	function isBorderBoxFn(elem) {
+	  return getComputedStyleX(elem, 'boxSizing') === 'border-box';
+	}
+	
+	var BOX_MODELS = ['margin', 'border', 'padding'];
+	var CONTENT_INDEX = -1;
+	var PADDING_INDEX = 2;
+	var BORDER_INDEX = 1;
+	var MARGIN_INDEX = 0;
+	
+	function swap(elem, options, callback) {
+	  var old = {};
+	  var style = elem.style;
+	  var name = undefined;
+	
+	  // Remember the old values, and insert the new ones
+	  for (name in options) {
+	    if (options.hasOwnProperty(name)) {
+	      old[name] = style[name];
+	      style[name] = options[name];
+	    }
+	  }
+	
+	  callback.call(elem);
+	
+	  // Revert the old values
+	  for (name in options) {
+	    if (options.hasOwnProperty(name)) {
+	      style[name] = old[name];
+	    }
+	  }
+	}
+	
+	function getPBMWidth(elem, props, which) {
+	  var value = 0;
+	  var prop = undefined;
+	  var j = undefined;
+	  var i = undefined;
+	  for (j = 0; j < props.length; j++) {
+	    prop = props[j];
+	    if (prop) {
+	      for (i = 0; i < which.length; i++) {
+	        var cssProp = undefined;
+	        if (prop === 'border') {
+	          cssProp = prop + which[i] + 'Width';
+	        } else {
+	          cssProp = prop + which[i];
+	        }
+	        value += parseFloat(getComputedStyleX(elem, cssProp)) || 0;
+	      }
+	    }
+	  }
+	  return value;
+	}
+	
+	/**
+	 * A crude way of determining if an object is a window
+	 * @member util
+	 */
+	function isWindow(obj) {
+	  // must use == for ie8
+	  /* eslint eqeqeq:0 */
+	  return obj !== null && obj !== undefined && obj == obj.window;
+	}
+	
+	var domUtils = {};
+	
+	each(['Width', 'Height'], function (name) {
+	  domUtils['doc' + name] = function (refWin) {
+	    var d = refWin.document;
+	    return Math.max(
+	    // firefox chrome documentElement.scrollHeight< body.scrollHeight
+	    // ie standard mode : documentElement.scrollHeight> body.scrollHeight
+	    d.documentElement['scroll' + name],
+	    // quirks : documentElement.scrollHeight 最大等于可视窗口多一点？
+	    d.body['scroll' + name], domUtils['viewport' + name](d));
+	  };
+	
+	  domUtils['viewport' + name] = function (win) {
+	    // pc browser includes scrollbar in window.innerWidth
+	    var prop = 'client' + name;
+	    var doc = win.document;
+	    var body = doc.body;
+	    var documentElement = doc.documentElement;
+	    var documentElementProp = documentElement[prop];
+	    // 标准模式取 documentElement
+	    // backcompat 取 body
+	    return doc.compatMode === 'CSS1Compat' && documentElementProp || body && body[prop] || documentElementProp;
+	  };
+	});
+	
+	/*
+	 得到元素的大小信息
+	 @param elem
+	 @param name
+	 @param {String} [extra]  'padding' : (css width) + padding
+	 'border' : (css width) + padding + border
+	 'margin' : (css width) + padding + border + margin
+	 */
+	function getWH(elem, name, ex) {
+	  var extra = ex;
+	  if (isWindow(elem)) {
+	    return name === 'width' ? domUtils.viewportWidth(elem) : domUtils.viewportHeight(elem);
+	  } else if (elem.nodeType === 9) {
+	    return name === 'width' ? domUtils.docWidth(elem) : domUtils.docHeight(elem);
+	  }
+	  var which = name === 'width' ? ['Left', 'Right'] : ['Top', 'Bottom'];
+	  var borderBoxValue = name === 'width' ? elem.offsetWidth : elem.offsetHeight;
+	  var computedStyle = getComputedStyleX(elem);
+	  var isBorderBox = isBorderBoxFn(elem, computedStyle);
+	  var cssBoxValue = 0;
+	  if (borderBoxValue === null || borderBoxValue === undefined || borderBoxValue <= 0) {
+	    borderBoxValue = undefined;
+	    // Fall back to computed then un computed css if necessary
+	    cssBoxValue = getComputedStyleX(elem, name);
+	    if (cssBoxValue === null || cssBoxValue === undefined || Number(cssBoxValue) < 0) {
+	      cssBoxValue = elem.style[name] || 0;
+	    }
+	    // Normalize '', auto, and prepare for extra
+	    cssBoxValue = parseFloat(cssBoxValue) || 0;
+	  }
+	  if (extra === undefined) {
+	    extra = isBorderBox ? BORDER_INDEX : CONTENT_INDEX;
+	  }
+	  var borderBoxValueOrIsBorderBox = borderBoxValue !== undefined || isBorderBox;
+	  var val = borderBoxValue || cssBoxValue;
+	  if (extra === CONTENT_INDEX) {
+	    if (borderBoxValueOrIsBorderBox) {
+	      return val - getPBMWidth(elem, ['border', 'padding'], which, computedStyle);
+	    }
+	    return cssBoxValue;
+	  } else if (borderBoxValueOrIsBorderBox) {
+	    if (extra === BORDER_INDEX) {
+	      return val;
+	    }
+	    return val + (extra === PADDING_INDEX ? -getPBMWidth(elem, ['border'], which, computedStyle) : getPBMWidth(elem, ['margin'], which, computedStyle));
+	  }
+	  return cssBoxValue + getPBMWidth(elem, BOX_MODELS.slice(extra), which, computedStyle);
+	}
+	
+	var cssShow = { position: 'absolute', visibility: 'hidden', display: 'block' };
+	
+	// fix #119 : https://github.com/kissyteam/kissy/issues/119
+	function getWHIgnoreDisplay() {
+	  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	    args[_key] = arguments[_key];
+	  }
+	
+	  var val = undefined;
+	  var elem = args[0];
+	  // in case elem is window
+	  // elem.offsetWidth === undefined
+	  if (elem.offsetWidth !== 0) {
+	    val = getWH.apply(undefined, args);
+	  } else {
+	    swap(elem, cssShow, function () {
+	      val = getWH.apply(undefined, args);
+	    });
+	  }
+	  return val;
+	}
+	
+	each(['width', 'height'], function (name) {
+	  var first = name.charAt(0).toUpperCase() + name.slice(1);
+	  domUtils['outer' + first] = function (el, includeMargin) {
+	    return el && getWHIgnoreDisplay(el, name, includeMargin ? MARGIN_INDEX : BORDER_INDEX);
+	  };
+	  var which = name === 'width' ? ['Left', 'Right'] : ['Top', 'Bottom'];
+	
+	  domUtils[name] = function (elem, v) {
+	    var val = v;
+	    if (val !== undefined) {
+	      if (elem) {
+	        var computedStyle = getComputedStyleX(elem);
+	        var isBorderBox = isBorderBoxFn(elem);
+	        if (isBorderBox) {
+	          val += getPBMWidth(elem, ['padding', 'border'], which, computedStyle);
+	        }
+	        return css(elem, name, val);
+	      }
+	      return undefined;
+	    }
+	    return elem && getWHIgnoreDisplay(elem, name, CONTENT_INDEX);
+	  };
+	});
+	
+	function mix(to, from) {
+	  for (var i in from) {
+	    if (from.hasOwnProperty(i)) {
+	      to[i] = from[i];
+	    }
+	  }
+	  return to;
+	}
+	
+	var utils = {
+	  getWindow: function getWindow(node) {
+	    if (node && node.document && node.setTimeout) {
+	      return node;
+	    }
+	    var doc = node.ownerDocument || node;
+	    return doc.defaultView || doc.parentWindow;
+	  },
+	  offset: function offset(el, value) {
+	    if (typeof value !== 'undefined') {
+	      setOffset(el, value);
+	    } else {
+	      return getOffset(el);
+	    }
+	  },
+	  isWindow: isWindow,
+	  each: each,
+	  css: css,
+	  clone: function clone(obj) {
+	    var i = undefined;
+	    var ret = {};
+	    for (i in obj) {
+	      if (obj.hasOwnProperty(i)) {
+	        ret[i] = obj[i];
+	      }
+	    }
+	    var overflow = obj.overflow;
+	    if (overflow) {
+	      for (i in obj) {
+	        if (obj.hasOwnProperty(i)) {
+	          ret.overflow[i] = obj.overflow[i];
+	        }
+	      }
+	    }
+	    return ret;
+	  },
+	  mix: mix,
+	  getWindowScrollLeft: function getWindowScrollLeft(w) {
+	    return getScrollLeft(w);
+	  },
+	  getWindowScrollTop: function getWindowScrollTop(w) {
+	    return getScrollTop(w);
+	  },
+	  merge: function merge() {
+	    var ret = {};
+	
+	    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+	      args[_key2] = arguments[_key2];
+	    }
+	
+	    for (var i = 0; i < args.length; i++) {
+	      utils.mix(ret, args[i]);
+	    }
+	    return ret;
+	  },
+	  viewportWidth: 0,
+	  viewportHeight: 0
+	};
+	
+	mix(utils, domUtils);
+	
+	exports['default'] = utils;
+	module.exports = exports['default'];
+
+/***/ },
+/* 407 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// export this package's api
+	'use strict';
+	
+	module.exports = __webpack_require__(408);
+
+/***/ },
+/* 408 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	function _defineProperty(obj, key, value) {
+	  if (key in obj) {
+	    Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+	  } else {
+	    obj[key] = value;
+	  }return obj;
+	}
+	
+	var _react = __webpack_require__(9);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _ChildrenUtils = __webpack_require__(409);
+	
+	var _ChildrenUtils2 = _interopRequireDefault(_ChildrenUtils);
+	
+	var _AnimateChild = __webpack_require__(410);
+	
+	var _AnimateChild2 = _interopRequireDefault(_AnimateChild);
+	
+	var _util = __webpack_require__(414);
+	
+	var _util2 = _interopRequireDefault(_util);
+	
+	var defaultKey = 'rc_animate_' + Date.now();
+	
+	function getChildrenFromProps(props) {
+	  var children = props.children;
+	  if (_react2['default'].isValidElement(children)) {
+	    if (!children.key) {
+	      return _react2['default'].cloneElement(children, {
+	        key: defaultKey
+	      });
+	    }
+	  }
+	  return children;
+	}
+	
+	function noop() {}
+	
+	var Animate = _react2['default'].createClass({
+	  displayName: 'Animate',
+	
+	  propTypes: {
+	    component: _react2['default'].PropTypes.any,
+	    animation: _react2['default'].PropTypes.object,
+	    transitionName: _react2['default'].PropTypes.string,
+	    transitionEnter: _react2['default'].PropTypes.bool,
+	    transitionAppear: _react2['default'].PropTypes.bool,
+	    transitionLeave: _react2['default'].PropTypes.bool,
+	    onEnd: _react2['default'].PropTypes.func,
+	    onEnter: _react2['default'].PropTypes.func,
+	    onLeave: _react2['default'].PropTypes.func,
+	    onAppear: _react2['default'].PropTypes.func,
+	    showProp: _react2['default'].PropTypes.string
+	  },
+	
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      animation: {},
+	      component: 'span',
+	      transitionEnter: true,
+	      transitionLeave: true,
+	      transitionAppear: false,
+	      onEnd: noop,
+	      onEnter: noop,
+	      onLeave: noop,
+	      onAppear: noop
+	    };
+	  },
+	
+	  getInitialState: function getInitialState() {
+	    this.currentlyAnimatingKeys = {};
+	    this.keysToEnter = [];
+	    this.keysToLeave = [];
+	    return {
+	      children: (0, _ChildrenUtils.toArrayChildren)(getChildrenFromProps(this.props))
+	    };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    var _this = this;
+	
+	    var showProp = this.props.showProp;
+	    var children = this.state.children;
+	    if (showProp) {
+	      children = children.filter(function (c) {
+	        return !!c.props[showProp];
+	      });
+	    }
+	    children.forEach(function (c) {
+	      _this.performAppear(c.key);
+	    });
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    var _this2 = this;
+	
+	    var nextChildren = (0, _ChildrenUtils.toArrayChildren)(getChildrenFromProps(nextProps));
+	    var props = this.props;
+	    var showProp = props.showProp;
+	    var exclusive = props.exclusive;
+	    var currentlyAnimatingKeys = this.currentlyAnimatingKeys;
+	    // last props children if exclusive
+	    // exclusive needs immediate response
+	    var currentChildren = this.state.children;
+	    // in case destroy in showProp mode
+	    var newChildren = [];
+	    if (showProp) {
+	      currentChildren.forEach(function (currentChild) {
+	        var nextChild = (0, _ChildrenUtils.findChildInChildrenByKey)(nextChildren, currentChild.key);
+	        var newChild = undefined;
+	        if ((!nextChild || !nextChild.props[showProp]) && currentChild.props[showProp]) {
+	          newChild = _react2['default'].cloneElement(nextChild || currentChild, _defineProperty({}, showProp, true));
+	        } else {
+	          newChild = nextChild;
+	        }
+	        if (newChild) {
+	          newChildren.push(newChild);
+	        }
+	      });
+	    } else {
+	      newChildren = _ChildrenUtils2['default'].mergeChildren(currentChildren, nextChildren);
+	    }
+	
+	    // exclusive needs immediate response
+	    if (exclusive) {
+	      Object.keys(currentlyAnimatingKeys).forEach(function (key) {
+	        _this2.stop(key);
+	      });
+	      currentChildren = (0, _ChildrenUtils.toArrayChildren)(getChildrenFromProps(props));
+	    }
+	
+	    // need render to avoid update
+	    this.setState({
+	      children: newChildren
+	    });
+	
+	    nextChildren.forEach(function (c) {
+	      var key = c.key;
+	      if (currentlyAnimatingKeys[key]) {
+	        return;
+	      }
+	      var hasPrev = (0, _ChildrenUtils.findChildInChildrenByKey)(currentChildren, key);
+	      if (showProp) {
+	        var showInNext = c.props[showProp];
+	        if (hasPrev) {
+	          var showInNow = (0, _ChildrenUtils.findShownChildInChildrenByKey)(currentChildren, key, showProp);
+	          if (!showInNow && showInNext) {
+	            _this2.keysToEnter.push(key);
+	          }
+	        } else if (showInNext) {
+	          _this2.keysToEnter.push(key);
+	        }
+	      } else if (!hasPrev) {
+	        _this2.keysToEnter.push(key);
+	      }
+	    });
+	
+	    currentChildren.forEach(function (c) {
+	      var key = c.key;
+	      if (currentlyAnimatingKeys[key]) {
+	        return;
+	      }
+	      var hasNext = (0, _ChildrenUtils.findChildInChildrenByKey)(nextChildren, key);
+	      if (showProp) {
+	        var showInNow = c.props[showProp];
+	        if (hasNext) {
+	          var showInNext = (0, _ChildrenUtils.findShownChildInChildrenByKey)(nextChildren, key, showProp);
+	          if (!showInNext && showInNow) {
+	            _this2.keysToLeave.push(key);
+	          }
+	        } else if (showInNow) {
+	          _this2.keysToLeave.push(key);
+	        }
+	      } else if (!hasNext) {
+	        _this2.keysToLeave.push(key);
+	      }
+	    });
+	  },
+	
+	  componentDidUpdate: function componentDidUpdate() {
+	    var keysToEnter = this.keysToEnter;
+	    this.keysToEnter = [];
+	    keysToEnter.forEach(this.performEnter);
+	    var keysToLeave = this.keysToLeave;
+	    this.keysToLeave = [];
+	    keysToLeave.forEach(this.performLeave);
+	  },
+	
+	  render: function render() {
+	    var props = this.props;
+	    var stateChildren = this.state.children;
+	    var children = null;
+	    if (stateChildren) {
+	      children = stateChildren.map(function (child) {
+	        if (!child.key) {
+	          throw new Error('must set key for <rc-animate> children');
+	        }
+	        return _react2['default'].createElement(_AnimateChild2['default'], {
+	          key: child.key,
+	          ref: child.key,
+	          animation: props.animation,
+	          transitionName: props.transitionName,
+	          transitionEnter: props.transitionEnter,
+	          transitionAppear: props.transitionAppear,
+	          transitionLeave: props.transitionLeave }, child);
+	      });
+	    }
+	    var Component = props.component;
+	    if (Component) {
+	      return _react2['default'].createElement(Component, this.props, children);
+	    }
+	    return children[0] || null;
+	  },
+	
+	  performEnter: function performEnter(key) {
+	    // may already remove by exclusive
+	    if (this.refs[key]) {
+	      this.currentlyAnimatingKeys[key] = true;
+	      this.refs[key].componentWillEnter(this.handleDoneAdding.bind(this, key, 'enter'));
+	    }
+	  },
+	
+	  performAppear: function performAppear(key) {
+	    if (this.refs[key]) {
+	      this.currentlyAnimatingKeys[key] = true;
+	      this.refs[key].componentWillAppear(this.handleDoneAdding.bind(this, key, 'appear'));
+	    }
+	  },
+	
+	  handleDoneAdding: function handleDoneAdding(key, type) {
+	    var props = this.props;
+	    delete this.currentlyAnimatingKeys[key];
+	    var currentChildren = (0, _ChildrenUtils.toArrayChildren)(getChildrenFromProps(props));
+	    if (!this.isValidChildByKey(currentChildren, key)) {
+	      // exclusive will not need this
+	      this.performLeave(key);
+	    } else {
+	      if (type === 'appear') {
+	        if (_util2['default'].allowAppearCallback(props)) {
+	          props.onAppear(key);
+	          props.onEnd(key, true);
+	        }
+	      } else {
+	        if (_util2['default'].allowEnterCallback(props)) {
+	          props.onEnter(key);
+	          props.onEnd(key, true);
+	        }
+	      }
+	    }
+	  },
+	
+	  performLeave: function performLeave(key) {
+	    // may already remove by exclusive
+	    if (this.refs[key]) {
+	      this.currentlyAnimatingKeys[key] = true;
+	      this.refs[key].componentWillLeave(this.handleDoneLeaving.bind(this, key));
+	    }
+	  },
+	
+	  handleDoneLeaving: function handleDoneLeaving(key) {
+	    var props = this.props;
+	    delete this.currentlyAnimatingKeys[key];
+	    var currentChildren = (0, _ChildrenUtils.toArrayChildren)(getChildrenFromProps(props));
+	    // in case state change is too fast
+	    if (this.isValidChildByKey(currentChildren, key)) {
+	      this.performEnter(key);
+	    } else {
+	      if (_util2['default'].allowLeaveCallback(props)) {
+	        props.onLeave(key);
+	        props.onEnd(key, false);
+	      }
+	      if (this.isMounted() && !(0, _ChildrenUtils.isSameChildren)(this.state.children, currentChildren, props.showProp)) {
+	        this.setState({
+	          children: currentChildren
+	        });
+	      }
+	    }
+	  },
+	
+	  isValidChildByKey: function isValidChildByKey(currentChildren, key) {
+	    var showProp = this.props.showProp;
+	    if (showProp) {
+	      return (0, _ChildrenUtils.findShownChildInChildrenByKey)(currentChildren, key, showProp);
+	    }
+	    return (0, _ChildrenUtils.findChildInChildrenByKey)(currentChildren, key);
+	  },
+	
+	  stop: function stop(key) {
+	    delete this.currentlyAnimatingKeys[key];
+	    var component = this.refs[key];
+	    if (component) {
+	      component.stop();
+	    }
+	  }
+	});
+	
+	exports['default'] = Animate;
+	module.exports = exports['default'];
+
+/***/ },
+/* 409 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	var _react = __webpack_require__(9);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var utils = {
+	  toArrayChildren: function toArrayChildren(children) {
+	    var ret = [];
+	    _react2['default'].Children.forEach(children, function (c) {
+	      ret.push(c);
+	    });
+	    return ret;
+	  },
+	
+	  findChildInChildrenByKey: function findChildInChildrenByKey(children, key) {
+	    var ret = null;
+	    if (children) {
+	      children.forEach(function (c) {
+	        if (ret) {
+	          return;
+	        }
+	        if (c.key === key) {
+	          ret = c;
+	        }
+	      });
+	    }
+	    return ret;
+	  },
+	
+	  findShownChildInChildrenByKey: function findShownChildInChildrenByKey(children, key, showProp) {
+	    var ret = null;
+	    if (children) {
+	      children.forEach(function (c) {
+	        if (c.key === key && c.props[showProp]) {
+	          if (ret) {
+	            throw new Error('two child with same key for <rc-animate> children');
+	          }
+	          ret = c;
+	        }
+	      });
+	    }
+	    return ret;
+	  },
+	
+	  findHiddenChildInChildrenByKey: function findHiddenChildInChildrenByKey(children, key, showProp) {
+	    var found = 0;
+	    if (children) {
+	      children.forEach(function (c) {
+	        if (found) {
+	          return;
+	        }
+	        found = c.key === key && !c.props[showProp];
+	      });
+	    }
+	    return found;
+	  },
+	
+	  isSameChildren: function isSameChildren(c1, c2, showProp) {
+	    var same = c1.length === c2.length;
+	    if (same) {
+	      c1.forEach(function (child, i) {
+	        var child2 = c2[i];
+	        if (child.key !== child2.key) {
+	          same = false;
+	        } else if (showProp && child.props[showProp] !== child2.props[showProp]) {
+	          same = false;
+	        }
+	      });
+	    }
+	    return same;
+	  },
+	
+	  mergeChildren: function mergeChildren(prev, next) {
+	    var ret = [];
+	
+	    // For each key of `next`, the list of keys to insert before that key in
+	    // the combined list
+	    var nextChildrenPending = {};
+	    var pendingChildren = [];
+	    prev.forEach(function (c) {
+	      if (utils.findChildInChildrenByKey(next, c.key)) {
+	        if (pendingChildren.length) {
+	          nextChildrenPending[c.key] = pendingChildren;
+	          pendingChildren = [];
+	        }
+	      } else {
+	        pendingChildren.push(c);
+	      }
+	    });
+	
+	    next.forEach(function (c) {
+	      if (nextChildrenPending.hasOwnProperty(c.key)) {
+	        ret = ret.concat(nextChildrenPending[c.key]);
+	      }
+	      ret.push(c);
+	    });
+	
+	    ret = ret.concat(pendingChildren);
+	
+	    return ret;
+	  }
+	};
+	
+	exports['default'] = utils;
+	module.exports = exports['default'];
+
+/***/ },
+/* 410 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	var _react = __webpack_require__(9);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _cssAnimation = __webpack_require__(411);
+	
+	var _cssAnimation2 = _interopRequireDefault(_cssAnimation);
+	
+	var _util = __webpack_require__(414);
+	
+	var _util2 = _interopRequireDefault(_util);
+	
+	var transitionMap = {
+	  enter: 'transitionEnter',
+	  appear: 'transitionAppear',
+	  leave: 'transitionLeave'
+	};
+	
+	var AnimateChild = _react2['default'].createClass({
+	  displayName: 'AnimateChild',
+	
+	  propTypes: {
+	    children: _react2['default'].PropTypes.any
+	  },
+	
+	  transition: function transition(animationType, finishCallback) {
+	    var _this = this;
+	
+	    var node = _react2['default'].findDOMNode(this);
+	    var props = this.props;
+	    var transitionName = props.transitionName;
+	    this.stop();
+	    var end = function end() {
+	      _this.stopper = null;
+	      finishCallback();
+	    };
+	    if ((_cssAnimation.isCssAnimationSupported || !props.animation[animationType]) && transitionName && props[transitionMap[animationType]]) {
+	      this.stopper = (0, _cssAnimation2['default'])(node, transitionName + '-' + animationType, end);
+	    } else {
+	      this.stopper = props.animation[animationType](node, end);
+	    }
+	  },
+	
+	  stop: function stop() {
+	    if (this.stopper) {
+	      this.stopper.stop();
+	      this.stopper = null;
+	    }
+	  },
+	
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.stop();
+	  },
+	
+	  componentWillEnter: function componentWillEnter(done) {
+	    if (_util2['default'].isEnterSupported(this.props)) {
+	      this.transition('enter', done);
+	    } else {
+	      done();
+	    }
+	  },
+	
+	  componentWillAppear: function componentWillAppear(done) {
+	    if (_util2['default'].isAppearSupported(this.props)) {
+	      this.transition('appear', done);
+	    } else {
+	      done();
+	    }
+	  },
+	
+	  componentWillLeave: function componentWillLeave(done) {
+	    if (_util2['default'].isLeaveSupported(this.props)) {
+	      this.transition('leave', done);
+	    } else {
+	      done();
+	    }
+	  },
+	
+	  render: function render() {
+	    return this.props.children;
+	  }
+	});
+	
+	exports['default'] = AnimateChild;
+	module.exports = exports['default'];
+
+/***/ },
+/* 411 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Event = __webpack_require__(412);
+	var Css = __webpack_require__(413);
+	var isCssAnimationSupported = Event.endEvents.length !== 0;
+	
+	function getDuration(node, name) {
+	  var style = window.getComputedStyle(node);
+	  var prefixes = ['-webkit-', '-moz-', '-o-', 'ms-', ''];
+	  var ret = '';
+	  for (var i = 0; i < prefixes.length; i++) {
+	    ret = style.getPropertyValue(prefixes[i] + name);
+	    if (ret) {
+	      break;
+	    }
+	  }
+	  return ret;
+	}
+	
+	function fixBrowserByTimeout(node) {
+	  if (isCssAnimationSupported) {
+	    var transitionDuration = parseFloat(getDuration(node, 'transition-duration')) || 0;
+	    var animationDuration = parseFloat(getDuration(node, 'animation-duration')) || 0;
+	    var time = Math.max(transitionDuration, animationDuration);
+	    // sometimes, browser bug
+	    node.rcEndAnimTimeout = setTimeout(function () {
+	      node.rcEndAnimTimeout = null;
+	      if (node.rcEndListener) {
+	        node.rcEndListener();
+	      }
+	    }, time * 1000 + 200);
+	  }
+	}
+	
+	function clearBrowserBugTimeout(node) {
+	  if (node.rcEndAnimTimeout) {
+	    clearTimeout(node.rcEndAnimTimeout);
+	    node.rcEndAnimTimeout = null;
+	  }
+	}
+	
+	var cssAnimation = function cssAnimation(node, transitionName, callback) {
+	  var className = transitionName;
+	  var activeClassName = className + '-active';
+	
+	  if (node.rcEndListener) {
+	    node.rcEndListener();
+	  }
+	
+	  node.rcEndListener = function (e) {
+	    if (e && e.target !== node) {
+	      return;
+	    }
+	
+	    if (node.rcAnimTimeout) {
+	      clearTimeout(node.rcAnimTimeout);
+	      node.rcAnimTimeout = null;
+	    }
+	
+	    clearBrowserBugTimeout(node);
+	
+	    Css.removeClass(node, className);
+	    Css.removeClass(node, activeClassName);
+	
+	    Event.removeEndEventListener(node, node.rcEndListener);
+	    node.rcEndListener = null;
+	
+	    // Usually this optional callback is used for informing an owner of
+	    // a leave animation and telling it to remove the child.
+	    if (callback) {
+	      callback();
+	    }
+	  };
+	
+	  Event.addEndEventListener(node, node.rcEndListener);
+	
+	  Css.addClass(node, className);
+	
+	  node.rcAnimTimeout = setTimeout(function () {
+	    node.rcAnimTimeout = null;
+	    Css.addClass(node, activeClassName);
+	    fixBrowserByTimeout(node);
+	  }, 0);
+	
+	  return {
+	    stop: function stop() {
+	      if (node.rcEndListener) {
+	        node.rcEndListener();
+	      }
+	    }
+	  };
+	};
+	
+	cssAnimation.style = function (node, style, callback) {
+	  if (node.rcEndListener) {
+	    node.rcEndListener();
+	  }
+	
+	  node.rcEndListener = function (e) {
+	    if (e && e.target !== node) {
+	      return;
+	    }
+	
+	    if (node.rcAnimTimeout) {
+	      clearTimeout(node.rcAnimTimeout);
+	      node.rcAnimTimeout = null;
+	    }
+	
+	    clearBrowserBugTimeout(node);
+	
+	    Event.removeEndEventListener(node, node.rcEndListener);
+	    node.rcEndListener = null;
+	
+	    // Usually this optional callback is used for informing an owner of
+	    // a leave animation and telling it to remove the child.
+	    if (callback) {
+	      callback();
+	    }
+	  };
+	
+	  Event.addEndEventListener(node, node.rcEndListener);
+	
+	  node.rcAnimTimeout = setTimeout(function () {
+	    for (var s in style) {
+	      if (style.hasOwnProperty(s)) {
+	        node.style[s] = style[s];
+	      }
+	    }
+	    node.rcAnimTimeout = null;
+	    fixBrowserByTimeout(node);
+	  }, 0);
+	};
+	
+	cssAnimation.setTransition = function (node, p, value) {
+	  var property = p;
+	  var v = value;
+	  if (value === undefined) {
+	    v = property;
+	    property = '';
+	  }
+	  property = property || '';
+	  ['Webkit', 'Moz', 'O',
+	  // ms is special .... !
+	  'ms'].forEach(function (prefix) {
+	    node.style[prefix + 'Transition' + property] = v;
+	  });
+	};
+	
+	cssAnimation.addClass = Css.addClass;
+	cssAnimation.removeClass = Css.removeClass;
+	cssAnimation.isCssAnimationSupported = isCssAnimationSupported;
+	
+	module.exports = cssAnimation;
+
+/***/ },
+/* 412 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var EVENT_NAME_MAP = {
+	  transitionend: {
+	    transition: 'transitionend',
+	    WebkitTransition: 'webkitTransitionEnd',
+	    MozTransition: 'mozTransitionEnd',
+	    OTransition: 'oTransitionEnd',
+	    msTransition: 'MSTransitionEnd'
+	  },
+	
+	  animationend: {
+	    animation: 'animationend',
+	    WebkitAnimation: 'webkitAnimationEnd',
+	    MozAnimation: 'mozAnimationEnd',
+	    OAnimation: 'oAnimationEnd',
+	    msAnimation: 'MSAnimationEnd'
+	  }
+	};
+	
+	var endEvents = [];
+	
+	function detectEvents() {
+	  var testEl = document.createElement('div');
+	  var style = testEl.style;
+	
+	  if (!('AnimationEvent' in window)) {
+	    delete EVENT_NAME_MAP.animationend.animation;
+	  }
+	
+	  if (!('TransitionEvent' in window)) {
+	    delete EVENT_NAME_MAP.transitionend.transition;
+	  }
+	
+	  for (var baseEventName in EVENT_NAME_MAP) {
+	    if (EVENT_NAME_MAP.hasOwnProperty(baseEventName)) {
+	      var baseEvents = EVENT_NAME_MAP[baseEventName];
+	      for (var styleName in baseEvents) {
+	        if (styleName in style) {
+	          endEvents.push(baseEvents[styleName]);
+	          break;
+	        }
+	      }
+	    }
+	  }
+	}
+	
+	if (typeof window !== 'undefined') {
+	  detectEvents();
+	}
+	
+	function addEventListener(node, eventName, eventListener) {
+	  node.addEventListener(eventName, eventListener, false);
+	}
+	
+	function removeEventListener(node, eventName, eventListener) {
+	  node.removeEventListener(eventName, eventListener, false);
+	}
+	
+	var TransitionEvents = {
+	  addEndEventListener: function addEndEventListener(node, eventListener) {
+	    if (endEvents.length === 0) {
+	      window.setTimeout(eventListener, 0);
+	      return;
+	    }
+	    endEvents.forEach(function (endEvent) {
+	      addEventListener(node, endEvent, eventListener);
+	    });
+	  },
+	
+	  endEvents: endEvents,
+	
+	  removeEndEventListener: function removeEndEventListener(node, eventListener) {
+	    if (endEvents.length === 0) {
+	      return;
+	    }
+	    endEvents.forEach(function (endEvent) {
+	      removeEventListener(node, endEvent, eventListener);
+	    });
+	  }
+	};
+	
+	module.exports = TransitionEvents;
+
+/***/ },
+/* 413 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var SPACE = ' ';
+	var RE_CLASS = /[\n\t\r]/g;
+	
+	function norm(elemClass) {
+	  return (SPACE + elemClass + SPACE).replace(RE_CLASS, SPACE);
+	}
+	
+	module.exports = {
+	  addClass: function addClass(elem, className) {
+	    elem.className += ' ' + className;
+	  },
+	
+	  removeClass: function removeClass(elem, n) {
+	    var elemClass = elem.className.trim();
+	    var className = norm(elemClass);
+	    var needle = n.trim();
+	    needle = SPACE + needle + SPACE;
+	    // 一个 cls 有可能多次出现：'link link2 link link3 link'
+	    while (className.indexOf(needle) >= 0) {
+	      className = className.replace(needle, SPACE);
+	    }
+	    elem.className = className.trim();
+	  }
+	};
+
+/***/ },
+/* 414 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var util = {
+	  isAppearSupported: function isAppearSupported(props) {
+	    return props.transitionName && props.transitionAppear || props.animation.appear;
+	  },
+	  isEnterSupported: function isEnterSupported(props) {
+	    return props.transitionName && props.transitionEnter || props.animation.enter;
+	  },
+	  isLeaveSupported: function isLeaveSupported(props) {
+	    return props.transitionName && props.transitionLeave || props.animation.leave;
+	  },
+	
+	  allowAppearCallback: function allowAppearCallback(props) {
+	    return props.transitionAppear || props.animation.appear;
+	  },
+	  allowEnterCallback: function allowEnterCallback(props) {
+	    return props.transitionEnter || props.animation.enter;
+	  },
+	  allowLeaveCallback: function allowLeaveCallback(props) {
+	    return props.transitionLeave || props.animation.leave;
+	  }
+	};
+	exports["default"] = util;
+	module.exports = exports["default"];
+
+/***/ },
+/* 415 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	/**
+	 * Representation of a single EventEmitter function.
+	 *
+	 * @param {Function} fn Event handler to be called.
+	 * @param {Mixed} context Context for function execution.
+	 * @param {Boolean} once Only emit once
+	 * @api private
+	 */
+	function EE(fn, context, once) {
+	  this.fn = fn;
+	  this.context = context;
+	  this.once = once || false;
+	}
+	
+	/**
+	 * Minimal EventEmitter interface that is molded against the Node.js
+	 * EventEmitter interface.
+	 *
+	 * @constructor
+	 * @api public
+	 */
+	function EventEmitter() {} /* Nothing to set */
+	
+	/**
+	 * Holds the assigned EventEmitters by name.
+	 *
+	 * @type {Object}
+	 * @private
+	 */
+	EventEmitter.prototype._events = undefined;
+	
+	/**
+	 * Return a list of assigned event listeners.
+	 *
+	 * @param {String} event The events that should be listed.
+	 * @returns {Array}
+	 * @api public
+	 */
+	EventEmitter.prototype.listeners = function listeners(event) {
+	  if (!this._events || !this._events[event]) return [];
+	  if (this._events[event].fn) return [this._events[event].fn];
+	
+	  for (var i = 0, l = this._events[event].length, ee = new Array(l); i < l; i++) {
+	    ee[i] = this._events[event][i].fn;
+	  }
+	
+	  return ee;
+	};
+	
+	/**
+	 * Emit an event to all registered event listeners.
+	 *
+	 * @param {String} event The name of the event.
+	 * @returns {Boolean} Indication if we've emitted an event.
+	 * @api public
+	 */
+	EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
+	  if (!this._events || !this._events[event]) return false;
+	
+	  var listeners = this._events[event],
+	      len = arguments.length,
+	      args,
+	      i;
+	
+	  if ('function' === typeof listeners.fn) {
+	    if (listeners.once) this.removeListener(event, listeners.fn, true);
+	
+	    switch (len) {
+	      case 1:
+	        return (listeners.fn.call(listeners.context), true);
+	      case 2:
+	        return (listeners.fn.call(listeners.context, a1), true);
+	      case 3:
+	        return (listeners.fn.call(listeners.context, a1, a2), true);
+	      case 4:
+	        return (listeners.fn.call(listeners.context, a1, a2, a3), true);
+	      case 5:
+	        return (listeners.fn.call(listeners.context, a1, a2, a3, a4), true);
+	      case 6:
+	        return (listeners.fn.call(listeners.context, a1, a2, a3, a4, a5), true);
+	    }
+	
+	    for (i = 1, args = new Array(len - 1); i < len; i++) {
+	      args[i - 1] = arguments[i];
+	    }
+	
+	    listeners.fn.apply(listeners.context, args);
+	  } else {
+	    var length = listeners.length,
+	        j;
+	
+	    for (i = 0; i < length; i++) {
+	      if (listeners[i].once) this.removeListener(event, listeners[i].fn, true);
+	
+	      switch (len) {
+	        case 1:
+	          listeners[i].fn.call(listeners[i].context);break;
+	        case 2:
+	          listeners[i].fn.call(listeners[i].context, a1);break;
+	        case 3:
+	          listeners[i].fn.call(listeners[i].context, a1, a2);break;
+	        default:
+	          if (!args) for (j = 1, args = new Array(len - 1); j < len; j++) {
+	            args[j - 1] = arguments[j];
+	          }
+	
+	          listeners[i].fn.apply(listeners[i].context, args);
+	      }
+	    }
+	  }
+	
+	  return true;
+	};
+	
+	/**
+	 * Register a new EventListener for the given event.
+	 *
+	 * @param {String} event Name of the event.
+	 * @param {Functon} fn Callback function.
+	 * @param {Mixed} context The context of the function.
+	 * @api public
+	 */
+	EventEmitter.prototype.on = function on(event, fn, context) {
+	  var listener = new EE(fn, context || this);
+	
+	  if (!this._events) this._events = {};
+	  if (!this._events[event]) this._events[event] = listener;else {
+	    if (!this._events[event].fn) this._events[event].push(listener);else this._events[event] = [this._events[event], listener];
+	  }
+	
+	  return this;
+	};
+	
+	/**
+	 * Add an EventListener that's only called once.
+	 *
+	 * @param {String} event Name of the event.
+	 * @param {Function} fn Callback function.
+	 * @param {Mixed} context The context of the function.
+	 * @api public
+	 */
+	EventEmitter.prototype.once = function once(event, fn, context) {
+	  var listener = new EE(fn, context || this, true);
+	
+	  if (!this._events) this._events = {};
+	  if (!this._events[event]) this._events[event] = listener;else {
+	    if (!this._events[event].fn) this._events[event].push(listener);else this._events[event] = [this._events[event], listener];
+	  }
+	
+	  return this;
+	};
+	
+	/**
+	 * Remove event listeners.
+	 *
+	 * @param {String} event The event we want to remove.
+	 * @param {Function} fn The listener that we need to find.
+	 * @param {Boolean} once Only remove once listeners.
+	 * @api public
+	 */
+	EventEmitter.prototype.removeListener = function removeListener(event, fn, once) {
+	  if (!this._events || !this._events[event]) return this;
+	
+	  var listeners = this._events[event],
+	      events = [];
+	
+	  if (fn) {
+	    if (listeners.fn && (listeners.fn !== fn || once && !listeners.once)) {
+	      events.push(listeners);
+	    }
+	    if (!listeners.fn) for (var i = 0, length = listeners.length; i < length; i++) {
+	      if (listeners[i].fn !== fn || once && !listeners[i].once) {
+	        events.push(listeners[i]);
+	      }
+	    }
+	  }
+	
+	  //
+	  // Reset the array, or remove it completely if we have no more listeners.
+	  //
+	  if (events.length) {
+	    this._events[event] = events.length === 1 ? events[0] : events;
+	  } else {
+	    delete this._events[event];
+	  }
+	
+	  return this;
+	};
+	
+	/**
+	 * Remove all listeners or only the listeners for the specified event.
+	 *
+	 * @param {String} event The event want to remove all listeners for.
+	 * @api public
+	 */
+	EventEmitter.prototype.removeAllListeners = function removeAllListeners(event) {
+	  if (!this._events) return this;
+	
+	  if (event) delete this._events[event];else this._events = {};
+	
+	  return this;
+	};
+	
+	//
+	// Alias methods names because people roll like that.
+	//
+	EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
+	EventEmitter.prototype.addListener = EventEmitter.prototype.on;
+	
+	//
+	// This function doesn't apply anymore.
+	//
+	EventEmitter.prototype.setMaxListeners = function setMaxListeners() {
+	  return this;
+	};
+	
+	//
+	// Expose the module.
+	//
+	EventEmitter.EventEmitter = EventEmitter;
+	EventEmitter.EventEmitter2 = EventEmitter;
+	EventEmitter.EventEmitter3 = EventEmitter;
+	
+	//
+	// Expose the module.
+	//
+	module.exports = EventEmitter;
 
 /***/ }
 /******/ ])

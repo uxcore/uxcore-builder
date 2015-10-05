@@ -16,7 +16,6 @@ module.exports = {
     Form: require("uxcore-form"),
     Grid: require("uxcore-grid"),
     Pagination: require("uxcore-pagination"),
-    RcUpload: require("uxcore-rc-upload"),
     Select2: require("uxcore-select2"),
     Tabs: require("uxcore-tabs"),
     Tooltip: require("uxcore-tooltip"),
@@ -24,5 +23,7 @@ module.exports = {
     Transfer: require("uxcore-transfer"),
     CheckboxGroup: require("uxcore-checkbox-group"),
     RadioGroup: require("uxcore-radiogroup"),
-    Popover: require("uxcore-popover")
+    Popover: require("uxcore-popover"),
+    FisGrid: require("@ali/uxcore-fis-grid"),
+    Hovercard: require("@ali/uxcore-hovercard")
 }
