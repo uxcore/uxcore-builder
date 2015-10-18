@@ -9,8 +9,8 @@
 
 module.exports = {
     Button: require("uxcore-button"),
+    Popover: require("uxcore-popover"),
     Calendar: require("uxcore-calendar"),
-    CheckboxGroup: require("uxcore-checkbox-group"),
     Dialog: require("uxcore-dialog"),
     Dropdown: require("uxcore-dropdown"),
     Form: require("uxcore-form"),
@@ -23,5 +23,6 @@ module.exports = {
     Tree: require("uxcore-tree"),
     Transfer: require("uxcore-transfer"),
     CheckboxGroup: require("uxcore-checkbox-group"),
+    Uploader: require("uxcore-uploader"),
     RadioGroup: require("uxcore-radiogroup")
 }

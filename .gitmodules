@@ -1,0 +1,6 @@
+[submodule "uxcore/uxcore-grid"]
+	path = uxcore/uxcore-grid
+	url = https://github.com/uxcore/uxcore-grid.git
+[submodule "uxcore/uxcore-form"]
+	path = uxcore/uxcore-form
+	url = https://github.com/uxcore/uxcore-form.git
